@@ -56,6 +56,13 @@
   pointer-events: none;
 }
 
+.titleBarClock {
+  height: 15px;
+  width: auto;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
 .trafficLights {
   display: flex;
   gap: 8px;

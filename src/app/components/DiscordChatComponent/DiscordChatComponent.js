@@ -594,6 +594,8 @@ export default function DiscordChatComponent({ messageCount = 500, joinMode = fa
           <span className={styles.trafficDot} />
         </div>
         <span className={styles.titleBarCenter}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/animated-clock.gif" alt="" className={styles.titleBarClock} aria-hidden="true" />
           <span className={styles.channelName}>{serverName || "Discord"}</span>
         </span>
         <span className={styles.onlineDot} />
