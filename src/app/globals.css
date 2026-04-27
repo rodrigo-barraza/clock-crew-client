@@ -174,7 +174,23 @@ a:hover {
   animation: sunburstSpin 60s linear infinite;
   will-change: transform;
   opacity: 0.4;
+  filter: saturate(0.5) brightness(0.6);
+  /* 3s ease-out when transitioning BACK from energized → idle */
+  transition:
+    opacity 3s ease-out,
+    filter 3s ease-out;
   z-index: 0;
+}
+
+/* Energized: faster spin, vivid colors, higher opacity */
+.hero--energized::before {
+  animation-duration: 10s;
+  opacity: 0.8;
+  filter: saturate(1.2) brightness(1);
+  /* Snap in fast on hover */
+  transition:
+    opacity 300ms ease,
+    filter 300ms ease;
 }
 
 /* ── Center/edge vignette ─────────────────────────────────────── */
