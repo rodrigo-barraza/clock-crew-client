@@ -530,6 +530,195 @@
   }
 }
 
+/* ── Embed Video ───────────────────────────────────────────────── */
+
+.embedVideoWrap {
+  max-width: 400px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #1e1f22;
+}
+
+.embedVideo {
+  display: block;
+  max-width: 400px;
+  max-height: 300px;
+  width: auto;
+  height: auto;
+  border-radius: 8px;
+}
+
+.embedVideoThumbLink {
+  display: block;
+  position: relative;
+  max-width: 400px;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: opacity 150ms ease;
+}
+
+.embedVideoThumbLink:hover {
+  opacity: 0.9;
+}
+
+.embedVideoThumb {
+  display: block;
+  max-width: 400px;
+  max-height: 300px;
+  width: auto;
+  height: auto;
+  border-radius: 8px;
+  background: #1e1f22;
+}
+
+.embedPlayButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: background-color 150ms ease;
+}
+
+.embedVideoThumbLink:hover .embedPlayButton {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+/* ── Rich Embed Cards (link unfurl / Open Graph) ──────────────── */
+
+.embedList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.embedCard {
+  max-width: 432px;
+  background: #2b2d31;
+  border-radius: 4px;
+  border-left: 4px solid #1e1f22;
+  padding: 8px 16px 12px 12px;
+  overflow: hidden;
+  transition: background-color 120ms ease;
+}
+
+.embedCardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.embedCardBodyInline {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.embedCardText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.embedProvider {
+  font-size: 12px;
+  font-weight: 400;
+  color: #dbdee1;
+  line-height: 1.33;
+}
+
+.embedTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #00a8fc;
+  text-decoration: none;
+  line-height: 1.25;
+  word-break: break-word;
+}
+
+.embedTitle:hover {
+  text-decoration: underline;
+}
+
+.embedTitlePlain {
+  font-size: 14px;
+  font-weight: 600;
+  color: #f2f3f5;
+  line-height: 1.25;
+  word-break: break-word;
+}
+
+.embedDescription {
+  font-size: 13px;
+  color: #b5bac1;
+  line-height: 1.43;
+  margin: 0;
+  word-break: break-word;
+  /* Clamp to 3 lines for long descriptions */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Small right-aligned thumbnail (article-style previews) */
+.embedThumbLink {
+  display: block;
+  flex-shrink: 0;
+  border-radius: 4px;
+  overflow: hidden;
+  width: 80px;
+  height: 80px;
+  margin-top: 4px;
+  transition: opacity 150ms ease;
+}
+
+.embedThumbLink:hover {
+  opacity: 0.85;
+}
+
+.embedThumb {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* Large image below text (e.g. Newgrounds, articles with OG images) */
+.embedImageLink {
+  display: block;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 8px;
+  max-width: 400px;
+  transition: opacity 150ms ease;
+}
+
+.embedImageLink:hover {
+  opacity: 0.9;
+}
+
+.embedImage {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  background: #1e1f22;
+}
+
 /* ── Input Bar ─────────────────────────────────────────────────── */
 
 .inputBar {

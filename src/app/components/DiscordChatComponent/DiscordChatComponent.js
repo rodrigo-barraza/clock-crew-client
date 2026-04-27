@@ -203,6 +203,151 @@ function ImageAttachments({ attachments }) {
   );
 }
 
+// ── Rich Embed Card (Discord link unfurl / Open Graph preview) ───
+// Renders Discord-style embed cards with provider, title, description,
+// thumbnail/image, and video. Matches the native Discord embed UI.
+function EmbedMedia({ embeds }) {
+  if (!embeds?.length) return null;
+  // Skip non-object embeds (legacy string data), Tenor (handled separately),
+  // and embeds with nothing renderable
+  const filteredEmbeds = embeds.filter((e) =>
+    typeof e === "object" && e !== null
+    && (e.title || e.description || e.provider || e.image || e.thumbnail || e.video)
+    && e.provider?.name !== "Tenor"
+    && !/tenor\.com/i.test(e.url || "")
+  );
+  if (!filteredEmbeds.length) return null;
+
+  return (
+    <div className={styles.embedList}>
+      {filteredEmbeds.map((embed, i) => {
+        const hasMetadata = embed.title || embed.description || embed.provider;
+        const hasThumbnailOnly = embed.thumbnail && !embed.image && !embed.video;
+        const hasLargeImage = embed.image && !embed.video;
+        const accentColor = embed.color
+          ? `#${embed.color.toString(16).padStart(6, "0")}`
+          : null;
+
+        // Pure image/gif embeds with NO metadata → render as simple attachment
+        if (!hasMetadata && (embed.image || embed.thumbnail)) {
+          const imgSrc = embed.image?.url || embed.image?.proxyURL
+            || embed.thumbnail?.url || embed.thumbnail?.proxyURL;
+          if (!imgSrc) return null;
+          const imgMeta = embed.image || embed.thumbnail;
+          const maxW = 400, maxH = 300;
+          let w = imgMeta.width || maxW, h = imgMeta.height || maxH;
+          if (w > maxW) { h = Math.round(h * (maxW / w)); w = maxW; }
+          if (h > maxH) { w = Math.round(w * (maxH / h)); h = maxH; }
+          return (
+            <a key={i} href={embed.url || imgSrc} target="_blank" rel="noopener noreferrer" className={styles.attachmentLink}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={imgSrc} alt={embed.title || "embed"} width={w} height={h}
+                className={styles.attachmentImage} loading="lazy" />
+            </a>
+          );
+        }
+
+        // Pure video embeds with NO metadata → render inline or thumbnail
+        if (!hasMetadata && embed.video) {
+          return <EmbedVideo key={i} embed={embed} />;
+        }
+
+        // ── Rich embed card ───────────────────────────────────
+        return (
+          <div
+            key={i}
+            className={styles.embedCard}
+            style={accentColor ? { borderLeftColor: accentColor } : undefined}
+          >
+            <div className={hasThumbnailOnly ? styles.embedCardBodyInline : styles.embedCardBody}>
+              <div className={styles.embedCardText}>
+                {embed.provider?.name && (
+                  <span className={styles.embedProvider}>{embed.provider.name}</span>
+                )}
+                {embed.title && (
+                  embed.url ? (
+                    <a href={embed.url} target="_blank" rel="noopener noreferrer" className={styles.embedTitle}>
+                      {embed.title}
+                    </a>
+                  ) : (
+                    <span className={styles.embedTitlePlain}>{embed.title}</span>
+                  )
+                )}
+                {embed.description && (
+                  <p className={styles.embedDescription}>{embed.description}</p>
+                )}
+              </div>
+              {/* Inline thumbnail (small, right-aligned — e.g. article previews) */}
+              {hasThumbnailOnly && embed.thumbnail?.url && (
+                <a href={embed.url || embed.thumbnail.url} target="_blank" rel="noopener noreferrer" className={styles.embedThumbLink}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={embed.thumbnail.proxyURL || embed.thumbnail.url}
+                    alt={embed.title || "thumbnail"}
+                    className={styles.embedThumb}
+                    loading="lazy"
+                  />
+                </a>
+              )}
+            </div>
+            {/* Large image below text (e.g. Newgrounds portal submissions) */}
+            {hasLargeImage && (() => {
+              const imgSrc = embed.image.proxyURL || embed.image.url;
+              const maxW = 400, maxH = 300;
+              let w = embed.image.width || maxW, h = embed.image.height || maxH;
+              if (w > maxW) { h = Math.round(h * (maxW / w)); w = maxW; }
+              if (h > maxH) { w = Math.round(w * (maxH / h)); h = maxH; }
+              return (
+                <a href={embed.url || imgSrc} target="_blank" rel="noopener noreferrer" className={styles.embedImageLink}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={imgSrc} alt={embed.title || "embed image"} width={w} height={h}
+                    className={styles.embedImage} loading="lazy" />
+                </a>
+              );
+            })()}
+            {/* Video embed inside the card */}
+            {embed.video && <EmbedVideo embed={embed} />}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ── Embed Video Sub-Component ────────────────────────────────────
+function EmbedVideo({ embed }) {
+  const poster = embed.thumbnail?.url || embed.thumbnail?.proxyURL || null;
+  const videoUrl = embed.video.url || embed.video.proxyURL;
+  const isDirectVideo = videoUrl && /\.(mp4|webm|mov)(\?|$)/i.test(videoUrl);
+  if (isDirectVideo) {
+    return (
+      <div className={styles.embedVideoWrap}>
+        <video
+          src={videoUrl}
+          poster={poster}
+          className={styles.embedVideo}
+          controls
+          preload="metadata"
+          loop
+          muted
+          autoPlay
+          playsInline
+        />
+      </div>
+    );
+  }
+  if (poster) {
+    return (
+      <a href={embed.url || videoUrl} target="_blank" rel="noopener noreferrer" className={styles.embedVideoThumbLink}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={poster} alt={embed.title || "Video"} className={styles.embedVideoThumb} loading="lazy" />
+        <span className={styles.embedPlayButton}>▶</span>
+      </a>
+    );
+  }
+  return null;
+}
+
 // ── Status Indicator ─────────────────────────────────────────────
 function StatusDot({ status }) {
   const colors = { online: "#23a559", idle: "#f0b232", dnd: "#f23f43" };
@@ -519,6 +664,7 @@ export default function DiscordChatComponent({ messageCount = 500, joinMode = fa
                         <p className={styles.messageText}>{formatContent(msg.content, msg.cleanContent)}</p>
                         <TenorEmbeds content={msg.content} />
                         <ImageAttachments attachments={msg.attachments} />
+                        <EmbedMedia embeds={msg.embeds} />
                       </div>
                     </div>
                   ) : (
@@ -549,6 +695,7 @@ export default function DiscordChatComponent({ messageCount = 500, joinMode = fa
                         <p className={styles.messageText}>{formatContent(msg.content, msg.cleanContent)}</p>
                         <TenorEmbeds content={msg.content} />
                         <ImageAttachments attachments={msg.attachments} />
+                        <EmbedMedia embeds={msg.embeds} />
                       </div>
                     </div>
                   )}
