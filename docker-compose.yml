@@ -1,6 +1,6 @@
 services:
-  clock-crew:
-    image: clock-crew:latest
+  clock-crew-client:
+    image: clock-crew-client:latest
     container_name: clock-crew
     restart: unless-stopped
     ports:
