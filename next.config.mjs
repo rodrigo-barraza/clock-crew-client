@@ -10,7 +10,7 @@ import { createVaultClient } from "./utils/vault-client.js";
 // ── Bootstrap secrets at build/dev time ────────────────────────
 const vault = createVaultClient({
   localEnvFile: "./.env",
-  fallbackEnvFile: "../vault/.env",
+  fallbackEnvFile: "../vault-service/.env",
 });
 
 const secrets = await vault.fetch();
@@ -51,12 +51,13 @@ const nextConfig = {
   },
 
   env: {
-    CLOCK_CREW_PORT: secrets.CLOCK_CREW_PORT || "3001",
+    CLOCK_CREW_CLIENT_PORT: secrets.CLOCK_CREW_CLIENT_PORT || "3001",
   },
 
   // Server-only env — NOT exposed to the browser
   serverRuntimeConfig: {
-    TOOLS_API_URL: secrets.TOOLS_API_URL || "http://192.168.86.2:5590",
+    TOOLS_SERVICE_URL: secrets.TOOLS_SERVICE_URL || "http://192.168.86.2:5590",
+    CLOCK_CREW_SERVICE_URL: secrets.CLOCK_CREW_SERVICE_URL || "http://192.168.86.2:5593",
   },
 
   // 301 redirect www → bare domain (canonical URL)

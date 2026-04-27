@@ -6,7 +6,7 @@
 // Retries on 503 (Discord client not ready) with exponential backoff.
 // ============================================================
 
-const LUPOS_URL = process.env.LUPOS_URL || "http://192.168.86.2:1337";
+const LUPOS_BOT_URL = process.env.LUPOS_BOT_URL || "http://192.168.86.2:1337";
 const GUILD_ID = "249010731910037507"; // Clock Crew
 const MAX_RETRIES = 3;
 
@@ -15,7 +15,7 @@ export async function GET() {
 
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     try {
-      const url = `${LUPOS_URL}/guild/members?guildId=${GUILD_ID}`;
+      const url = `${LUPOS_BOT_URL}/guild/members?guildId=${GUILD_ID}`;
       const res = await fetch(url, { next: { revalidate: 30 } });
 
       // Retry on 503 — Lupos Discord client isn't ready yet

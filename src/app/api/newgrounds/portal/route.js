@@ -1,10 +1,10 @@
 // ============================================================
 // Clock Crew — Newgrounds Portal API Proxy
 // ============================================================
-// Proxies search/browse requests to tools-api /newgrounds/portal.
+// Proxies search/browse requests to clockcrew-api /newgrounds/portal.
 // ============================================================
 
-const TOOLS_API_URL = process.env.TOOLS_API_URL || "http://192.168.86.2:5590";
+const CLOCK_CREW_SERVICE_URL = process.env.CLOCK_CREW_SERVICE_URL || "http://192.168.86.2:5593";
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -18,7 +18,7 @@ export async function GET(request) {
   if (!params.has("limit")) params.set("limit", "60");
 
   try {
-    const url = `${TOOLS_API_URL}/newgrounds/portal?${params}`;
+    const url = `${CLOCK_CREW_SERVICE_URL}/newgrounds/portal?${params}`;
     const res = await fetch(url, { cache: "no-store" });
 
     if (!res.ok) {

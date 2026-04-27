@@ -1,16 +1,16 @@
 // ============================================================
 // Clock Crew — Newgrounds Profile Card API Proxy
 // ============================================================
-// Proxies enriched profile card requests to tools-api.
+// Proxies enriched profile card requests to clockcrew-api.
 // ============================================================
 
-const TOOLS_API_URL = process.env.TOOLS_API_URL || "http://192.168.86.2:5590";
+const CLOCK_CREW_SERVICE_URL = process.env.CLOCK_CREW_SERVICE_URL || "http://192.168.86.2:5593";
 
 export async function GET(request, { params }) {
   const { username } = await params;
 
   try {
-    const url = `${TOOLS_API_URL}/newgrounds/portal/${encodeURIComponent(username)}/card`;
+    const url = `${CLOCK_CREW_SERVICE_URL}/newgrounds/portal/${encodeURIComponent(username)}/card`;
     const res = await fetch(url, { next: { revalidate: 600 } });
 
     if (!res.ok) {

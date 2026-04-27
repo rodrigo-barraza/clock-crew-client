@@ -8,7 +8,7 @@
 // selectable from a whitelist.
 // ============================================================
 
-const TOOLS_API_URL = process.env.TOOLS_API_URL || "http://192.168.86.2:5590";
+const TOOLS_SERVICE_URL = process.env.TOOLS_SERVICE_URL || "http://192.168.86.2:5590";
 const GUILD_ID = "249010731910037507"; // Clock Crew
 
 // Whitelist of allowed channel IDs (prevents arbitrary channel access)
@@ -27,7 +27,7 @@ export async function GET(request) {
   // Validate channel ID against whitelist
   const safeChannelId = ALLOWED_CHANNELS.has(channelId) ? channelId : DEFAULT_CHANNEL;
 
-  const upstreamUrl = `${TOOLS_API_URL}/discord/messages/stream?guildId=${GUILD_ID}&channelId=${safeChannelId}&limit=${limit}&includeBots=true`;
+  const upstreamUrl = `${TOOLS_SERVICE_URL}/discord/messages/stream?guildId=${GUILD_ID}&channelId=${safeChannelId}&limit=${limit}&includeBots=true`;
 
   try {
     const upstream = await fetch(upstreamUrl, {

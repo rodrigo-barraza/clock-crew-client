@@ -1,7 +1,8 @@
 // ============================================================
-// Clock Crew — Newgrounds Portal Clocks API Proxy
+// Clock Crew — User Listing API Proxy
 // ============================================================
-// Proxies profile browse requests to clockcrew-api /newgrounds/portal/clocks.
+// Proxies GET requests to clockcrew-api /clockcrew/users.
+// Supports ?limit= and ?q= query params.
 // ============================================================
 
 const CLOCK_CREW_SERVICE_URL = process.env.CLOCK_CREW_SERVICE_URL || "http://192.168.86.2:5593";
@@ -9,21 +10,19 @@ const CLOCK_CREW_SERVICE_URL = process.env.CLOCK_CREW_SERVICE_URL || "http://192
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
 
-  // Forward all supported query params
   const params = new URLSearchParams();
-  for (const key of ["q", "sort", "limit", "skip", "year"]) {
-    const val = searchParams.get(key);
-    if (val) params.set(key, val);
-  }
-  if (!params.has("limit")) params.set("limit", "60");
+  const limit = searchParams.get("limit");
+  const q = searchParams.get("q");
+  if (limit) params.set("limit", limit);
+  if (q) params.set("q", q);
 
   try {
-    const url = `${CLOCK_CREW_SERVICE_URL}/newgrounds/portal/clocks?${params}`;
+    const url = `${CLOCK_CREW_SERVICE_URL}/clockcrew/users?${params}`;
     const res = await fetch(url, { cache: "no-store" });
 
     if (!res.ok) {
       return Response.json(
-        { error: "Failed to fetch clocks data" },
+        { error: "Failed to fetch user listing" },
         { status: res.status },
       );
     }
@@ -31,7 +30,7 @@ export async function GET(request) {
     const data = await res.json();
     return Response.json(data);
   } catch (error) {
-    console.error("[newgrounds/portal/clocks] Proxy error:", error.message);
+    console.error("[clockcrew/users] Proxy error:", error.message);
     return Response.json(
       { error: "Service unavailable" },
       { status: 503 },

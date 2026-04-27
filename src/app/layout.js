@@ -1,5 +1,6 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
+import NavBarComponent from "./components/NavBarComponent/NavBarComponent";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -161,7 +162,10 @@ export default function RootLayout({ children }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className={inter.variable}>{children}</body>
+      <body className={inter.variable}>
+        <NavBarComponent />
+        {children}
+      </body>
     </html>
   );
 }

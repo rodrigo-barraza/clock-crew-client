@@ -1,0 +1,126 @@
+/* ── MemberCardComponent ─────────────────────────────────────── */
+
+.card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  text-decoration: none;
+  overflow: hidden;
+  animation: cardFadeIn 400ms ease-out both;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+
+  &:hover {
+    border-color: rgba(245, 158, 11, 0.2);
+    box-shadow:
+      0 0 0 1px rgba(245, 158, 11, 0.08),
+      0 4px 20px rgba(0, 0, 0, 0.3);
+    transform: translateY(-1px);
+  }
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Avatar ──────────────────────────────────────────────────── */
+
+.avatarWrap {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+  background: var(--bg-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatarImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatarFallback {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  letter-spacing: 0.02em;
+}
+
+/* ── Info ─────────────────────────────────────────────────────── */
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.username {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.customTitle {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+.metaItem {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.metaValue {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* ── Hover glow edge ─────────────────────────────────────────── */
+
+.glowEdge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--accent-color);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.card:hover .glowEdge {
+  opacity: 1;
+}

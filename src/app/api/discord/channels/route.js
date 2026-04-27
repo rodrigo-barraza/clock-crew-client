@@ -7,8 +7,8 @@
 // Guild is hardcoded for security.
 // ============================================================
 
-const LUPOS_URL = process.env.LUPOS_URL || "http://192.168.86.2:1337";
-const TOOLS_API_URL = process.env.TOOLS_API_URL || "http://192.168.86.2:5590";
+const LUPOS_BOT_URL = process.env.LUPOS_BOT_URL || "http://192.168.86.2:1337";
+const TOOLS_SERVICE_URL = process.env.TOOLS_SERVICE_URL || "http://192.168.86.2:5590";
 const GUILD_ID = "249010731910037507"; // Clock Crew
 
 // Whitelisted channel IDs — must match DiscordChatComponent
@@ -17,7 +17,7 @@ const CHANNEL_IDS = ["671089694397956116", "676318241689436170"];
 export async function GET() {
   // ── Try Lupos first (live Discord.js cache) ──────────────────
   try {
-    const url = `${LUPOS_URL}/guild/channels?guildId=${GUILD_ID}`;
+    const url = `${LUPOS_BOT_URL}/guild/channels?guildId=${GUILD_ID}`;
     const res = await fetch(url, { next: { revalidate: 60 } });
 
     if (res.ok) {
@@ -34,7 +34,7 @@ export async function GET() {
   try {
     const results = await Promise.allSettled(
       CHANNEL_IDS.map(async (channelId) => {
-        const url = `${TOOLS_API_URL}/discord/messages/search?guildId=${GUILD_ID}&channelId=${channelId}&limit=1&mode=compact&includeBots=true`;
+        const url = `${TOOLS_SERVICE_URL}/discord/messages/search?guildId=${GUILD_ID}&channelId=${channelId}&limit=1&mode=compact&includeBots=true`;
         const res = await fetch(url);
         if (!res.ok) return { channelId, name: channelId };
         const data = await res.json();
@@ -50,7 +50,7 @@ export async function GET() {
     let guildName = null;
     try {
       const guildRes = await fetch(
-        `${TOOLS_API_URL}/discord/messages/search?guildId=${GUILD_ID}&limit=1&includeBots=true`,
+        `${TOOLS_SERVICE_URL}/discord/messages/search?guildId=${GUILD_ID}&limit=1&includeBots=true`,
       );
       if (guildRes.ok) {
         const guildData = await guildRes.json();

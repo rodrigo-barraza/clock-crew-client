@@ -1,0 +1,131 @@
+/* ── NavBarComponent ──────────────────────────────────────────── */
+
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  transition:
+    background var(--transition-normal),
+    backdrop-filter var(--transition-normal),
+    box-shadow var(--transition-normal);
+}
+
+/* ── Home (transparent over hero) ────────────────────────────── */
+
+.navHome {
+  background: transparent;
+}
+
+.navHome.navScrolled {
+  background: rgba(10, 10, 15, 0.82);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* ── Inner pages (always solid) ──────────────────────────────── */
+
+.navInner {
+  background: rgba(10, 10, 15, 0.92);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* ── Inner wrap ──────────────────────────────────────────────── */
+
+.navInnerWrap {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+/* ── Logo ─────────────────────────────────────────────────────── */
+
+.logoLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.logoGif {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+}
+
+.logoText {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+/* ── Links ────────────────────────────────────────────────────── */
+
+.linkList {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: var(--border-radius-sm);
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast);
+
+  &:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
+
+.linkActive {
+  color: var(--accent-color);
+
+  &:hover {
+    color: var(--accent-color);
+    background: var(--accent-subtle);
+  }
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .logoText {
+    display: none;
+  }
+
+  .navInnerWrap {
+    padding: 0 16px;
+  }
+
+  .link {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}

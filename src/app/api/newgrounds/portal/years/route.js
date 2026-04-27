@@ -1,14 +1,14 @@
 // ============================================================
 // Clock Crew — Newgrounds Portal Years API Proxy
 // ============================================================
-// Proxies year dropdown data requests to tools-api /newgrounds/portal/years.
+// Proxies year dropdown data requests to clockcrew-api /newgrounds/portal/years.
 // ============================================================
 
-const TOOLS_API_URL = process.env.TOOLS_API_URL || "http://192.168.86.2:5590";
+const CLOCK_CREW_SERVICE_URL = process.env.CLOCK_CREW_SERVICE_URL || "http://192.168.86.2:5593";
 
 export async function GET() {
   try {
-    const url = `${TOOLS_API_URL}/newgrounds/portal/years`;
+    const url = `${CLOCK_CREW_SERVICE_URL}/newgrounds/portal/years`;
     const res = await fetch(url, { cache: "no-store" });
 
     if (!res.ok) {

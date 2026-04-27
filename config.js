@@ -5,7 +5,7 @@
 // values when served from *.com
 // ============================================================
 
-import { CLOCK_CREW_PORT as SECRETS_PORT } from "./secrets.js";
+import { CLOCK_CREW_CLIENT_PORT as SECRETS_PORT } from "./secrets.js";
 
 export const PORT = SECRETS_PORT || 3000;
 

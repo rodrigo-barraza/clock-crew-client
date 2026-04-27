@@ -1,5 +1,5 @@
 {
-  "name": "clock-crew",
+  "name": "clock-crew-client",
   "version": "0.1.0",
   "type": "module",
   "private": true,
