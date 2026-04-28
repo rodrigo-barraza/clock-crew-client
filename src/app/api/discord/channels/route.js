@@ -18,7 +18,7 @@ export async function GET() {
   // ── Try Lupos first (live Discord.js cache) ──────────────────
   try {
     const url = `${LUPOS_BOT_URL}/guild/channels?guildId=${GUILD_ID}`;
-    const res = await fetch(url, { next: { revalidate: 60 } });
+    const res = await fetch(url, { cache: "no-store" });
 
     if (res.ok) {
       const data = await res.json();

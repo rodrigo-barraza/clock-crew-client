@@ -20,9 +20,7 @@ export async function GET(request) {
 
   try {
     const url = `${TOOLS_SERVICE_URL}/discord/messages/search?guildId=${GUILD_ID}&channelId=${CHANNEL_ID}&limit=${limit}&includeBots=true`;
-    const res = await fetch(url, {
-      next: { revalidate: 60 }, // ISR — cache for 60 seconds
-    });
+    const res = await fetch(url, { cache: "no-store" });
 
     if (!res.ok) {
       return Response.json(

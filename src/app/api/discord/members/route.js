@@ -16,7 +16,7 @@ export async function GET() {
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     try {
       const url = `${LUPOS_BOT_URL}/guild/members?guildId=${GUILD_ID}`;
-      const res = await fetch(url, { next: { revalidate: 30 } });
+      const res = await fetch(url, { cache: "no-store" });
 
       // Retry on 503 — Lupos Discord client isn't ready yet
       if (res.status === 503 && attempt < MAX_RETRIES) {
