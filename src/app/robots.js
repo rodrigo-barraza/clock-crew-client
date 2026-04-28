@@ -5,8 +5,9 @@ export default function robots() {
       {
         userAgent: "*",
         allow: "/",
+        disallow: ["/api/"],
       },
     ],
-    sitemap: "https://clock-crew.com/sitemap.xml",
+    sitemap: "https://clocktopia.com/sitemap.xml",
   };
 }

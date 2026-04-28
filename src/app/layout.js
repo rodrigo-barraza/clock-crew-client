@@ -7,7 +7,7 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-const SITE_URL = "https://clock-crew.com";
+const SITE_URL = "https://clocktopia.com";
 const SITE_NAME = "The Clock Crew";
 const SITE_DESCRIPTION =
   "The Clock Crew — the legendary Newgrounds Flash animation collective born in 2002. Home of StrawberryClock, the king of the portal, and the iconic clock characters that defined early internet culture.";
