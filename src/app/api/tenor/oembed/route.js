@@ -10,9 +10,11 @@
 // → { gifUrl, width, height, title }
 // ============================================================
 
+import { MS_PER_DAY } from "@rodrigo-barraza/utilities";
+
 // In-memory cache to avoid repeated oEmbed fetches for the same URL
 const cache = new Map();
-const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
+const CACHE_TTL = MS_PER_DAY;
 
 function transformThumbnailToGif(thumbnailUrl) {
   if (!thumbnailUrl) return null;
