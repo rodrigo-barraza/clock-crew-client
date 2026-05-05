@@ -21,13 +21,13 @@ WORKDIR /app
 
 # Vault credentials — needed at build time for next.config.mjs
 ARG VAULT_SERVICE_URL=http://192.168.86.2:5599
-ARG VAULT_SERVICE_TOKEN
 ENV VAULT_SERVICE_URL=$VAULT_SERVICE_URL
-ENV VAULT_SERVICE_TOKEN=$VAULT_SERVICE_TOKEN
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npx next build --webpack
+RUN --mount=type=secret,id=VAULT_SERVICE_TOKEN \
+  export VAULT_SERVICE_TOKEN=$(cat /run/secrets/VAULT_SERVICE_TOKEN 2>/dev/null) && \
+  npx next build --webpack
 
 # --- Production ---
 FROM base AS runner
