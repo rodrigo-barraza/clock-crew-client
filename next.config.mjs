@@ -52,9 +52,9 @@ const nextConfig = {
   },
 
   env: {
-    CLOCK_CREW_CLIENT_PORT: secrets.CLOCK_CREW_CLIENT_PORT || "3001",
-    CLOCK_CREW_SERVICE_URL: secrets.CLOCK_CREW_SERVICE_URL || "http://localhost:5593",
-    TOOLS_SERVICE_URL: secrets.TOOLS_SERVICE_URL || "http://localhost:5590",
+    CLOCK_CREW_CLIENT_PORT: secrets.CLOCK_CREW_CLIENT_PORT,
+    CLOCK_CREW_SERVICE_URL: secrets.CLOCK_CREW_SERVICE_URL,
+    TOOLS_SERVICE_URL: secrets.TOOLS_SERVICE_URL,
   },
 
   // 301 redirect www → bare domain (canonical URL)
