@@ -3,6 +3,7 @@
 import { useRef, useCallback, useEffect } from "react";
 import { DiscordChatComponent } from "@rodrigo-barraza/components";
 import NewgroundsPortalComponent from "./components/NewgroundsPortalComponent/NewgroundsPortalComponent";
+import ClockComponent from "./components/ClockComponent/ClockComponent";
 
 // ── Sunburst spin speeds (deg/s) ──────────────────────────────────
 const IDLE_SPEED = 6;       // 360° / 60s — gentle idle rotation
@@ -74,12 +75,7 @@ export default function HomePage() {
     <main className="hero" ref={heroRef}>
       <div className="hero-content">
         <div className="hero-title-row">
-          <img
-            src="/animated-clock.gif"
-            alt="Animated clock"
-            className="hero-clock-gif"
-            aria-hidden="true"
-          />
+          <ClockComponent size={72} showSeconds={false} />
           <h1 className="hero-title">The Clock Crew</h1>
         </div>
         <p className="hero-subtitle">

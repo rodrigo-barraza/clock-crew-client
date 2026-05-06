@@ -1,34 +1,101 @@
-# Clock Crew
+# Clock Crew Client
 
-Community website for [clock-crew.com](https://clock-crew.com) — celebrating the legacy of Flash animation and the iconic clock characters.
+Community website for [clock-crew.com](https://clock-crew.com) — celebrating the legacy of Flash animation and the iconic Clock Crew characters from Newgrounds.
+
+**Live:** [clock-crew.com](https://clock-crew.com)
+
+## Features
+
+- **Homepage** — Landing page with real-time clock display and animated hero section
+- **Discord Chat** — Live message feed from the Clock Crew Discord server
+- **Wiki** — Community wiki with member directory, individual profiles, and history timeline
+- **Newgrounds Portal** — Browse Clock Crew submissions on Newgrounds, filterable by year
+- **Member Cards** — Profile cards with Newgrounds integration
+- **SEO** — Dynamic sitemap and robots.txt generation
+
+## Stack
+
+| Dependency | Purpose |
+|---|---|
+| Next.js 16 | React framework (App Router, standalone output) |
+| React 19 | UI library |
+| `@rodrigo-barraza/components` | Shared component library (DiscordChatComponent) |
+| `@rodrigo-barraza/utilities` | Shared utility functions |
 
 ## Getting Started
 
 ```bash
-cp .env.example .env    # configure local overrides
+# 1. Install dependencies
 npm install
+
+# 2. Copy and configure environment
+cp .env.example .env
+
+# 3. Start development server
 npm run dev
 ```
+
+## Environment
+
+Secrets are resolved in priority order:
+
+1. `process.env` (manual env vars, Docker `--env`)
+2. Local `.env` file
+3. Vault service (`VAULT_SERVICE_URL` + `VAULT_SERVICE_TOKEN`)
+4. Shared `../vault-service/.env` fallback
+
+| Variable | Description |
+|---|---|
+| `CLOCK_CREW_PORT` | Dev server port (default `3001`) |
+| `VAULT_SERVICE_URL` | Vault service endpoint |
+| `LUPOS_URL` | Lupos bot API for Discord data |
+| `MINIO_INTERNAL_URL` | MinIO endpoint for media proxying |
 
 ## Scripts
 
 | Command | Description |
-|---------|-------------|
+|---|---|
 | `npm run dev` | Start dev server on configured port |
 | `npm run build` | Production build |
 | `npm run lint` | Run ESLint |
 | `npm run lint:fix` | Auto-fix lint issues |
 | `npm run format` | Format with Prettier |
+| `npm run format:check` | Check formatting |
+| `npm run test` | Run Vitest unit tests |
 | `npm run deploy` | Build & deploy to Synology NAS |
-| `npm run deploy:dry` | Dry-run deploy |
+| `npm run deploy:dry` | Dry-run deploy (validate only) |
 
-## Configuration
+## Architecture
 
-Secrets are resolved in priority order:
+```
+clock-crew-client/
+├── src/
+│   ├── app/
+│   │   ├── (wiki)/             # Wiki route group
+│   │   │   ├── clocks/         # Member directory + individual profiles
+│   │   │   └── history/        # History timeline page
+│   │   ├── api/                # Next.js API routes
+│   │   │   ├── clockcrew/      # Clock Crew user data proxy
+│   │   │   ├── discord/        # Discord message/channel/member proxies
+│   │   │   ├── media/          # MinIO media proxy
+│   │   │   ├── newgrounds/     # Newgrounds portal + card data
+│   │   │   └── tenor/          # Tenor GIF embed proxy
+│   │   └── components/         # React components
+│   │       ├── ClockComponent/
+│   │       ├── DiscordChatComponent/
+│   │       ├── HistoryTimelineComponent/
+│   │       ├── MemberCardComponent/
+│   │       ├── MemberProfileComponent/
+│   │       ├── NavBarComponent/
+│   │       ├── NewgroundsPortalComponent/
+│   │       └── WikiSidebarComponent/
+├── config.js                   # Runtime configuration
+├── secrets.js                  # Secret resolution (gitignored)
+├── next.config.mjs             # Next.js + Vault bootstrap
+└── deploy.sh                   # Synology NAS deploy script
+```
 
-1. `process.env` — manual env vars, Docker `--env`
-2. `.env` — project-level local overrides
-3. Vault service — production secret server
-4. `../vault/.env` — shared fallback for offline dev
+## Related Services
 
-See `.env.example` for available overrides.
+- **clock-crew-service** — Backend API for Clock Crew user data
+- **lupos-bot** (`:1337`) — Discord bot providing channel/message/member data

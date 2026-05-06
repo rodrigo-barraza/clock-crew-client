@@ -1,0 +1,135 @@
+/* ── ClockComponent ──────────────────────────────────────────── */
+
+.clock {
+  --clock-size: 160px;
+  width: var(--clock-size);
+  height: var(--clock-size);
+  flex-shrink: 0;
+  position: relative;
+  animation: clockFadeIn 600ms ease-out both;
+}
+
+@keyframes clockFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ── Bezel (outer ring) ───────────────────────────────────────── */
+
+.bezel {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  padding: 8%;
+  background:
+    radial-gradient(
+      circle at 35% 30%,
+      #3a3a3a 0%,
+      #252525 40%,
+      #1a1a1a 70%,
+      #111 100%
+    );
+  box-shadow:
+    /* outer shadow */
+    0 4px 20px rgba(0, 0, 0, 0.7),
+    0 2px 8px rgba(0, 0, 0, 0.5),
+    /* subtle warm glow */
+    0 0 30px rgba(218, 185, 92, 0.12),
+    /* inner bevel highlight */
+    inset 0 1px 2px rgba(255, 255, 255, 0.08),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Face (golden dial) ───────────────────────────────────────── */
+
+.face {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 45% 40%,
+      #f5e6a3 0%,
+      #e8d374 25%,
+      #dab95c 50%,
+      #c8a84a 75%,
+      #b89a3e 100%
+    );
+  box-shadow:
+    inset 0 2px 6px rgba(255, 255, 255, 0.35),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* ── Center highlight (specular) ──────────────────────────────── */
+
+.highlight {
+  position: absolute;
+  top: 10%;
+  left: 15%;
+  width: 55%;
+  height: 45%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(255, 255, 240, 0.5) 0%,
+    rgba(255, 255, 240, 0.15) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* ── Tick marks ───────────────────────────────────────────────── */
+
+.tick {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 3px;
+  height: 50%;
+  margin-left: -1.5px;
+  background: transparent;
+  transform-origin: bottom center;
+  transform: rotate(var(--tick-rotation));
+
+  &::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 16%;
+    margin-top: 12%;
+    background: #2a2a2a;
+    border-radius: 1px;
+    opacity: 0.7;
+  }
+}
+
+/* ── SVG hands layer ──────────────────────────────────────────── */
+
+.hands {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+/* All hand groups rotate from the SVG center (100,100) */
+.hourHand,
+.minuteHand,
+.secondHand {
+  transform-origin: 100px 100px;
+  will-change: transform;
+}
+
+/* Smooth second hand sweep */
+.secondHand {
+  transition: none;
+}
