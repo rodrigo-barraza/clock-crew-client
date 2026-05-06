@@ -22,7 +22,7 @@ Object.assign(process.env, secrets);
 const nextConfig = {
   output: "standalone",
   allowedDevOrigins: ["clocktopia.com"],
-  transpilePackages: ["@rodrigo-barraza/components"],
+  transpilePackages: ["@rodrigo-barraza/components-library"],
   turbopack: {},
 
   // Discord avatar and attachment images

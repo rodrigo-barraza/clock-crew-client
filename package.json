@@ -17,7 +17,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@rodrigo-barraza/components": "git+https://github.com/rodrigo-barraza/components-library.git",
+    "@rodrigo-barraza/components-library": "git+https://github.com/rodrigo-barraza/components-library.git",
     "@rodrigo-barraza/utilities": "git+https://github.com/rodrigo-barraza/utilities-library.git",
     "next": "16.2.4",
     "react": "19.2.4",

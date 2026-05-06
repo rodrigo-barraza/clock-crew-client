@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useCallback, useEffect } from "react";
-import { DiscordChatComponent } from "@rodrigo-barraza/components";
+import { DiscordChatComponent } from "@rodrigo-barraza/components-library";
 import NewgroundsPortalComponent from "./components/NewgroundsPortalComponent/NewgroundsPortalComponent";
 import ClockComponent from "./components/ClockComponent/ClockComponent";
 
