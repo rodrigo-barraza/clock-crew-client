@@ -1,13 +1,14 @@
 // ============================================================
 // Clock Crew — Runtime Configuration
 // ============================================================
-// Imports defaults from secrets.js and overrides with production
-// values when served from *.com
+// Typed accessor layer over process.env. The Vault service is
+// the single source of truth — next.config.mjs hydrates
+// process.env from the Vault before any module imports run.
+//
+// This file contains NO defaults and NO secrets.
 // ============================================================
 
-import { CLOCK_CREW_CLIENT_PORT as SECRETS_PORT } from "./secrets.js";
-
-export const PORT = SECRETS_PORT || 3000;
+export const PORT = process.env.CLOCK_CREW_CLIENT_PORT;
 
 export const IS_PRODUCTION =
   typeof window !== "undefined" &&
