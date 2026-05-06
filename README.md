@@ -20,7 +20,7 @@ Community website for [clock-crew.com](https://clock-crew.com) — celebrating t
 | Next.js 16 | React framework (App Router, standalone output) |
 | React 19 | UI library |
 | `@rodrigo-barraza/components-library` | Shared component library (DiscordChatComponent) |
-| `@rodrigo-barraza/utilities` | Shared utility functions |
+| `@rodrigo-barraza/utilities-library` | Shared utility functions |
 
 ## Getting Started
 

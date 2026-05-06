@@ -10,7 +10,7 @@
 // → { gifUrl, width, height, title }
 // ============================================================
 
-import { MS_PER_DAY } from "@rodrigo-barraza/utilities";
+import { MS_PER_DAY } from "@rodrigo-barraza/utilities-library";
 
 // In-memory cache to avoid repeated oEmbed fetches for the same URL
 const cache = new Map();
