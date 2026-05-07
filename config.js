@@ -8,7 +8,7 @@
 // This file contains NO defaults and NO secrets.
 // ============================================================
 
-export const PORT = process.env.CLOCK_CREW_CLIENT_PORT;
+export const PORT = (process.env.NEXT_PUBLIC_CLOCK_CREW_CLIENT_PORT || process.env.CLOCK_CREW_CLIENT_PORT);
 
 export const IS_PRODUCTION =
   typeof window !== "undefined" &&

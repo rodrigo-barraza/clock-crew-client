@@ -5,7 +5,7 @@
 // and injects them into process.env for the app.
 // ============================================================
 
-import { createVaultClient } from "@rodrigo-barraza/utilities-library/vault";
+import { createVaultClient } from "@rodrigo-barraza/utilities-library/node";
 
 // ── Bootstrap secrets at build/dev time ────────────────────────
 const vault = createVaultClient({
@@ -55,6 +55,11 @@ const nextConfig = {
     CLOCK_CREW_CLIENT_PORT: secrets.CLOCK_CREW_CLIENT_PORT,
     CLOCK_CREW_SERVICE_URL: secrets.CLOCK_CREW_SERVICE_URL,
     TOOLS_SERVICE_URL: secrets.TOOLS_SERVICE_URL,
+  
+    // Explicit NEXT_PUBLIC_ variables for Turbopack client-side injection
+    NEXT_PUBLIC_CLOCK_CREW_CLIENT_PORT: secrets.CLOCK_CREW_CLIENT_PORT,
+    NEXT_PUBLIC_CLOCK_CREW_SERVICE_URL: secrets.CLOCK_CREW_SERVICE_URL,
+    NEXT_PUBLIC_TOOLS_SERVICE_URL: secrets.TOOLS_SERVICE_URL,
   },
 
   // 301 redirect www → bare domain (canonical URL)
