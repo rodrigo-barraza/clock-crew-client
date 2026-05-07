@@ -19,10 +19,11 @@
   "dependencies": {
     "@rodrigo-barraza/components-library": "git+https://github.com/rodrigo-barraza/components-library.git",
     "@rodrigo-barraza/utilities-library": "git+https://github.com/rodrigo-barraza/utilities-library.git",
+    "lucide-react": "^0.577.0",
+    "luxon": "^3.7.2",
     "next": "16.2.4",
     "react": "19.2.4",
-    "react-dom": "19.2.4",
-    "lucide-react": "^0.577.0"
+    "react-dom": "19.2.4"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",
