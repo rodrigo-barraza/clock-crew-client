@@ -74,6 +74,9 @@ export async function GET() {
     return Response.json({
       guildId: GUILD_ID,
       guildName: guildName || "Clock Crew",
+      guildIcon: null,
+      guildBanner: null,
+      guildSplash: null,
       channels,
     });
   } catch (error) {
