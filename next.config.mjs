@@ -55,6 +55,7 @@ const nextConfig = {
     CLOCK_CREW_CLIENT_PORT: secrets.CLOCK_CREW_CLIENT_PORT,
     CLOCK_CREW_SERVICE_URL: secrets.CLOCK_CREW_SERVICE_URL,
     TOOLS_SERVICE_URL: secrets.TOOLS_SERVICE_URL,
+    LUPOS_URL: secrets.LUPOS_URL,
   
     // Explicit NEXT_PUBLIC_ variables for Turbopack client-side injection
     NEXT_PUBLIC_CLOCK_CREW_CLIENT_PORT: secrets.CLOCK_CREW_CLIENT_PORT,
