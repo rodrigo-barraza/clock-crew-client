@@ -614,17 +614,36 @@ export default function DiscordChatComponent({ messageCount = 500, joinMode = fa
             <span className={styles.serverName}>{serverName || "Discord"}</span>
           </div>
           <div className={styles.channelList}>
-            <div className={styles.channelCategory}>
-              <span className={styles.categoryName}>Text Channels</span>
-            </div>
-            {channels.map((ch) => (
-              <ChannelItem
-                key={ch.id}
-                channel={ch}
-                isActive={activeChannelId === ch.id}
-                onClick={handleChannelClick}
-              />
-            ))}
+            {(() => {
+              // Group channels by their Discord category (parentName).
+              // Preserves the order channels arrive from the API (sorted
+              // by position), and groups under real category headings.
+              const groups = [];
+              let lastCategory = null;
+              for (const ch of channels) {
+                const cat = ch.parentName || "Text Channels";
+                if (cat !== lastCategory) {
+                  groups.push({ category: cat, items: [] });
+                  lastCategory = cat;
+                }
+                groups[groups.length - 1].items.push(ch);
+              }
+              return groups.map((group) => (
+                <div key={group.category}>
+                  <div className={styles.channelCategory}>
+                    <span className={styles.categoryName}>{group.category}</span>
+                  </div>
+                  {group.items.map((ch) => (
+                    <ChannelItem
+                      key={ch.id}
+                      channel={ch}
+                      isActive={activeChannelId === ch.id}
+                      onClick={handleChannelClick}
+                    />
+                  ))}
+                </div>
+              ));
+            })()}
           </div>
         </aside>
 

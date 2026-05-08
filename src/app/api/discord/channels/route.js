@@ -34,27 +34,43 @@ export async function GET() {
   try {
     const results = await Promise.allSettled(
       CHANNEL_IDS.map(async (channelId) => {
-        const url = `${TOOLS_SERVICE_URL}/discord/messages/search?guildId=${GUILD_ID}&channelId=${channelId}&limit=1&mode=compact&includeBots=true`;
+        const url = `${TOOLS_SERVICE_URL}/discord/messages/search?guildId=${GUILD_ID}&channelId=${channelId}&limit=1&includeBots=true`;
         const res = await fetch(url);
         if (!res.ok) return { channelId, name: channelId };
         const data = await res.json();
         const msg = data.messages?.[0];
         return {
           channelId,
-          name: msg?.channel || channelId,
+          name: msg?.channelName || msg?.channel || channelId,
+          parentName: msg?.parentName || null,
         };
       }),
     );
 
-    // Also grab guild name from a full-mode message
+    // Also grab guild name + icon/banner from a full-mode message
     let guildName = null;
+    let guildIcon = null;
+    let guildBanner = null;
+    let guildSplash = null;
     try {
       const guildRes = await fetch(
         `${TOOLS_SERVICE_URL}/discord/messages/search?guildId=${GUILD_ID}&limit=1&includeBots=true`,
       );
       if (guildRes.ok) {
         const guildData = await guildRes.json();
-        guildName = guildData.messages?.[0]?.guildName || null;
+        const msg = guildData.messages?.[0];
+        guildName = msg?.guildName || null;
+        // Build CDN URLs from stored icon/banner/splash hashes
+        if (msg?.guildIcon) {
+          const ext = msg.guildIcon.startsWith("a_") ? "gif" : "png";
+          guildIcon = `https://cdn.discordapp.com/icons/${GUILD_ID}/${msg.guildIcon}.${ext}?size=128`;
+        }
+        if (msg?.guildBanner) {
+          guildBanner = `https://cdn.discordapp.com/banners/${GUILD_ID}/${msg.guildBanner}.png?size=480`;
+        }
+        if (msg?.guildSplash) {
+          guildSplash = `https://cdn.discordapp.com/splashes/${GUILD_ID}/${msg.guildSplash}.png?size=480`;
+        }
       }
     } catch {
       // non-critical
@@ -67,16 +83,16 @@ export async function GET() {
         name: r.value.name,
         topic: null,
         parentId: null,
-        parentName: null,
+        parentName: r.value.parentName,
         position: CHANNEL_IDS.indexOf(r.value.channelId),
       }));
 
     return Response.json({
       guildId: GUILD_ID,
       guildName: guildName || "Clock Crew",
-      guildIcon: null,
-      guildBanner: null,
-      guildSplash: null,
+      guildIcon,
+      guildBanner,
+      guildSplash,
       channels,
     });
   } catch (error) {
