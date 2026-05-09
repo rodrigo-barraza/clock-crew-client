@@ -1,6 +1,14 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { Search } from "lucide-react";
+import {
+  CloseButtonComponent,
+  SearchInputComponent,
+  SelectComponent,
+  LoadingIndicatorComponent,
+  EmptyStateComponent,
+} from "@rodrigo-barraza/components-library";
 import styles from "./NewgroundsPortalComponent.module.css";
 
 // ── Score display helpers ────────────────────────────────────────
@@ -71,14 +79,7 @@ function getTypeMeta(contentType) {
   return TYPE_META[contentType] || TYPE_META.movie;
 }
 
-// ── Search icon SVG ──────────────────────────────────────────────
-function SearchIcon() {
-  return (
-    <svg className={styles.searchIcon} viewBox="0 0 16 16" fill="currentColor">
-      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.44.706a5 5 0 1 1 0-10 5 5 0 0 1 0 10z" />
-    </svg>
-  );
-}
+// SearchIcon removed — now using SearchInputComponent from library
 
 // ── Content Detail Modal ─────────────────────────────────────────
 function ContentDetailModal({ item, onClose }) {
@@ -110,7 +111,7 @@ function ContentDetailModal({ item, onClose }) {
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modalCard} onClick={(e) => e.stopPropagation()}>
-        <button className={styles.modalClose} onClick={onClose} title="Close">✕</button>
+        <CloseButtonComponent onClick={onClose} />
 
         {/* ══ CONTENT HERO — the clicked content ══════════ */}
         <div
@@ -152,16 +153,10 @@ function ContentDetailModal({ item, onClose }) {
 
         {loading ? (
           <div className={styles.loading} style={{ minHeight: 120 }}>
-            <div className={styles.loadingDots}>
-              <span className={styles.loadingDot} />
-              <span className={styles.loadingDot} />
-              <span className={styles.loadingDot} />
-            </div>
+            <LoadingIndicatorComponent size={32} />
           </div>
         ) : !profile ? (
-          <div className={styles.emptyState} style={{ minHeight: 80 }}>
-            <span className={styles.emptyText}>Profile not found</span>
-          </div>
+          <EmptyStateComponent subtitle="Profile not found" />
         ) : (
           <>
             <div className={styles.creatorHeader}>
@@ -301,7 +296,7 @@ function ProfileDetailModal({ username, onClose }) {
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modalCard} onClick={(e) => e.stopPropagation()}>
-        <button className={styles.modalClose} onClick={onClose} title="Close">✕</button>
+        <CloseButtonComponent onClick={onClose} />
 
         {/* ══ PROFILE BANNER ════════════════════════════════ */}
         <div className={styles.profileBanner}>
@@ -310,16 +305,10 @@ function ProfileDetailModal({ username, onClose }) {
 
         {loading ? (
           <div className={styles.loading} style={{ minHeight: 200 }}>
-            <div className={styles.loadingDots}>
-              <span className={styles.loadingDot} />
-              <span className={styles.loadingDot} />
-              <span className={styles.loadingDot} />
-            </div>
+            <LoadingIndicatorComponent size={32} />
           </div>
         ) : !profile ? (
-          <div className={styles.emptyState} style={{ minHeight: 120 }}>
-            <span className={styles.emptyText}>Profile not found</span>
-          </div>
+          <EmptyStateComponent subtitle="Profile not found" />
         ) : (
           <>
             {/* ── Avatar + Identity ─────────────────────────── */}
@@ -711,17 +700,13 @@ export default function NewgroundsPortalComponent() {
         <div className={styles.contentArea}>
           {/* ── Search + Filters ──────────────────────────────── */}
           <div className={styles.searchBar}>
-            <div className={styles.searchInputWrap}>
-              <SearchIcon />
-              <input
-                className={styles.searchInput}
-                type="text"
-                placeholder={isClocks ? "Search clocks by name…" : "Search movies, games, audio, or usernames…"}
-                value={query}
-                onChange={handleSearchChange}
-                id="portal-search-input"
-              />
-            </div>
+            <SearchInputComponent
+              value={query}
+              onChange={(val) => handleSearchChange({ target: { value: val } })}
+              placeholder={isClocks ? "Search clocks by name…" : "Search movies, games, audio, or usernames…"}
+              leadingIcon={<Search size={14} />}
+              className={styles.searchInputWrap}
+            />
             <div className={styles.filterRow}>
               <div className={styles.typeTabs}>
                 {TABS.map(({ key, label }) => (
@@ -735,17 +720,14 @@ export default function NewgroundsPortalComponent() {
                 ))}
               </div>
               <div className={styles.yearFilter}>
-                <select
-                  className={styles.yearSelect}
+                <SelectComponent
                   value={year}
-                  onChange={handleYearChange}
-                  id="portal-year-filter"
-                >
-                  <option value="">All Years</option>
-                  {(isClocks ? availableYears.profileYears : availableYears.contentYears).map((y) => (
-                    <option key={y} value={y}>{y}</option>
-                  ))}
-                </select>
+                  onChange={(val) => handleYearChange({ target: { value: val } })}
+                  options={[
+                    { value: "", label: "All Years" },
+                    ...(isClocks ? availableYears.profileYears : availableYears.contentYears).map((y) => ({ value: String(y), label: String(y) })),
+                  ]}
+                />
               </div>
             </div>
           </div>
@@ -754,21 +736,17 @@ export default function NewgroundsPortalComponent() {
           <div className={styles.itemGrid}>
             {loading && (
               <div className={styles.loading} style={{ gridColumn: "1 / -1" }}>
-                <div className={styles.loadingDots}>
-                  <span className={styles.loadingDot} />
-                  <span className={styles.loadingDot} />
-                  <span className={styles.loadingDot} />
-                </div>
+                <LoadingIndicatorComponent size={32} />
                 <span>Loading {isClocks ? "clocks" : "portal"}…</span>
               </div>
             )}
 
             {!loading && items.length === 0 && (
-              <div className={styles.emptyState} style={{ gridColumn: "1 / -1" }}>
-                <span className={styles.emptyIcon}>🔍</span>
-                <span className={styles.emptyText}>
-                  {query ? `No results for "${query}"` : isClocks ? "No clocks found" : "No submissions found"}
-                </span>
+              <div style={{ gridColumn: "1 / -1" }}>
+                <EmptyStateComponent
+                  icon={<span style={{ fontSize: 40 }}>🔍</span>}
+                  subtitle={query ? `No results for "${query}"` : isClocks ? "No clocks found" : "No submissions found"}
+                />
               </div>
             )}
 
@@ -822,11 +800,7 @@ export default function NewgroundsPortalComponent() {
 
             {loadingMore && (
               <div className={styles.loadingMore}>
-                <div className={styles.loadingDots}>
-                  <span className={styles.loadingDot} />
-                  <span className={styles.loadingDot} />
-                  <span className={styles.loadingDot} />
-                </div>
+                <LoadingIndicatorComponent size={24} />
               </div>
             )}
 

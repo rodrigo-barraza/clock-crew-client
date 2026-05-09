@@ -1,6 +1,12 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
+import { Search } from "lucide-react";
+import {
+  SearchInputComponent,
+  LoadingIndicatorComponent,
+  EmptyStateComponent,
+} from "@rodrigo-barraza/components-library";
 import MemberCardComponent from "../../components/MemberCardComponent/MemberCardComponent";
 import styles from "./MembersPage.module.css";
 
@@ -103,13 +109,11 @@ export default function MembersDirectory() {
 
       {/* ── Controls ────────────────────────────────────────────── */}
       <div className={styles.controls}>
-        <input
-          type="text"
-          placeholder="Search members…"
+        <SearchInputComponent
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className={styles.searchInput}
-          id="member-search"
+          onChange={setSearch}
+          placeholder="Search members…"
+          leadingIcon={<Search size={14} />}
         />
         <div className={styles.sortGroup}>
           {SORT_OPTIONS.map((opt) => (
@@ -126,10 +130,9 @@ export default function MembersDirectory() {
 
       {/* ── Loading state ───────────────────────────────────────── */}
       {loading && (
-        <div className={styles.grid}>
-          {Array.from({ length: 12 }).map((_, i) => (
-            <div key={i} className={styles.skeletonCard} />
-          ))}
+        <div className={styles.loadingState}>
+          <LoadingIndicatorComponent size={48} />
+          <span>Loading directory…</span>
         </div>
       )}
 
@@ -170,9 +173,10 @@ export default function MembersDirectory() {
 
       {/* ── Empty state ─────────────────────────────────────────── */}
       {!loading && filteredUsers.length === 0 && (
-        <div className={styles.empty}>
-          <p>No members found matching &quot;{search}&quot;</p>
-        </div>
+        <EmptyStateComponent
+          icon={<span style={{ fontSize: 40 }}>🔍</span>}
+          subtitle={`No members found matching "${search}"`}
+        />
       )}
     </div>
   );
