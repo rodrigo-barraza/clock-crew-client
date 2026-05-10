@@ -74,8 +74,6 @@ function getTypeMeta(contentType) {
   return TYPE_META[contentType] || TYPE_META.movie;
 }
 
-// SearchIcon removed — now using SearchInputComponent from library
-
 // ── Content Detail Modal ─────────────────────────────────────────
 function ContentDetailModal({ item, onClose }) {
   const [data, setData] = useState(null);

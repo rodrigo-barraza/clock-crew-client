@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import styles from "./NavBarComponent.module.css";
 
@@ -33,11 +34,14 @@ export default function NavBarComponent() {
       <div className={styles.navInnerWrap}>
         {/* ── Logo / Home ──────────────────────────────────────── */}
         <Link href="/" className={styles.logoLink}>
-          <img
+          <Image
             src="/animated-clock.gif"
             alt=""
             className={styles.logoGif}
             aria-hidden="true"
+            width={32}
+            height={32}
+            unoptimized
           />
           <span className={styles.logoText}>The Clock Crew</span>
         </Link>
