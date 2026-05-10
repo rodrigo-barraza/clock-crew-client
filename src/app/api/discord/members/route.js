@@ -6,8 +6,7 @@
 // Retries on 503 (Discord client not ready) with exponential backoff.
 // ============================================================
 
-const LUPOS_BOT_URL = process.env.LUPOS_URL || "http://localhost:1337";
-const GUILD_ID = "249010731910037507"; // Clock Crew
+import { GUILD_ID, LUPOS_BOT_URL } from "../discord-config.js";
 const MAX_RETRIES = 3;
 
 export async function GET() {

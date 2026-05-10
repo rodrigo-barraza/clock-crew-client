@@ -7,9 +7,7 @@
 // Guild is hardcoded for security.
 // ============================================================
 
-const LUPOS_BOT_URL = process.env.LUPOS_URL || "http://localhost:1337";
-const TOOLS_SERVICE_URL = process.env.TOOLS_SERVICE_URL || "http://localhost:5590";
-const GUILD_ID = "249010731910037507"; // Clock Crew
+import { GUILD_ID, LUPOS_BOT_URL, TOOLS_SERVICE_URL } from "../discord-config.js";
 
 // Whitelisted channel IDs — must match DiscordChatComponent
 const CHANNEL_IDS = ["671089694397956116", "676318241689436170"];

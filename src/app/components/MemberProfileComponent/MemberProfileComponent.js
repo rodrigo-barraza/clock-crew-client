@@ -2,13 +2,10 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { formatNumber } from "@rodrigo-barraza/utilities-library";
 import styles from "./MemberProfileComponent.module.css";
 
 // ── Helpers ──────────────────────────────────────────────────────
-function formatNumber(n) {
-  if (n == null) return "—";
-  return typeof n === "number" ? n.toLocaleString() : n;
-}
 
 function formatDate(dateStr) {
   if (!dateStr) return "—";

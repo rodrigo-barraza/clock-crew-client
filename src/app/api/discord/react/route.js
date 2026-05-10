@@ -7,8 +7,7 @@
 // the whitelist.
 // ============================================================
 
-const LUPOS_BOT_URL = process.env.LUPOS_URL || "http://localhost:1337";
-const GUILD_ID = "249010731910037507"; // Clock Crew
+import { GUILD_ID, LUPOS_BOT_URL } from "../discord-config.js";
 
 // Whitelist of allowed channel IDs (must match stream/route.js)
 const ALLOWED_CHANNELS = new Set([

@@ -9,6 +9,7 @@ import {
   LoadingIndicatorComponent,
   EmptyStateComponent,
 } from "@rodrigo-barraza/components-library";
+import { formatNumber } from "@rodrigo-barraza/utilities-library";
 import styles from "./NewgroundsPortalComponent.module.css";
 
 // ── Score display helpers ────────────────────────────────────────
@@ -21,12 +22,6 @@ function ScoreDisplay({ score }) {
       {rounded.toFixed(1)}
     </span>
   );
-}
-
-function formatNumber(n) {
-  if (n == null) return "—";
-  if (typeof n === "string") return n;
-  return n.toLocaleString();
 }
 
 function formatDate(dateStr) {

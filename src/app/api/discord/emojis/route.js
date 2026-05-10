@@ -6,8 +6,7 @@
 // Guild is hardcoded for security.
 // ============================================================
 
-const LUPOS_BOT_URL = process.env.LUPOS_URL || "http://localhost:1337";
-const GUILD_ID = "249010731910037507"; // Clock Crew
+import { GUILD_ID, LUPOS_BOT_URL } from "../discord-config.js";
 
 export async function GET() {
   try {

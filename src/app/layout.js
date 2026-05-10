@@ -165,6 +165,12 @@ export default function RootLayout({ children }) {
       <body className={inter.variable}>
         <NavBarComponent />
         {children}
+        <footer className="site-footer">
+          <a href="https://rod.dev" className="site-copyright" target="_blank" rel="noopener noreferrer">
+            <img src="/rod-dev-logo.ico" alt="" className="site-copyright-logo" />
+            © 2023–2026 Rodrigo Barraza
+          </a>
+        </footer>
       </body>
     </html>
   );
