@@ -10,17 +10,7 @@ const SESSION_KEY = "sessions_session_id";
 const VISITOR_KEY = "sessions_visitor_id";
 const API_BASE = "/api/sessions";
 
-// ─── UUID Generation ───────────────────────────────────────────
-
-function generateUUID() {
-  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
-    return crypto.randomUUID();
-  }
-  return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, (c) =>
-    (+c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (+c / 4)))).toString(16),
-  );
-}
-
+import { generateUUID } from "@rodrigo-barraza/utilities-library";
 // ─── Session & Visitor ID Management ───────────────────────────
 
 function getVisitorId() {

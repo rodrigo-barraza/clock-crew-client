@@ -5,7 +5,7 @@
 // Supports ?limit= and ?q= query params.
 // ============================================================
 
-const CLOCK_CREW_SERVICE_URL = process.env.CLOCK_CREW_SERVICE_URL || "http://localhost:5593";
+import { CLOCK_CREW_SERVICE_URL } from "../../../../../config.js";
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);

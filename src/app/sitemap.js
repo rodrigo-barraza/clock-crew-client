@@ -4,8 +4,7 @@
 // ──────────────────────────────────────────────────────────────
 
 const BASE_URL = "https://clocktopia.com";
-const CLOCK_CREW_SERVICE_URL =
-  process.env.CLOCK_CREW_SERVICE_URL || "http://localhost:5593";
+import { CLOCK_CREW_SERVICE_URL } from "../../config.js";
 
 export const revalidate = 86400; // Revalidate sitemap once per day
 

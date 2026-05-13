@@ -7,8 +7,7 @@
 import MemberProfileComponent from "../../../components/MemberProfileComponent/MemberProfileComponent";
 
 const SITE_URL = "https://clocktopia.com";
-const CLOCK_CREW_SERVICE_URL =
-  process.env.CLOCK_CREW_SERVICE_URL || "http://localhost:5593";
+import { CLOCK_CREW_SERVICE_URL } from "../../../../../config.js";
 
 // ── Fetch member data at request time for metadata ───────────
 async function fetchMember(username) {

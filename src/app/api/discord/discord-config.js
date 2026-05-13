@@ -7,5 +7,5 @@
 // ============================================================
 
 export const GUILD_ID = "249010731910037507"; // Clock Crew
-export const LUPOS_BOT_URL = process.env.LUPOS_URL || "http://localhost:1337";
-export const TOOLS_SERVICE_URL = process.env.TOOLS_SERVICE_URL || "http://localhost:5590";
+import { LUPOS_BOT_URL, TOOLS_SERVICE_URL } from "../../../../config";
+export { LUPOS_BOT_URL, TOOLS_SERVICE_URL };

@@ -7,7 +7,7 @@
 // the LLM-generated profile summary.
 // ============================================================
 
-const CLOCK_CREW_SERVICE_URL = process.env.CLOCK_CREW_SERVICE_URL || "http://localhost:5593";
+import { CLOCK_CREW_SERVICE_URL } from "../../../../../../config.js";
 
 export async function GET(_request, { params }) {
   const { username } = await params;

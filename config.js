@@ -18,3 +18,21 @@ export const IS_LOCALHOST = !IS_PRODUCTION;
 
 // Environment-aware project name — isolates data between dev and prod
 export const PROJECT_NAME = "clock-crew";
+
+const IS_BROWSER = typeof window !== "undefined";
+
+const RAW_SERVICE_URL =
+  process.env.NEXT_PUBLIC_CLOCK_CREW_SERVICE_URL || process.env.CLOCK_CREW_SERVICE_URL;
+
+const PUBLIC_SERVICE_URL =
+  process.env.NEXT_PUBLIC_CLOCK_CREW_SERVICE_PUBLIC_URL || process.env.CLOCK_CREW_SERVICE_PUBLIC_URL;
+
+function resolveServiceUrl() {
+  if (!IS_BROWSER) return RAW_SERVICE_URL;
+  if (IS_PRODUCTION && PUBLIC_SERVICE_URL) return PUBLIC_SERVICE_URL;
+  return RAW_SERVICE_URL;
+}
+
+export const CLOCK_CREW_SERVICE_URL = resolveServiceUrl();
+export const LUPOS_BOT_URL = process.env.LUPOS_BOT_URL || process.env.LUPOS_URL;
+export const TOOLS_SERVICE_URL = process.env.TOOLS_SERVICE_URL;

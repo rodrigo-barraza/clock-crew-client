@@ -4,7 +4,7 @@
 // Proxies year dropdown data requests to clockcrew-api /newgrounds/portal/years.
 // ============================================================
 
-const CLOCK_CREW_SERVICE_URL = process.env.CLOCK_CREW_SERVICE_URL || "http://localhost:5593";
+import { CLOCK_CREW_SERVICE_URL } from "../../../../../../config.js";
 
 export async function GET() {
   try {
