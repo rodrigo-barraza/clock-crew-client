@@ -3,6 +3,7 @@ import Image from "next/image";
 import "./globals.css";
 import NavBarComponent from "./components/NavBarComponent/NavBarComponent";
 import SessionTrackerComponent from "./components/SessionTrackerComponent/SessionTrackerComponent";
+import { ThemeProvider } from "@rodrigo-barraza/components-library";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -165,15 +166,17 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className={inter.variable}>
-        <SessionTrackerComponent />
-        <NavBarComponent />
-        {children}
-        <footer className="site-footer">
-          <a href="https://rod.dev" className="site-copyright" target="_blank" rel="noopener noreferrer">
-            <Image src="/rod-dev-logo.ico" alt="" className="site-copyright-logo" width={14} height={14} unoptimized />
-            © 2023–2026 Rodrigo Barraza
-          </a>
-        </footer>
+        <ThemeProvider>
+          <SessionTrackerComponent />
+          <NavBarComponent />
+          {children}
+          <footer className="site-footer">
+            <a href="https://rod.dev" className="site-copyright" target="_blank" rel="noopener noreferrer">
+              <Image src="/rod-dev-logo.ico" alt="" className="site-copyright-logo" width={14} height={14} unoptimized />
+              © 2023–2026 Rodrigo Barraza
+            </a>
+          </footer>
+        </ThemeProvider>
       </body>
     </html>
   );
