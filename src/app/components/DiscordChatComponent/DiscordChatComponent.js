@@ -4,6 +4,38 @@ import { useState, useEffect, useLayoutEffect, useRef, useCallback } from "react
 import Image from "next/image";
 import styles from "./DiscordChatComponent.module.css";
 
+// ── Emoji categories for the picker ──────────────────────────────
+const EMOJI_CATEGORIES = [
+  { id: "frequent", name: "Frequently Used", icon: "🕐", emojis: ["👍","👎","❤️","😂","😮","😢","😡","🔥","🎉","✅","👀","💯","🙏","💀","🤣","😭","🥺","😤","🤔","👏","💪","🫡","🤡","💩"] },
+  { id: "people", name: "People & Faces", icon: "😀", emojis: ["😀","😃","😄","😁","😆","😅","🤣","😂","🙂","😉","😊","😇","🥰","😍","🤩","😘","😋","😛","😜","🤪","😝","🤑","🤗","🤔","🤐","🤨","😐","😑","😶","😏","😒","🙄","😬","😌","😔","😪","🤤","😴","😷","🤒","🤕","🤢","🤮","🥵","🥶","🥴","😵","🤯","🤠","🥳","😎","🤓","😕","😟","😮","😲","😳","🥺","😦","😨","😰","😥","😢","😭","😱","😖","😣","😞","😩","😫","😤","😡","😠","🤬","😈","👿","💀","💩","🤡","👹","👺","👻","👽","🤖","👋","👌","✌️","🤞","🤟","🤘","🤙","👈","👉","👆","👇","👍","👎","✊","👊","👏","🙌","👐","🤝","🙏","💪","👀"] },
+  { id: "nature", name: "Nature", icon: "🌿", emojis: ["🐶","🐱","🐭","🐹","🐰","🦊","🐻","🐼","🐨","🐯","🦁","🐮","🐷","🐸","🐵","🐔","🐧","🐦","🐤","🦆","🦅","🦉","🐺","🐗","🐴","🦄","🐝","🐛","🦋","🐌","🐞","🐢","🐍","🐙","🦑","🦐","🐠","🐟","🐬","🐳","🐋","🦈","🐊","🐅","🐆","🐘","🌵","🎄","🌲","🌳","🌴","🌱","🌿","🍀","🍃","🍂","🍁","🍄","💐","🌷","🌹","🌺","🌸","🌼","🌻","🌞","🌈","🔥","💧","🌊"] },
+  { id: "food", name: "Food & Drink", icon: "🍔", emojis: ["🍇","🍈","🍉","🍊","🍋","🍌","🍍","🍎","🍏","🍑","🍒","🍓","🥝","🍅","🥑","🍆","🥔","🥕","🌽","🌶️","🥒","🥦","🍞","🧀","🍖","🍗","🥩","🍔","🍟","🍕","🌭","🥪","🌮","🌯","🥚","🍳","🍲","🍿","🍱","🍣","🍦","🍩","🍪","🎂","🍰","🍫","🍬","🍭","🍯","☕","🍵","🍶","🍷","🍸","🍹","🍺","🍻","🥂"] },
+  { id: "symbols", name: "Symbols", icon: "💠", emojis: ["❤️","🧡","💛","💚","💙","💜","🖤","🤍","💔","❣️","💕","💞","💓","💗","💖","💘","💝","💟","❌","⭕","🛑","⛔","💯","❗","❓","‼️","⁉️","⚠️","✅","❎","💠","🔅","🔆","⭐","🌟","✨","⚡","💥","🎵","🎶","➕","➖","➗","✖️","♾️","✔️","☑️","🔴","🟠","🟡","🟢","🔵","🟣","⚫","⚪"] },
+];
+
+// ── localStorage helpers for reaction dedup ──────────────────────
+const REACT_STORAGE_KEY = "discord-reactions";
+const REACT_MAX_ENTRIES = 500;
+
+function loadReactedSet() {
+  try {
+    const raw = localStorage.getItem(REACT_STORAGE_KEY);
+    return raw ? new Set(JSON.parse(raw)) : new Set();
+  } catch { return new Set(); }
+}
+
+function persistReactedSet(set) {
+  try {
+    let arr = Array.from(set);
+    if (arr.length > REACT_MAX_ENTRIES) arr = arr.slice(arr.length - REACT_MAX_ENTRIES);
+    localStorage.setItem(REACT_STORAGE_KEY, JSON.stringify(arr));
+  } catch { /* silent */ }
+}
+
+function buildReactKey(messageId, emoji) {
+  return `${messageId}:${emoji}`;
+}
+
 // ── Discord role colors (fallback when no role color from API) ───
 const ROLE_COLORS = [
   "#e91e63", "#9c27b0", "#3f51b5", "#2196f3", "#009688",
@@ -398,6 +430,115 @@ function MemberItem({ member }) {
   );
 }
 
+// ── Emoji Picker ─────────────────────────────────────────────────
+function EmojiPicker({ anchorRef, serverEmojis, onSelect, onClose }) {
+  const pickerRef = useRef(null);
+  const searchRef = useRef(null);
+  const bodyRef = useRef(null);
+  const [filter, setFilter] = useState("");
+  const [activeCategory, setActiveCategory] = useState(serverEmojis?.length ? "server" : "frequent");
+  useEffect(() => { searchRef.current?.focus(); }, []);
+  useEffect(() => {
+    const anchor = anchorRef?.current;
+    const picker = pickerRef.current;
+    if (!anchor || !picker) return;
+    const rect = anchor.getBoundingClientRect();
+    const pickerH = picker.offsetHeight || 460;
+    let top = rect.top - pickerH - 8;
+    if (top < 8) top = rect.bottom + 8;
+    picker.style.top = `${top}px`;
+    picker.style.right = `${window.innerWidth - rect.right}px`;
+    picker.style.left = "auto";
+    const pickerRect = picker.getBoundingClientRect();
+    if (pickerRect.left < 8) { picker.style.right = "auto"; picker.style.left = "8px"; }
+  }, [anchorRef]);
+  const lowerFilter = filter.toLowerCase();
+  const allCategories = [];
+  if (serverEmojis?.length) allCategories.push({ id: "server", name: "Server Emojis", icon: "🏠" });
+  for (const cat of EMOJI_CATEGORIES) allCategories.push(cat);
+  const filteredCustom = serverEmojis ? serverEmojis.filter((e) => !filter || e.name.toLowerCase().includes(lowerFilter)) : [];
+  const scrollToCategory = (catId) => {
+    setActiveCategory(catId);
+    if (filter) setFilter("");
+    const el = bodyRef.current?.querySelector(`[data-category="${catId}"]`);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+  const isSearching = filter.length > 0;
+  return (
+    <>
+      <div className={styles.emojiPickerOverlay} onClick={onClose} />
+      <div className={styles.emojiPicker} ref={pickerRef}>
+        <input ref={searchRef} className={styles.emojiPickerSearch} type="text" placeholder="Search emojis…" value={filter} onChange={(e) => setFilter(e.target.value)} />
+        <div className={styles.emojiPickerMain}>
+          <div className={styles.emojiCategorySidebar}>
+            {allCategories.map((cat) => (
+              <button key={cat.id} className={`${styles.emojiCategoryTab} ${activeCategory === cat.id ? styles.emojiCategoryTabActive : ""}`} type="button" onClick={() => scrollToCategory(cat.id)} title={cat.name}>
+                {cat.id === "server" && serverEmojis?.[0] ? <img src={emojiUrl(serverEmojis[0].id, serverEmojis[0].animated)} alt="" className={styles.emojiCategoryTabImg} draggable={false} /> : <span>{cat.icon}</span>}
+              </button>
+            ))}
+          </div>
+          <div className={styles.emojiPickerBody} ref={bodyRef}>
+            {isSearching ? (
+              <>
+                {filteredCustom.length > 0 && (<><div className={styles.emojiPickerSection}>Server Emojis</div><div className={styles.emojiPickerGrid}>{filteredCustom.map((emoji) => (<button key={emoji.id} className={styles.emojiPickerItem} type="button" onClick={() => onSelect(`${emoji.name}:${emoji.id}`)} title={`:${emoji.name}:`}><img src={emojiUrl(emoji.id, emoji.animated)} alt={`:${emoji.name}:`} className={styles.emojiPickerCustomImg} draggable={false} loading="lazy" /></button>))}</div></>)}
+                {EMOJI_CATEGORIES.map((cat) => (<div key={cat.id}><div className={styles.emojiPickerSection}>{cat.name}</div><div className={styles.emojiPickerGrid}>{cat.emojis.map((emoji) => (<button key={emoji} className={styles.emojiPickerItem} type="button" onClick={() => onSelect(emoji)} title={emoji}>{emoji}</button>))}</div></div>))}
+                {filteredCustom.length === 0 && <div className={styles.emojiPickerEmpty}>No matching emojis found</div>}
+              </>
+            ) : (
+              <>
+                {serverEmojis?.length > 0 && (<div data-category="server"><div className={styles.emojiPickerSection}>Server Emojis</div><div className={styles.emojiPickerGrid}>{serverEmojis.map((emoji) => (<button key={emoji.id} className={styles.emojiPickerItem} type="button" onClick={() => onSelect(`${emoji.name}:${emoji.id}`)} title={`:${emoji.name}:`}><img src={emojiUrl(emoji.id, emoji.animated)} alt={`:${emoji.name}:`} className={styles.emojiPickerCustomImg} draggable={false} loading="lazy" /></button>))}</div></div>)}
+                {EMOJI_CATEGORIES.map((cat) => (<div key={cat.id} data-category={cat.id}><div className={styles.emojiPickerSection}>{cat.name}</div><div className={styles.emojiPickerGrid}>{cat.emojis.map((emoji) => (<button key={emoji} className={styles.emojiPickerItem} type="button" onClick={() => onSelect(emoji)} title={emoji}>{emoji}</button>))}</div></div>))}
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ── Message Actions (hover bar) ──────────────────────────────────
+function MessageActions({ messageId, onOpenPicker, pickerMessageId }) {
+  const btnRef = useRef(null);
+  const isPickerOpen = pickerMessageId === messageId;
+  return (
+    <div className={`${styles.messageActions} ${isPickerOpen ? styles.messageActionsVisible : ""}`}>
+      <button ref={btnRef} className={styles.actionBtn} type="button" onClick={() => onOpenPicker(messageId, btnRef)} title="Add Reaction">😀</button>
+    </div>
+  );
+}
+
+// ── Reactions ────────────────────────────────────────────────────
+function Reactions({ reactions, messageId, reactedSet, onReact }) {
+  if (!reactions?.length) return null;
+  return (
+    <div className={styles.reactions}>
+      {reactions.map((r, i) => {
+        const emoji = r.emoji;
+        const emojiIdentifier = emoji.id ? `${emoji.name}:${emoji.id}` : emoji.name;
+        const reactKey = buildReactKey(messageId, emojiIdentifier);
+        const hasReacted = reactedSet?.has(reactKey) || r.me === true;
+        const pillClass = hasReacted ? styles.reactionPillReacted : styles.reactionPill;
+        if (emoji.id) {
+          return (
+            <button key={`${emoji.id}-${i}`} className={pillClass} type="button" onClick={() => !hasReacted && onReact?.(messageId, emojiIdentifier)} title={hasReacted ? "You reacted" : `:${emoji.name}:`}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={emojiUrl(emoji.id, emoji.animated)} alt={`:${emoji.name}:`} className={styles.reactionEmoji} loading="lazy" draggable={false} />
+              <span className={styles.reactionCount}>{r.count}</span>
+            </button>
+          );
+        }
+        return (
+          <button key={`${emoji.name}-${i}`} className={pillClass} type="button" onClick={() => !hasReacted && onReact?.(messageId, emojiIdentifier)} title={hasReacted ? "You reacted" : emoji.name}>
+            <span className={styles.reactionUnicode}>{emoji.name}</span>
+            <span className={styles.reactionCount}>{r.count}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 // ── Whitelisted channel IDs (only these are shown in the sidebar) ─
 const CHANNEL_IDS = ["671089694397956116", "676318241689436170"];
 
@@ -416,6 +557,12 @@ export default function DiscordChatComponent({ messageCount = 500, joinMode = fa
   const scrollRef = useRef(null);
   const isFirstLoad = useRef(true);
   const shouldSnapToBottom = useRef(false);
+
+  // ── Reaction state ──────────────────────────────────────────────
+  const [serverEmojis, setServerEmojis] = useState(null);
+  const [reactedSet, setReactedSet] = useState(() => loadReactedSet());
+  const [pickerMessageId, setPickerMessageId] = useState(null);
+  const pickerAnchorRef = useRef(null);
 
   // Derive active channel object from fetched data
   const activeChannel = channels.find((ch) => ch.id === activeChannelId) || { id: activeChannelId, name: "chat" };
@@ -542,6 +689,23 @@ export default function DiscordChatComponent({ messageCount = 500, joinMode = fa
         }
       });
 
+      // Reaction updates on existing messages
+      es.addEventListener("update", (e) => {
+        try {
+          const { messages: updatedMsgs } = JSON.parse(e.data);
+          if (!updatedMsgs?.length) return;
+          const updateMap = new Map(updatedMsgs.map((m) => [m.id, m]));
+          setMessages((prev) =>
+            prev.map((msg) => {
+              const updated = updateMap.get(msg.id);
+              return updated ? { ...msg, reactions: updated.reactions } : msg;
+            }),
+          );
+        } catch (err) {
+          console.error("[DiscordChat] Update event parse error:", err);
+        }
+      });
+
       es.addEventListener("error", () => {
         if (es.readyState === EventSource.CLOSED) {
           console.warn("[DiscordChat] SSE closed, retrying in 3s…");
@@ -583,6 +747,60 @@ export default function DiscordChatComponent({ messageCount = 500, joinMode = fa
     setLoading(true);
     isFirstLoad.current = true;
   }, []);
+
+  // ── Fetch server emojis for the picker ───────────────────────────
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/discord/emojis")
+      .then((res) => (res.ok ? res.json() : Promise.reject()))
+      .then((data) => { if (!cancelled && data.emojis) setServerEmojis(data.emojis); })
+      .catch(() => { /* Non-critical */ });
+    return () => { cancelled = true; };
+  }, []);
+
+  // ── Handle emoji reaction ───────────────────────────────────────
+  const handleReact = useCallback(async (messageId, emojiIdentifier) => {
+    const reactKey = buildReactKey(messageId, emojiIdentifier);
+    if (reactedSet.has(reactKey)) return;
+    setReactedSet((prev) => { const next = new Set(prev); next.add(reactKey); persistReactedSet(next); return next; });
+    setMessages((prev) =>
+      prev.map((msg) => {
+        if (msg.id !== messageId) return msg;
+        const reactions = msg.reactions ? [...msg.reactions] : [];
+        const isCustom = /^\w+:\d+$/.test(emojiIdentifier);
+        const idx = reactions.findIndex((r) => isCustom ? r.emoji.id === emojiIdentifier.split(":")[1] : r.emoji.name === emojiIdentifier && !r.emoji.id);
+        if (idx >= 0) { reactions[idx] = { ...reactions[idx], count: reactions[idx].count + 1 }; }
+        else if (isCustom) { const [name, id] = emojiIdentifier.split(":"); reactions.push({ emoji: { id, name, animated: false }, count: 1 }); }
+        else { reactions.push({ emoji: { id: null, name: emojiIdentifier, animated: false }, count: 1 }); }
+        return { ...msg, reactions };
+      }),
+    );
+    try {
+      const res = await fetch("/api/discord/react", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ channelId: activeChannelId, messageId, emoji: emojiIdentifier }),
+      });
+      if (!res.ok && res.status !== 409) {
+        console.warn("[DiscordChat] React failed:", res.status);
+        setReactedSet((prev) => { const next = new Set(prev); next.delete(reactKey); persistReactedSet(next); return next; });
+      }
+    } catch (err) {
+      console.error("[DiscordChat] React error:", err);
+      setReactedSet((prev) => { const next = new Set(prev); next.delete(reactKey); persistReactedSet(next); return next; });
+    }
+  }, [reactedSet, activeChannelId]);
+
+  // ── Picker open/close handlers ──────────────────────────────────
+  const handleOpenPicker = useCallback((messageId, anchorRef) => {
+    pickerAnchorRef.current = anchorRef;
+    setPickerMessageId((prev) => (prev === messageId ? null : messageId));
+  }, []);
+  const handleClosePicker = useCallback(() => { setPickerMessageId(null); pickerAnchorRef.current = null; }, []);
+  const handlePickerSelect = useCallback((emojiIdentifier) => {
+    if (pickerMessageId) handleReact(pickerMessageId, emojiIdentifier);
+    handleClosePicker();
+  }, [pickerMessageId, handleReact, handleClosePicker]);
 
   return (
     <div className={styles.container} id="discord-chat">
@@ -681,11 +899,13 @@ export default function DiscordChatComponent({ messageCount = 500, joinMode = fa
                   {grouped && !newDay ? (
                     <div className={styles.messageRowGrouped}>
                       <span className={styles.timestampInline}>{formatShortTime(msg.createdAtISO)}</span>
+                      <MessageActions messageId={msg.id} onOpenPicker={handleOpenPicker} pickerMessageId={pickerMessageId} />
                       <div className={styles.messageContent}>
                         <p className={styles.messageText}>{formatContent(msg.content, msg.cleanContent)}</p>
                         <TenorEmbeds content={msg.content} />
                         <ImageAttachments attachments={msg.attachments} />
                         <EmbedMedia embeds={msg.embeds} />
+                        <Reactions reactions={msg.reactions} messageId={msg.id} reactedSet={reactedSet} onReact={handleReact} />
                       </div>
                     </div>
                   ) : (
@@ -698,6 +918,7 @@ export default function DiscordChatComponent({ messageCount = 500, joinMode = fa
                           {(msg.author.displayName || "?")[0].toUpperCase()}
                         </div>
                       )}
+                      <MessageActions messageId={msg.id} onOpenPicker={handleOpenPicker} pickerMessageId={pickerMessageId} />
                       <div className={styles.messageContent}>
                         <div className={styles.messageHeader}>
                           <span className={styles.authorName} style={{ color: nameColor }}>
@@ -717,6 +938,7 @@ export default function DiscordChatComponent({ messageCount = 500, joinMode = fa
                         <TenorEmbeds content={msg.content} />
                         <ImageAttachments attachments={msg.attachments} />
                         <EmbedMedia embeds={msg.embeds} />
+                        <Reactions reactions={msg.reactions} messageId={msg.id} reactedSet={reactedSet} onReact={handleReact} />
                       </div>
                     </div>
                   )}
@@ -784,6 +1006,16 @@ export default function DiscordChatComponent({ messageCount = 500, joinMode = fa
           )}
         </aside>
       </div>
+
+      {/* ── Emoji Picker (rendered at top level for z-index) ──── */}
+      {pickerMessageId && (
+        <EmojiPicker
+          anchorRef={pickerAnchorRef}
+          serverEmojis={serverEmojis}
+          onSelect={handlePickerSelect}
+          onClose={handleClosePicker}
+        />
+      )}
     </div>
   );
 }
