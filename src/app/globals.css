@@ -15,6 +15,30 @@
   --accent-glow: rgba(245, 158, 11, 0.4);
   --accent-subtle: rgba(245, 158, 11, 0.1);
   --shadow-glow: 0 0 20px rgba(245, 158, 11, 0.15);
+
+  /* ── Discord Theme Colors ─────────────────────────────── */
+  --discord-bg-dark: #1e1f22;
+  --discord-bg-mid: #2b2d31;
+  --discord-bg-chat: #313338;
+  --discord-bg-deep: #1a1b1e;
+  --discord-bg-input: #383a40;
+  --discord-text-primary: #f2f3f5;
+  --discord-text-normal: #dbdee1;
+  --discord-text-secondary: #b5bac1;
+  --discord-text-muted: #949ba4;
+  --discord-text-faint: #80848e;
+  --discord-text-subtle: #6d6f78;
+  --discord-blurple: #5865f2;
+  --discord-blurple-light: #c9cdfb;
+  --discord-blurple-muted: #8a99fc;
+  --discord-white: #fff;
+
+  /* ── Newgrounds / Clock Crew Colors ───────────────────── */
+  --ng-orange: #ff6600;
+  --ng-gold: #f5c518;
+  --ng-gold-muted: #f4bf4f;
+  --ng-fan-pink: #f48fb1;
+  --ng-supporter-pink: #f48fb1;
 }
 
 /* ── Body Overrides ────────────────────────────────────────── */
@@ -83,7 +107,7 @@ a:hover {
   );
   margin-top: -100vmax;
   margin-left: -100vmax;
-  will-change: transform, top;
+  will-change: transform;
   opacity: 0.4;
   filter: saturate(0.5) brightness(0.6);
   /* 3s ease-out when transitioning BACK from energized → idle */
@@ -230,7 +254,7 @@ a:hover {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   color: var(--text-muted);
   text-decoration: none;
   transition: color var(--transition-fast);

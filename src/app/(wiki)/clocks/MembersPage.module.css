@@ -23,7 +23,7 @@
 }
 
 .subtitle {
-  font-size: 14px;
+  font-size: var(--font-size-base);
   color: var(--text-secondary);
 }
 
@@ -53,7 +53,7 @@
 
 .sortBtn {
   padding: 6px 12px;
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   font-weight: 500;
   color: var(--text-tertiary);
   border-radius: var(--border-radius-sm);
@@ -88,7 +88,7 @@
 }
 
 .letterHeading {
-  font-size: 20px;
+  font-size: var(--font-size-xl);
   font-weight: 700;
   color: var(--accent-color);
   padding-bottom: 8px;
@@ -118,7 +118,7 @@
   padding: 48px 24px;
   text-align: center;
   color: var(--text-tertiary);
-  font-size: 14px;
+  font-size: var(--font-size-base);
 }
 
 @media (max-width: 600px) {

@@ -8,7 +8,7 @@
   width: 100%;
   border-radius: 12px;
   overflow: hidden;
-  background: #2b2d31;
+  background: var(--discord-bg-mid);
   border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.5),
@@ -38,7 +38,7 @@
   align-items: center;
   gap: 10px;
   padding: 12px 16px;
-  background: #1e1f22;
+  background: var(--discord-bg-dark);
   border-bottom: 1px solid rgba(0, 0, 0, 0.4);
   user-select: none;
   flex-shrink: 0;
@@ -72,15 +72,15 @@
 }
 
 .titleText {
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-weight: 600;
-  color: #f2f3f5;
+  color: var(--discord-text-primary);
   letter-spacing: -0.01em;
 }
 
 .titleCount {
-  font-size: 12px;
-  color: #80848e;
+  font-size: var(--font-size-sm);
+  color: var(--discord-text-faint);
   margin-left: auto;
 }
 
@@ -102,7 +102,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  background: #313338;
+  background: var(--discord-bg-chat);
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 
@@ -111,9 +111,9 @@
   padding: 8px 12px 8px 36px;
   border: none;
   border-radius: 6px;
-  background: #383a40;
-  color: #dbdee1;
-  font-size: 14px;
+  background: var(--discord-bg-input);
+  color: var(--discord-text-normal);
+  font-size: var(--font-size-base);
   font-family: inherit;
   outline: none;
   transition: background-color 150ms ease, box-shadow 150ms ease;
@@ -121,11 +121,11 @@
 }
 
 .searchInput::placeholder {
-  color: #6d6f78;
+  color: var(--discord-text-subtle);
 }
 
 .searchInput:focus {
-  background: #404249;
+  background: var(--discord-bg-input);
   box-shadow: 0 0 0 2px rgba(88, 101, 242, 0.4);
   border-color: transparent;
 }
@@ -141,7 +141,7 @@
   transform: translateY(-50%);
   width: 16px;
   height: 16px;
-  color: #6d6f78;
+  color: var(--discord-text-subtle);
   pointer-events: none;
 }
 
@@ -168,8 +168,8 @@
   border: none;
   border-radius: 4px;
   background: transparent;
-  color: #949ba4;
-  font-size: 12px;
+  color: var(--discord-text-muted);
+  font-size: var(--font-size-sm);
   font-weight: 600;
   font-family: inherit;
   cursor: pointer;
@@ -180,12 +180,12 @@
 
 .typeTab:hover {
   background: rgba(255, 255, 255, 0.06);
-  color: #dbdee1;
+  color: var(--discord-text-normal);
 }
 
 .typeTabActive {
   background: rgba(88, 101, 242, 0.2);
-  color: #8a99fc;
+  color: var(--discord-blurple-muted);
 }
 
 /* ── Year Filter ───────────────────────────────────────────────── */
@@ -198,9 +198,9 @@
   padding: 4px 28px 4px 10px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 4px;
-  background: #383a40;
-  color: #dbdee1;
-  font-size: 12px;
+  background: var(--discord-bg-input);
+  color: var(--discord-text-normal);
+  font-size: var(--font-size-sm);
   font-weight: 600;
   font-family: inherit;
   cursor: pointer;
@@ -217,7 +217,7 @@
 }
 
 .yearSelect:hover {
-  background-color: #404249;
+  background-color: var(--discord-bg-input);
   border-color: rgba(255, 255, 255, 0.12);
 }
 
@@ -227,8 +227,8 @@
 }
 
 .yearSelect option {
-  background: #2b2d31;
-  color: #dbdee1;
+  background: var(--discord-bg-mid);
+  color: var(--discord-text-normal);
 }
 
 /* ── Item Grid (scrollable) ────────────────────────────────────── */
@@ -243,14 +243,14 @@
   gap: 12px;
   align-content: flex-start;
   min-height: 0;
-  background: #313338;
+  background: var(--discord-bg-chat);
 }
 
 /* Discord-style scrollbar */
 .itemGrid::-webkit-scrollbar { width: 8px; }
-.itemGrid::-webkit-scrollbar-track { background: #2b2d31; border-radius: 4px; }
-.itemGrid::-webkit-scrollbar-thumb { background: #1a1b1e; border-radius: 4px; }
-.itemGrid::-webkit-scrollbar-thumb:hover { background: #111214; }
+.itemGrid::-webkit-scrollbar-track { background: var(--discord-bg-mid); border-radius: 4px; }
+.itemGrid::-webkit-scrollbar-thumb { background: var(--discord-bg-deep); border-radius: 4px; }
+.itemGrid::-webkit-scrollbar-thumb:hover { background: var(--discord-bg-deep); }
 
 /* ── Item Card ─────────────────────────────────────────────────── */
 
@@ -259,7 +259,7 @@
   flex-shrink: 0;
   border-radius: 8px;
   overflow: hidden;
-  background: #2b2d31;
+  background: var(--discord-bg-mid);
   border: 1px solid rgba(255, 255, 255, 0.04);
   cursor: pointer;
   transition:
@@ -291,7 +291,7 @@
   position: relative;
   width: 100%;
   height: 135px;
-  background: #1e1f22;
+  background: var(--discord-bg-dark);
   overflow: hidden;
 }
 
@@ -313,7 +313,7 @@
   right: 6px;
   padding: 2px 6px;
   border-radius: 4px;
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.03em;
@@ -323,17 +323,17 @@
 
 .typeBadgeMovie {
   background: rgba(229, 57, 53, 0.75);
-  color: #fff;
+  color: var(--discord-white);
 }
 
 .typeBadgeGame {
   background: rgba(67, 160, 71, 0.75);
-  color: #fff;
+  color: var(--discord-white);
 }
 
 .typeBadgeAudio {
   background: rgba(156, 39, 176, 0.75);
-  color: #fff;
+  color: var(--discord-white);
 }
 
 
@@ -343,9 +343,9 @@
 }
 
 .itemTitle {
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 600;
-  color: #f2f3f5;
+  color: var(--discord-text-primary);
   line-height: 1.3;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -362,8 +362,8 @@
 }
 
 .itemAuthor {
-  font-size: 11px;
-  color: #949ba4;
+  font-size: var(--font-size-xs);
+  color: var(--discord-text-muted);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -373,14 +373,14 @@
   display: flex;
   align-items: center;
   gap: 3px;
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   font-weight: 600;
-  color: #f5c518;
+  color: var(--ng-gold);
   flex-shrink: 0;
 }
 
 .scoreStar {
-  font-size: 10px;
+  font-size: 0.625rem;
 }
 
 /* ── Profile Card Modal Overlay ────────────────────────────────── */
@@ -409,7 +409,7 @@
   max-width: 560px;
   max-height: 85vh;
   overflow-y: auto;
-  background: #2b2d31;
+  background: var(--discord-bg-mid);
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
@@ -431,7 +431,7 @@
 /* Discord-style scrollbar for modal */
 .modalCard::-webkit-scrollbar { width: 6px; }
 .modalCard::-webkit-scrollbar-track { background: transparent; }
-.modalCard::-webkit-scrollbar-thumb { background: #1a1b1e; border-radius: 3px; }
+.modalCard::-webkit-scrollbar-thumb { background: var(--discord-bg-deep); border-radius: 3px; }
 
 .modalClose {
   position: absolute;
@@ -442,8 +442,8 @@
   border: none;
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.4);
-  color: #dbdee1;
-  font-size: 18px;
+  color: var(--discord-text-normal);
+  font-size: var(--font-size-lg);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -466,7 +466,7 @@
   justify-content: center;
   min-height: 220px;
   padding: 32px 24px 28px;
-  background-color: #1e1f22;
+  background-color: var(--discord-bg-dark);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -503,7 +503,7 @@
   align-items: center;
   padding: 3px 10px;
   border-radius: 4px;
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -512,9 +512,9 @@
 }
 
 .contentHeroTitle {
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--discord-white);
   margin: 4px 0 2px;
   line-height: 1.25;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
@@ -529,14 +529,14 @@
 }
 
 .contentHeroAuthor {
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: rgba(255, 255, 255, 0.65);
 }
 
 .contentHeroScore {
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 600;
-  color: #f5c518;
+  color: var(--ng-gold);
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
@@ -544,11 +544,11 @@
 
 .actionHero {
   margin-top: 14px;
-  background: #ff6600;
-  color: #fff;
+  background: var(--ng-orange);
+  color: var(--discord-white);
   padding: 10px 28px;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: var(--font-size-base);
   box-shadow:
     0 4px 16px rgba(255, 102, 0, 0.35),
     0 1px 3px rgba(0, 0, 0, 0.3);
@@ -559,7 +559,7 @@
 }
 
 .actionHero:hover {
-  background: #e65c00;
+  background: var(--ng-orange);
   box-shadow:
     0 6px 24px rgba(255, 102, 0, 0.45),
     0 2px 6px rgba(0, 0, 0, 0.4);
@@ -574,9 +574,9 @@
 }
 
 .creatorDividerText {
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   font-weight: 700;
-  color: #80848e;
+  color: var(--discord-text-faint);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -618,8 +618,8 @@
   width: 72px;
   height: 72px;
   border-radius: 50%;
-  border: 5px solid #2b2d31;
-  background: #2b2d31;
+  border: 5px solid var(--discord-bg-mid);
+  background: var(--discord-bg-mid);
   z-index: 1;
 }
 
@@ -634,13 +634,13 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: #5865f2;
+  background: var(--discord-blurple);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 28px;
+  font-size: 1.75rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--discord-white);
 }
 
 /* ── Card Header ───────────────────────────────────────────────── */
@@ -650,9 +650,9 @@
 }
 
 .cardUsername {
-  font-size: 20px;
+  font-size: var(--font-size-xl);
   font-weight: 700;
-  color: #f2f3f5;
+  color: var(--discord-text-primary);
 }
 
 .cardRankRow {
@@ -669,7 +669,7 @@
   gap: 4px;
   padding: 2px 8px;
   border-radius: 4px;
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.02em;
@@ -677,29 +677,29 @@
 
 .ngBadge {
   background: rgba(255, 152, 0, 0.2);
-  color: #ffb74d;
+  color: var(--ng-gold-muted);
 }
 
 .ccBadge {
   background: rgba(88, 101, 242, 0.2);
-  color: #8a99fc;
+  color: var(--discord-blurple-muted);
 }
 
 .levelBadge {
   background: rgba(76, 175, 80, 0.2);
-  color: #81c784;
+  color: var(--success);
 }
 
 .supporterBadge {
   background: rgba(233, 30, 99, 0.2);
-  color: #f48fb1;
+  color: var(--ng-fan-pink);
 }
 
 .cardDescription {
   margin-top: 8px;
   padding: 0 20px 12px;
-  font-size: 13px;
-  color: #b5bac1;
+  font-size: 0.8125rem;
+  color: var(--discord-text-secondary);
   line-height: 1.5;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
@@ -718,17 +718,17 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 12px;
-  color: #949ba4;
+  font-size: var(--font-size-sm);
+  color: var(--discord-text-muted);
 }
 
 .personalInfoIcon {
-  font-size: 13px;
+  font-size: 0.8125rem;
   flex-shrink: 0;
 }
 
 .personalInfoValue {
-  color: #dbdee1;
+  color: var(--discord-text-normal);
 }
 
 /* ── Stats Grid ────────────────────────────────────────────────── */
@@ -756,16 +756,16 @@
 }
 
 .statValue {
-  font-size: 18px;
+  font-size: var(--font-size-lg);
   font-weight: 700;
-  color: #f2f3f5;
+  color: var(--discord-text-primary);
   line-height: 1;
 }
 
 .statLabel {
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 600;
-  color: #80848e;
+  color: var(--discord-text-faint);
   text-transform: uppercase;
   letter-spacing: 0.04em;
   margin-top: 4px;
@@ -788,8 +788,8 @@
   padding: 4px 10px;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.04);
-  font-size: 12px;
-  color: #b5bac1;
+  font-size: var(--font-size-sm);
+  color: var(--discord-text-secondary);
   transition: background-color 150ms ease;
 }
 
@@ -798,12 +798,12 @@
 }
 
 .contentPillIcon {
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 .contentPillCount {
   font-weight: 600;
-  color: #dbdee1;
+  color: var(--discord-text-normal);
 }
 
 /* ── CC Forum Section ──────────────────────────────────────────── */
@@ -814,9 +814,9 @@
 }
 
 .ccSectionTitle {
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   font-weight: 700;
-  color: #949ba4;
+  color: var(--discord-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.02em;
   margin-bottom: 8px;
@@ -837,7 +837,7 @@
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
-  background: #1e1f22;
+  background: var(--discord-bg-dark);
 }
 
 .ccInfo {
@@ -846,14 +846,14 @@
 }
 
 .ccUsername {
-  font-size: 14px;
+  font-size: var(--font-size-base);
   font-weight: 600;
-  color: #f2f3f5;
+  color: var(--discord-text-primary);
 }
 
 .ccCustomTitle {
-  font-size: 12px;
-  color: #949ba4;
+  font-size: var(--font-size-sm);
+  color: var(--discord-text-muted);
   font-style: italic;
   margin-top: 1px;
 }
@@ -866,12 +866,12 @@
 }
 
 .ccStatItem {
-  font-size: 12px;
-  color: #949ba4;
+  font-size: var(--font-size-sm);
+  color: var(--discord-text-muted);
 }
 
 .ccStatValue {
-  color: #dbdee1;
+  color: var(--discord-text-normal);
   font-weight: 600;
 }
 
@@ -899,9 +899,9 @@
 }
 
 .ccQuoteBody {
-  font-size: 12.5px;
+  font-size: 0.78125rem;
   line-height: 1.55;
-  color: #b5bac1;
+  color: var(--discord-text-secondary);
   font-style: italic;
   margin: 0;
   word-break: break-word;
@@ -919,8 +919,8 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 11px;
-  color: #7a7e8a;
+  font-size: var(--font-size-xs);
+  color: var(--discord-text-subtle);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -928,13 +928,13 @@
 }
 
 .ccQuoteThreadIcon {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   flex-shrink: 0;
 }
 
 .ccQuoteDate {
-  font-size: 11px;
-  color: #6d6f78;
+  font-size: var(--font-size-xs);
+  color: var(--discord-text-subtle);
   margin-left: auto;
 }
 
@@ -950,9 +950,9 @@
 }
 
 .topSubTitle {
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   font-weight: 700;
-  color: #949ba4;
+  color: var(--discord-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.02em;
   margin-bottom: 6px;
@@ -983,7 +983,7 @@
   border-radius: 3px;
   object-fit: cover;
   flex-shrink: 0;
-  background: #1e1f22;
+  background: var(--discord-bg-dark);
 }
 
 .topSubInfo {
@@ -992,18 +992,18 @@
 }
 
 .topSubName {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   font-weight: 500;
-  color: #dbdee1;
+  color: var(--discord-text-normal);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .topSubScore {
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   font-weight: 600;
-  color: #f5c518;
+  color: var(--ng-gold);
   flex-shrink: 0;
 }
 
@@ -1024,7 +1024,7 @@
   padding: 10px 12px;
   border: none;
   border-radius: 6px;
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 600;
   font-family: inherit;
   cursor: pointer;
@@ -1044,17 +1044,17 @@
 }
 
 .actionPrimary {
-  background: #ff6600;
-  color: #fff;
+  background: var(--ng-orange);
+  color: var(--discord-white);
 }
 
 .actionPrimary:hover {
-  background: #e65c00;
+  background: var(--ng-orange);
 }
 
 .actionSecondary {
   background: rgba(255, 255, 255, 0.08);
-  color: #dbdee1;
+  color: var(--discord-text-normal);
 }
 
 .actionSecondary:hover {
@@ -1070,8 +1070,8 @@
   justify-content: center;
   gap: 12px;
   padding: 48px 16px;
-  color: #80848e;
-  font-size: 14px;
+  color: var(--discord-text-faint);
+  font-size: var(--font-size-base);
 }
 
 .loadingDots {
@@ -1083,7 +1083,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #ff6600;
+  background: var(--ng-orange);
   animation: portalBounce 1.4s ease-in-out infinite both;
 }
 
@@ -1111,18 +1111,18 @@
   justify-content: center;
   gap: 8px;
   padding: 48px 24px;
-  color: #80848e;
+  color: var(--discord-text-faint);
   text-align: center;
 }
 
 .emptyIcon {
-  font-size: 36px;
+  font-size: 2.25rem;
   opacity: 0.6;
 }
 
 .emptyText {
-  font-size: 14px;
-  color: #949ba4;
+  font-size: var(--font-size-base);
+  color: var(--discord-text-muted);
 }
 
 /* ── Infinite Scroll ──────────────────────────────────────────── */
@@ -1145,9 +1145,9 @@
   width: 100%;
   text-align: center;
   padding: 16px 0 8px;
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   font-weight: 500;
-  color: #5c5e66;
+  color: var(--discord-text-subtle);
   letter-spacing: 0.02em;
   flex-shrink: 0;
 }
@@ -1158,7 +1158,7 @@
   position: relative;
   width: 100%;
   height: 135px;
-  background: #1e1f22;
+  background: var(--discord-bg-dark);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -1183,13 +1183,13 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: #5865f2;
+  background: var(--discord-blurple);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 32px;
+  font-size: 2rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--discord-white);
   border: 3px solid rgba(255, 255, 255, 0.1);
   transition: transform 300ms ease, border-color 300ms ease;
 }
@@ -1208,9 +1208,9 @@
   background: rgba(76, 175, 80, 0.8);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--discord-white);
   letter-spacing: 0.02em;
 }
 
@@ -1218,9 +1218,9 @@
   display: flex;
   align-items: center;
   gap: 3px;
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   font-weight: 600;
-  color: #f48fb1;
+  color: var(--ng-fan-pink);
   flex-shrink: 0;
 }
 
@@ -1239,7 +1239,8 @@
   height: 100%;
   border-radius: 2px;
   background: linear-gradient(90deg, #f5c518, #ff6600);
-  transition: width 600ms cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: left;
+  transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ── Profile Detail Modal (Clocks tab) ─────────────────────────── */
@@ -1274,8 +1275,8 @@
   width: 72px;
   height: 72px;
   border-radius: 50%;
-  border: 5px solid #2b2d31;
-  background: #2b2d31;
+  border: 5px solid var(--discord-bg-mid);
+  background: var(--discord-bg-mid);
   flex-shrink: 0;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
@@ -1287,9 +1288,9 @@
 }
 
 .profileDisplayName {
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: 700;
-  color: #f2f3f5;
+  color: var(--discord-text-primary);
   display: block;
   line-height: 1.2;
 }
@@ -1314,8 +1315,8 @@
   padding: 4px 10px;
   border-radius: 12px;
   background: rgba(88, 101, 242, 0.1);
-  color: #8a99fc;
-  font-size: 12px;
+  color: var(--discord-blurple-muted);
+  font-size: var(--font-size-sm);
   font-weight: 500;
   text-decoration: none;
   transition: background-color 150ms ease, color 150ms ease;
@@ -1323,7 +1324,7 @@
 
 .profileLinkItem:hover {
   background: rgba(88, 101, 242, 0.2);
-  color: #a5b4fc;
+  color: var(--discord-blurple-light);
 }
 
 /* ── Top Submission anchors reset ──────────────────────────────── */

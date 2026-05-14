@@ -67,7 +67,7 @@
 }
 
 .logoText {
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-weight: 600;
   color: var(--text-primary);
   letter-spacing: -0.02em;
@@ -89,7 +89,7 @@
   display: inline-flex;
   align-items: center;
   padding: 6px 14px;
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 500;
   color: var(--text-secondary);
   text-decoration: none;
@@ -126,6 +126,6 @@
 
   .link {
     padding: 6px 10px;
-    font-size: 12px;
+    font-size: var(--font-size-sm);
   }
 }

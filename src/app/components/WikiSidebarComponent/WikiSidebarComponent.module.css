@@ -26,7 +26,7 @@
 
 .sectionLabel {
   display: block;
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -39,7 +39,7 @@
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 500;
   color: var(--text-secondary);
   text-decoration: none;
@@ -65,7 +65,7 @@
 }
 
 .sectionIcon {
-  font-size: 14px;
+  font-size: var(--font-size-base);
   flex-shrink: 0;
 }
 
@@ -90,7 +90,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   font-weight: 600;
   color: var(--text-tertiary);
   text-decoration: none;
@@ -116,7 +116,7 @@
   align-items: center;
   gap: 6px;
   padding: 10px 16px;
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 600;
   color: var(--text-primary);
   background: var(--bg-secondary);
@@ -127,11 +127,11 @@
 }
 
 .mobileToggleIcon {
-  font-size: 16px;
+  font-size: var(--font-size-md);
 }
 
 .mobileToggleLabel {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
 }
 
 
@@ -151,7 +151,7 @@
 .articleSectionLink {
   display: block;
   padding: 4px 8px;
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   color: var(--text-tertiary);
   text-decoration: none;
   border-radius: var(--border-radius-sm);

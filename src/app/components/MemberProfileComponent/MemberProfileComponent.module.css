@@ -57,7 +57,7 @@
 }
 
 .avatarFallback {
-  font-size: 28px;
+  font-size: 1.75rem;
   font-weight: 700;
   color: var(--text-tertiary);
 }
@@ -69,7 +69,7 @@
 }
 
 .username {
-  font-size: 28px;
+  font-size: 1.75rem;
   font-weight: 700;
   color: var(--text-primary);
   letter-spacing: -0.02em;
@@ -84,7 +84,7 @@
 }
 
 .customTitle {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
   font-style: italic;
 }
@@ -92,7 +92,7 @@
 .groupBadge, .posBadge, .ngRankBadge, .levelBadge, .supporterBadge {
   display: inline-block;
   padding: 2px 8px;
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 600;
   border-radius: var(--border-radius-sm);
   text-transform: uppercase;
@@ -111,7 +111,7 @@
 
 .ngRankBadge {
   background: rgba(245, 158, 11, 0.15);
-  color: #f59e0b;
+  color: var(--accent-color);
 }
 
 .levelBadge {
@@ -121,7 +121,7 @@
 
 .supporterBadge {
   background: rgba(245, 158, 11, 0.15);
-  color: #fbbf24;
+  color: var(--warning);
 }
 
 .headerActions {
@@ -131,7 +131,7 @@
 }
 
 .headerBtn {
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   font-weight: 600;
   padding: 4px 12px;
   border-radius: var(--border-radius-sm);
@@ -176,18 +176,18 @@
 }
 
 .statIcon {
-  font-size: 14px;
+  font-size: var(--font-size-base);
   opacity: 0.7;
 }
 
 .statValue {
-  font-size: 16px;
+  font-size: var(--font-size-md);
   font-weight: 700;
   color: var(--text-primary);
 }
 
 .statLabel {
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 500;
   color: var(--text-muted);
   text-transform: uppercase;
@@ -211,7 +211,7 @@
   align-items: center;
   gap: 6px;
   padding: 10px 16px;
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   font-weight: 500;
   color: var(--text-tertiary);
   border: none;
@@ -248,11 +248,11 @@
 }
 
 .tabIcon {
-  font-size: 14px;
+  font-size: var(--font-size-base);
 }
 
 .tabCount {
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 700;
   padding: 1px 6px;
   border-radius: var(--border-radius-sm);
@@ -302,7 +302,7 @@
 }
 
 .sectionTitle {
-  font-size: 14px;
+  font-size: var(--font-size-base);
   font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 14px;
@@ -312,11 +312,11 @@
 }
 
 .sectionIcon {
-  font-size: 16px;
+  font-size: var(--font-size-md);
 }
 
 .panelCount {
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 600;
   padding: 2px 8px;
   border-radius: var(--border-radius-sm);
@@ -343,7 +343,7 @@
 /* ── NG Bio ──────────────────────────────────────────────────── */
 
 .ngBio {
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: var(--text-secondary);
   line-height: 1.6;
   padding: 12px;
@@ -362,7 +362,7 @@
 }
 
 .infoItem {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
   padding: 4px 10px;
   background: rgba(255, 255, 255, 0.03);
@@ -389,14 +389,14 @@
 }
 
 .ccName {
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-weight: 600;
   color: var(--text-primary);
   display: block;
 }
 
 .ccTitle {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
   font-style: italic;
   display: block;
@@ -407,7 +407,7 @@
   display: inline-block;
   margin-top: 4px;
   padding: 2px 8px;
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 600;
   border-radius: var(--border-radius-sm);
   background: rgba(16, 185, 129, 0.1);
@@ -424,7 +424,7 @@
 
 .signatureLabel {
   display: block;
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 600;
   color: var(--text-muted);
   text-transform: uppercase;
@@ -433,7 +433,7 @@
 }
 
 .signatureContent {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
   line-height: 1.5;
   overflow: hidden;
@@ -455,7 +455,7 @@
 }
 
 .pill {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   font-weight: 500;
   padding: 6px 14px;
   border-radius: var(--border-radius-sm);
@@ -518,7 +518,7 @@
 }
 
 .contentTitle {
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 600;
   color: var(--text-primary);
   white-space: nowrap;
@@ -530,13 +530,13 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   color: var(--text-muted);
   align-items: center;
 }
 
 .contentType {
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 .contentScore {
@@ -549,7 +549,7 @@
 }
 
 .contentDesc {
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   color: var(--text-tertiary);
   line-height: 1.4;
   display: -webkit-box;
@@ -583,7 +583,7 @@
 }
 
 .postThread {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   font-weight: 600;
   color: var(--text-primary);
   white-space: nowrap;
@@ -592,14 +592,14 @@
 }
 
 .postDate {
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   color: var(--text-muted);
   white-space: nowrap;
   flex-shrink: 0;
 }
 
 .postBody {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
   line-height: 1.5;
 }
@@ -628,7 +628,7 @@
 }
 
 .reviewTarget {
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 600;
   color: var(--text-primary);
   white-space: nowrap;
@@ -637,7 +637,7 @@
 }
 
 .reviewScore {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   font-weight: 700;
   color: var(--accent-color);
   background: var(--accent-subtle);
@@ -647,7 +647,7 @@
 }
 
 .reviewBody {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
   line-height: 1.5;
 }
@@ -661,7 +661,7 @@
 }
 
 .fanTag {
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   font-weight: 500;
   padding: 4px 10px;
   border-radius: var(--border-radius-sm);
@@ -671,7 +671,7 @@
 }
 
 .fanMore {
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   color: var(--text-muted);
   padding: 4px 10px;
   font-style: italic;
@@ -704,7 +704,7 @@
 }
 
 .threadTitle {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   font-weight: 500;
   color: var(--text-primary);
   white-space: nowrap;
@@ -715,7 +715,7 @@
 .threadMeta {
   display: flex;
   gap: 10px;
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   color: var(--text-muted);
   flex-shrink: 0;
 }
@@ -734,7 +734,7 @@
 }
 
 .linkItem {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   padding: 6px 14px;
   border-radius: var(--border-radius-sm);
   background: rgba(255, 255, 255, 0.04);
@@ -764,7 +764,7 @@
 }
 
 .summaryModel {
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 500;
   padding: 2px 8px;
   border-radius: var(--border-radius-sm);
@@ -773,13 +773,13 @@
 }
 
 .mdWrap {
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: var(--text-secondary);
   line-height: 1.7;
 }
 
 .mdH1 {
-  font-size: 20px;
+  font-size: var(--font-size-xl);
   font-weight: 700;
   color: var(--text-primary);
   margin: 16px 0 8px;
@@ -792,14 +792,14 @@
 }
 
 .mdH2 {
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-weight: 600;
   color: var(--text-primary);
   margin: 14px 0 6px;
 }
 
 .mdH3 {
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 600;
   color: var(--accent-color);
   margin: 10px 0 4px;
@@ -823,7 +823,7 @@
 }
 
 .mdList li {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
   line-height: 1.5;
 }
@@ -845,11 +845,11 @@
   border-radius: var(--border-radius-sm);
   text-align: center;
   color: var(--text-muted);
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 .emptyTabIcon {
-  font-size: 28px;
+  font-size: 1.75rem;
 }
 
 /* ── Loading Skeleton ────────────────────────────────────────── */
@@ -905,15 +905,15 @@
   text-align: center;
 }
 
-.errorIcon { font-size: 32px; }
+.errorIcon { font-size: 2rem; }
 
 .errorText {
-  font-size: 14px;
+  font-size: var(--font-size-base);
   color: var(--text-secondary);
 }
 
 .backLink {
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: var(--accent-color);
   text-decoration: none;
 
@@ -928,7 +928,7 @@
     text-align: center;
   }
 
-  .username { font-size: 22px; }
+  .username { font-size: 1.375rem; }
 
   .badges { justify-content: center; }
 
