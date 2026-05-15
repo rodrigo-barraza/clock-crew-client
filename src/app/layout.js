@@ -2,8 +2,7 @@ import { Inter } from "next/font/google";
 import Image from "next/image";
 import "./globals.css";
 import NavBarComponent from "./components/NavBarComponent/NavBarComponent";
-import SessionTrackerComponent from "./components/SessionTrackerComponent/SessionTrackerComponent";
-import { ThemeProvider } from "@rodrigo-barraza/components-library";
+import { ThemeProvider, SessionTrackerComponent } from "@rodrigo-barraza/components-library";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -167,7 +166,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className={inter.variable}>
         <ThemeProvider>
-          <SessionTrackerComponent />
+          <SessionTrackerComponent projectId="clock-crew-client" />
           <NavBarComponent />
           {children}
           <footer className="site-footer">
