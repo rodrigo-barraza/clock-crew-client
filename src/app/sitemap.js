@@ -6,8 +6,7 @@
 const BASE_URL = "https://clocktopia.com";
 import { CLOCK_CREW_SERVICE_URL } from "../../config.js";
 
-const ONE_DAY_SECONDS = 86_400;
-export const revalidate = ONE_DAY_SECONDS; // Revalidate sitemap once per day
+export const revalidate = 86_400; // 1 day — must be a literal for Next.js static analysis
 
 function safeDate(str) {
   if (!str) return new Date();
