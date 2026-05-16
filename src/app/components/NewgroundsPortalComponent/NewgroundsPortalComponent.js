@@ -599,7 +599,7 @@ export default function NewgroundsPortalComponent() {
           }
         }
       }
-    } catch (err) {
+    } catch (error) {
       console.error("[NewgroundsPortal] Fetch error:", err);
     } finally {
       setLoading(false);

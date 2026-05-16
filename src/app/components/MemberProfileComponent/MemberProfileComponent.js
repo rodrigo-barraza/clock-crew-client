@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { formatNumber } from "@rodrigo-barraza/utilities-library";
+import { formatNumber, stripHtml } from "@rodrigo-barraza/utilities-library";
 import styles from "./MemberProfileComponent.module.css";
 
 // ── Helpers ──────────────────────────────────────────────────────
@@ -14,10 +14,7 @@ function formatDate(dateStr) {
   return d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
 }
 
-function stripHtml(html) {
-  if (!html) return "";
-  return html.replace(/<[^>]*>/g, "").trim();
-}
+
 
 // ── Tab definitions ──────────────────────────────────────────────
 const TABS = [
@@ -449,8 +446,8 @@ export default function MemberProfileComponent({ username }) {
         throw new Error(body.error || `Failed (${res.status})`);
       }
       return { data: await res.json(), error: null };
-    } catch (err) {
-      return { data: null, error: err.message };
+    } catch (error) {
+      return { data: null, error: error.message };
     }
   }, []);
 

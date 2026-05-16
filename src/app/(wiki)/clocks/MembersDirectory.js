@@ -30,8 +30,8 @@ export default function MembersDirectory() {
         if (!res.ok) throw new Error("Failed to fetch");
         const data = await res.json();
         setUsers(data.users || []);
-      } catch (err) {
-        console.error("[MembersPage] Fetch error:", err.message);
+      } catch (error) {
+        console.error("[MembersPage] Fetch error:", error.message);
       } finally {
         setLoading(false);
       }

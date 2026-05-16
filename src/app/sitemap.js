@@ -6,7 +6,8 @@
 const BASE_URL = "https://clocktopia.com";
 import { CLOCK_CREW_SERVICE_URL } from "../../config.js";
 
-export const revalidate = 86400; // Revalidate sitemap once per day
+const ONE_DAY_SECONDS = 86_400;
+export const revalidate = ONE_DAY_SECONDS; // Revalidate sitemap once per day
 
 function safeDate(str) {
   if (!str) return new Date();
@@ -57,8 +58,8 @@ export default async function sitemap() {
         priority: 0.6,
       }));
     }
-  } catch (err) {
-    console.error("[sitemap] Failed to fetch members:", err.message);
+  } catch (error) {
+    console.error("[sitemap] Failed to fetch members:", error.message);
     // Return only static pages if service is unavailable
   }
 

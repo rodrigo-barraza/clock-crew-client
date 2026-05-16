@@ -15,6 +15,7 @@ import { MS_PER_DAY } from "@rodrigo-barraza/utilities-library";
 // In-memory cache to avoid repeated oEmbed fetches for the same URL
 const cache = new Map();
 const CACHE_TTL = MS_PER_DAY;
+const ONE_DAY_SECONDS = 86_400;
 
 function transformThumbnailToGif(thumbnailUrl) {
   if (!thumbnailUrl) return null;
@@ -37,13 +38,13 @@ export async function GET(request) {
   const cached = cache.get(tenorUrl);
   if (cached && Date.now() - cached.ts < CACHE_TTL) {
     return Response.json(cached.data, {
-      headers: { "Cache-Control": "public, max-age=86400" },
+      headers: { "Cache-Control": `public, max-age=${ONE_DAY_SECONDS}` },
     });
   }
 
   try {
     const oembedUrl = `https://tenor.com/oembed?url=${encodeURIComponent(tenorUrl)}`;
-    const res = await fetch(oembedUrl, { next: { revalidate: 86400 } });
+    const res = await fetch(oembedUrl, { next: { revalidate: ONE_DAY_SECONDS } });
 
     if (!res.ok) {
       return Response.json({ error: "Tenor oEmbed request failed" }, { status: res.status });
@@ -72,7 +73,7 @@ export async function GET(request) {
     }
 
     return Response.json(data, {
-      headers: { "Cache-Control": "public, max-age=86400" },
+      headers: { "Cache-Control": `public, max-age=${ONE_DAY_SECONDS}` },
     });
   } catch (error) {
     console.error("[tenor/oembed] Proxy error:", error.message);
