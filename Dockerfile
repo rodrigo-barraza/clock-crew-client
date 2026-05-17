@@ -3,7 +3,7 @@
 # ============================================================
 # Community website for clock-crew.com. Uses
 # standalone output mode for minimal image size. Secrets are
-# resolved from Vault at build time via next.config.mjs.
+# resolved from Vault at build time via next.config.ts.
 # ============================================================
 
 # --- Base ---
@@ -20,7 +20,7 @@ RUN npm ci
 FROM base AS builder
 WORKDIR /app
 
-# Vault credentials — needed at build time for next.config.mjs
+# Vault credentials — needed at build time for next.config.ts
 ARG VAULT_SERVICE_URL=http://192.168.86.2:5599
 ENV VAULT_SERVICE_URL=$VAULT_SERVICE_URL
 
