@@ -41,13 +41,13 @@ export default async function sitemap() {
   // ── Dynamic member profile pages ────────────────────────────
   let memberPages = [];
   try {
-    const res = await fetch(
+    const response = await fetch(
       `${CLOCK_CREW_SERVICE_URL}/clockcrew/users?limit=5000`,
       { cache: "no-store" },
     );
 
-    if (res.ok) {
-      const data = await res.json();
+    if (response.ok) {
+      const data = await response.json();
       const users = data.users || [];
 
       memberPages = users.map((user: any) => ({

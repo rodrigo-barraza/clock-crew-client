@@ -17,20 +17,20 @@ export async function GET(_request: any,  { params }: any) {
   }
 
   try {
-    const res = await fetch(
+    const response = await fetch(
       `${CLOCK_CREW_SERVICE_URL}/clockcrew/members/${encodeURIComponent(username)}`,
       { cache: "no-store" },
     );
 
-    if (!res.ok) {
-      const body = await res.json().catch(() => ({}));
+    if (!response.ok) {
+      const body = await response.json().catch(() => ({}));
       return Response.json(
-        { error: body.error || `Failed to load profile (${res.status})` },
-        { status: res.status },
+        { error: body.error || `Failed to load profile (${response.status})` },
+        { status: response.status },
       );
     }
 
-    const data = await res.json();
+    const data = await response.json();
 
     // If the endpoint returned an error object (member not found)
     if (data.error) {

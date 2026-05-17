@@ -48,7 +48,7 @@ export default function HistoryTimelineComponent() {
       { threshold: 0.15, rootMargin: "0px 0px -60px 0px" },
     );
     const items = (timelineRef.current as any)?.querySelectorAll("[data-index]");
-    (items as any)?.forEach((el: any) => observer.observe(el));
+    (items as any)?.forEach((element: any) => observer.observe(element));
     return () => observer.disconnect();
   }, []);
 

@@ -12,11 +12,11 @@ import { CLOCK_CREW_SERVICE_URL } from "../../../../../config";
 // ── Fetch member data at request time for metadata ───────────
 async function fetchMember(username: any) {
   try {
-    const res = await fetch(
+    const response = await fetch(
       `${CLOCK_CREW_SERVICE_URL}/clockcrew/users/${encodeURIComponent(username)}`,
       { next: { revalidate: 3600 } },
     );
-    if (res.ok) return res.json();
+    if (response.ok) return response.json();
   } catch {
     // Silently fall back to basic metadata
   }

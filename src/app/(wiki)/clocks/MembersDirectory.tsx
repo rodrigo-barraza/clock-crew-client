@@ -26,9 +26,9 @@ export default function MembersDirectory() {
   useEffect(() => {
     async function fetchUsers() {
       try {
-        const res = await fetch("/api/clockcrew/users?limit=2000");
-        if (!res.ok) throw new Error("Failed to fetch");
-        const data = await res.json();
+        const response = await fetch("/api/clockcrew/users?limit=2000");
+        if (!response.ok) throw new Error("Failed to fetch");
+        const data = await response.json();
         setUsers(data.users || []);
       } catch (error) {
         console.error("[MembersPage] Fetch error:", (error as any).message);

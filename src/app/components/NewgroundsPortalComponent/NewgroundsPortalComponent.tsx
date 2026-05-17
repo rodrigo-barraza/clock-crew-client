@@ -562,10 +562,10 @@ export default function NewgroundsPortalComponent() {
       if (yr) params.set("year", yr);
 
       const endpoint = isClocks ? "/api/newgrounds/portal/clocks" : "/api/newgrounds/portal";
-      const res = await fetch(`${endpoint}?${params}`);
+      const response = await fetch(`${endpoint}?${params}`);
 
-      if (res.ok) {
-        const data = await res.json();
+      if (response.ok) {
+        const data = await response.json();
 
         if (isClocks) {
           const profiles = data.profiles || [];
@@ -635,11 +635,11 @@ export default function NewgroundsPortalComponent() {
 
   // ── Debounced search ───────────────────────────────────────────
   const handleSearchChange = useCallback((e: any) => {
-    const val = e.target.value;
-    setQuery(val);
+    const value = e.target.value;
+    setQuery(value);
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
-      fetchPortal(val, type, false, year);
+      fetchPortal(value, type, false, year);
     }, 350);
   }, [fetchPortal, type, year]);
 
@@ -695,7 +695,7 @@ export default function NewgroundsPortalComponent() {
           <div className={styles.searchBar}>
             <SearchInputComponent
               value={query}
-              onChange={(val: any) => handleSearchChange({ target: { value: val } })}
+              onChange={(value: any) => handleSearchChange({ target: { value: value } })}
               placeholder={isClocks ? "Search clocks by name…" : "Search movies, games, audio, or usernames…"}
               leadingIcon={<Search size={14} />}
               className={styles.searchInputWrap}
@@ -715,7 +715,7 @@ export default function NewgroundsPortalComponent() {
               <div className={styles.yearFilter}>
                 <SelectComponent
                   value={year}
-                  onChange={(val: any) => handleYearChange({ target: { value: val } })}
+                  onChange={(value: any) => handleYearChange({ target: { value: value } })}
                   options={[
                     { value: "", label: "All Years" },
                     ...(isClocks ? availableYears.profileYears : availableYears.contentYears).map((y: any) => ({ value: String(y), label: String(y) })),

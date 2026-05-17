@@ -32,11 +32,11 @@ export default function ClockComponent({
       const m = now.getMinutes() + s / 60;
       const h = (now.getHours() % 12) + m / 60;
 
-      const el = clockRef.current;
-      if (el) {
-        (el as any).style.setProperty("--hour-deg", `${h * 30}deg`);
-        (el as any).style.setProperty("--minute-deg", `${m * 6}deg`);
-        (el as any).style.setProperty("--second-deg", `${s * 6}deg`);
+      const element = clockRef.current;
+      if (element) {
+        (element as any).style.setProperty("--hour-deg", `${h * 30}deg`);
+        (element as any).style.setProperty("--minute-deg", `${m * 6}deg`);
+        (element as any).style.setProperty("--second-deg", `${s * 6}deg`);
       }
 
       rafId = requestAnimationFrame(tick);

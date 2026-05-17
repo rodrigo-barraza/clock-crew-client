@@ -11,16 +11,16 @@ import { GUILD_ID, LUPOS_BOT_URL } from "../discord-config";
 export async function GET() {
   try {
     const url = `${LUPOS_BOT_URL}/guild/emojis?guildId=${GUILD_ID}`;
-    const res = await fetch(url, { cache: "no-store" });
+    const response = await fetch(url, { cache: "no-store" });
 
-    if (!res.ok) {
+    if (!response.ok) {
       return Response.json(
         { error: "Failed to fetch emojis" },
-        { status: res.status },
+        { status: response.status },
       );
     }
 
-    return Response.json(await res.json());
+    return Response.json(await response.json());
   } catch (error) {
     console.error("[discord/emojis] Proxy error:", (error as any).message);
     return Response.json(

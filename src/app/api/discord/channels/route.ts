@@ -16,10 +16,10 @@ export async function GET() {
   // ── Try Lupos first (live Discord.js cache) ──────────────────
   try {
     const url = `${LUPOS_BOT_URL}/guild/channels?guildId=${GUILD_ID}`;
-    const res = await fetch(url, { cache: "no-store" });
+    const response = await fetch(url, { cache: "no-store" });
 
-    if (res.ok) {
-      const data = await res.json();
+    if (response.ok) {
+      const data = await response.json();
       return Response.json(data);
     }
   } catch {
@@ -33,14 +33,14 @@ export async function GET() {
     const results = await Promise.allSettled(
       CHANNEL_IDS.map(async (channelId) => {
         const url = `${TOOLS_SERVICE_URL}/discord/messages/search?guildId=${GUILD_ID}&channelId=${channelId}&limit=1&includeBots=true`;
-        const res = await fetch(url);
-        if (!res.ok) return { channelId, name: channelId };
-        const data = await res.json();
-        const msg = data.messages?.[0];
+        const response = await fetch(url);
+        if (!response.ok) return { channelId, name: channelId };
+        const data = await response.json();
+        const message = data.messages?.[0];
         return {
           channelId,
-          name: msg?.channelName || msg?.channel || channelId,
-          parentName: msg?.parentName || null,
+          name: message?.channelName || message?.channel || channelId,
+          parentName: message?.parentName || null,
         };
       }),
     );
@@ -56,18 +56,18 @@ export async function GET() {
       );
       if (guildRes.ok) {
         const guildData = await guildRes.json();
-        const msg = guildData.messages?.[0];
-        guildName = msg?.guildName || null;
+        const message = guildData.messages?.[0];
+        guildName = message?.guildName || null;
         // Build CDN URLs from stored icon/banner/splash hashes
-        if (msg?.guildIcon) {
-          const ext = msg.guildIcon.startsWith("a_") ? "gif" : "png";
-          guildIcon = `https://cdn.discordapp.com/icons/${GUILD_ID}/${msg.guildIcon}.${ext}?size=128`;
+        if (message?.guildIcon) {
+          const ext = message.guildIcon.startsWith("a_") ? "gif" : "png";
+          guildIcon = `https://cdn.discordapp.com/icons/${GUILD_ID}/${message.guildIcon}.${ext}?size=128`;
         }
-        if (msg?.guildBanner) {
-          guildBanner = `https://cdn.discordapp.com/banners/${GUILD_ID}/${msg.guildBanner}.png?size=480`;
+        if (message?.guildBanner) {
+          guildBanner = `https://cdn.discordapp.com/banners/${GUILD_ID}/${message.guildBanner}.png?size=480`;
         }
-        if (msg?.guildSplash) {
-          guildSplash = `https://cdn.discordapp.com/splashes/${GUILD_ID}/${msg.guildSplash}.png?size=480`;
+        if (message?.guildSplash) {
+          guildSplash = `https://cdn.discordapp.com/splashes/${GUILD_ID}/${message.guildSplash}.png?size=480`;
         }
       }
     } catch {

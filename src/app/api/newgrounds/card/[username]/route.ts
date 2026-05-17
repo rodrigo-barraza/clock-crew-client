@@ -11,16 +11,16 @@ export async function GET(request: any,  { params }: any) {
 
   try {
     const url = `${CLOCK_CREW_SERVICE_URL}/newgrounds/portal/${encodeURIComponent(username)}/card`;
-    const res = await fetch(url, { next: { revalidate: 600 } });
+    const response = await fetch(url, { next: { revalidate: 600 } });
 
-    if (!res.ok) {
+    if (!response.ok) {
       return Response.json(
         { error: "Failed to fetch card data" },
-        { status: res.status },
+        { status: response.status },
       );
     }
 
-    const data = await res.json();
+    const data = await response.json();
     return Response.json(data);
   } catch (error) {
     console.error("[newgrounds/card] Proxy error:", (error as any).message);

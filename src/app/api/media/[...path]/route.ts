@@ -19,16 +19,16 @@ export async function GET(_request: any,  { params }: any) {
   const upstream = `${MINIO_INTERNAL_URL}/${objectPath}`;
 
   try {
-    const res = await fetch(upstream, { cache: "no-store" });
+    const response = await fetch(upstream, { cache: "no-store" });
 
-    if (!res.ok) {
-      return new Response(null, { status: res.status });
+    if (!response.ok) {
+      return new Response(null, { status: response.status });
     }
 
-    return new Response(res.body, {
+    return new Response(response.body, {
       headers: {
         "Content-Type":
-          res.headers.get("Content-Type") || "application/octet-stream",
+          response.headers.get("Content-Type") || "application/octet-stream",
         // Archived media is immutable — cache aggressively
         "Cache-Control": "public, max-age=31536000, immutable",
       },

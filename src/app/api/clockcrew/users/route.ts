@@ -18,16 +18,16 @@ export async function GET(request: any) {
 
   try {
     const url = `${CLOCK_CREW_SERVICE_URL}/clockcrew/users?${params}`;
-    const res = await fetch(url, { cache: "no-store" });
+    const response = await fetch(url, { cache: "no-store" });
 
-    if (!res.ok) {
+    if (!response.ok) {
       return Response.json(
         { error: "Failed to fetch user listing" },
-        { status: res.status },
+        { status: response.status },
       );
     }
 
-    const data = await res.json();
+    const data = await response.json();
     return Response.json(data);
   } catch (error) {
     console.error("[clockcrew/users] Proxy error:", (error as any).message);

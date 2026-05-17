@@ -12,23 +12,23 @@ export async function GET(request: any) {
   // Forward all supported query params
   const params = new URLSearchParams();
   for (const key of ["q", "sort", "limit", "skip", "year"]) {
-    const val = searchParams.get(key);
-    if (val) params.set(key, val);
+    const value = searchParams.get(key);
+    if (value) params.set(key, value);
   }
   if (!params.has("limit")) params.set("limit", "60");
 
   try {
     const url = `${CLOCK_CREW_SERVICE_URL}/newgrounds/portal/clocks?${params}`;
-    const res = await fetch(url, { cache: "no-store" });
+    const response = await fetch(url, { cache: "no-store" });
 
-    if (!res.ok) {
+    if (!response.ok) {
       return Response.json(
         { error: "Failed to fetch clocks data" },
-        { status: res.status },
+        { status: response.status },
       );
     }
 
-    const data = await res.json();
+    const data = await response.json();
     return Response.json(data);
   } catch (error) {
     console.error("[newgrounds/portal/clocks] Proxy error:", (error as any).message);

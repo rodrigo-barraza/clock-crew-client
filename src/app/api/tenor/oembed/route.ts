@@ -44,13 +44,13 @@ export async function GET(request: any) {
 
   try {
     const oembedUrl = `https://tenor.com/oembed?url=${encodeURIComponent(tenorUrl)}`;
-    const res = await fetch(oembedUrl, { next: { revalidate: ONE_DAY_SECONDS } });
+    const response = await fetch(oembedUrl, { next: { revalidate: ONE_DAY_SECONDS } });
 
-    if (!res.ok) {
-      return Response.json({ error: "Tenor oEmbed request failed" }, { status: res.status });
+    if (!response.ok) {
+      return Response.json({ error: "Tenor oEmbed request failed" }, { status: response.status });
     }
 
-    const oembed = await res.json();
+    const oembed = await response.json();
     const gifUrl = transformThumbnailToGif(oembed.thumbnail_url);
 
     const data = {
@@ -67,8 +67,8 @@ export async function GET(request: any) {
     // Lazy cleanup — prevent unbounded growth
     if (cache.size > 500) {
       const now = Date.now();
-      for (const [key, val] of cache) {
-        if (now - val.ts > CACHE_TTL) cache.delete(key);
+      for (const [key, value] of cache) {
+        if (now - value.ts > CACHE_TTL) cache.delete(key);
       }
     }
 

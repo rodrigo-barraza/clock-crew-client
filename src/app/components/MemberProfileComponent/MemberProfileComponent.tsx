@@ -412,7 +412,7 @@ function MarkdownRenderer({ markdown }: any) {
       }
       elements.push(
         <ul key={i} className={styles.mdList}>
-          {listItems.map((item: any, idx: any) => <li key={idx}>{item}</li>)}
+          {listItems.map((item: any, index: any) => <li key={index}>{item}</li>)}
         </ul>
       );
       i = j;
@@ -440,12 +440,12 @@ export default function MemberProfileComponent({ username }: any) {
 
   const fetchMember = useCallback(async (name: any) => {
     try {
-      const res = await fetch(`/api/clockcrew/users/${encodeURIComponent(name)}`);
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        throw new Error(body.error || `Failed (${res.status})`);
+      const response = await fetch(`/api/clockcrew/users/${encodeURIComponent(name)}`);
+      if (!response.ok) {
+        const body = await response.json().catch(() => ({}));
+        throw new Error(body.error || `Failed (${response.status})`);
       }
-      return { data: await res.json(), error: null };
+      return { data: await response.json(), error: null };
     } catch (error) {
       return { data: null, error: (error as any).message };
     }

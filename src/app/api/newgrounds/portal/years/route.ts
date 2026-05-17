@@ -9,16 +9,16 @@ import { CLOCK_CREW_SERVICE_URL } from "../../../../../../config";
 export async function GET() {
   try {
     const url = `${CLOCK_CREW_SERVICE_URL}/newgrounds/portal/years`;
-    const res = await fetch(url, { cache: "no-store" });
+    const response = await fetch(url, { cache: "no-store" });
 
-    if (!res.ok) {
+    if (!response.ok) {
       return Response.json(
         { error: "Failed to fetch years data" },
-        { status: res.status },
+        { status: response.status },
       );
     }
 
-    const data = await res.json();
+    const data = await response.json();
     return Response.json(data);
   } catch (error) {
     console.error("[newgrounds/portal/years] Proxy error:", (error as any).message);

@@ -15,24 +15,24 @@ export async function GET() {
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     try {
       const url = `${LUPOS_BOT_URL}/guild/members?guildId=${GUILD_ID}`;
-      const res = await fetch(url, { cache: "no-store" });
+      const response = await fetch(url, { cache: "no-store" });
 
       // Retry on 503 — Lupos Discord client isn't ready yet
-      if (res.status === 503 && attempt < MAX_RETRIES) {
+      if (response.status === 503 && attempt < MAX_RETRIES) {
         const delay = Math.pow(2, attempt) * 1000; // 1s, 2s, 4s
         await new Promise((r: any) => setTimeout(r, delay));
         lastStatus = 503;
         continue;
       }
 
-      if (!res.ok) {
+      if (!response.ok) {
         return Response.json(
           { error: "Failed to fetch members" },
-          { status: res.status },
+          { status: response.status },
         );
       }
 
-      const data = await res.json();
+      const data = await response.json();
       return Response.json(data);
     } catch (error) {
       // Network error — retry if attempts remain

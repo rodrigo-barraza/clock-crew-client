@@ -18,17 +18,17 @@ export async function GET(request: any) {
 
   try {
     const url = `${TOOLS_SERVICE_URL}/discord/messages/search?guildId=${GUILD_ID}&channelId=${CHANNEL_ID}&limit=${limit}&includeBots=true`;
-    const res = await fetch(url, { cache: "no-store" });
+    const response = await fetch(url, { cache: "no-store" });
 
-    if (!res.ok) {
+    if (!response.ok) {
       return Response.json(
         { error: "Failed to fetch messages" },
-        { status: res.status },
+        { status: response.status },
       );
     }
 
     // Sanitize private MinIO URLs before sending to the browser
-    const raw = await res.text();
+    const raw = await response.text();
     const sanitized = rewritePrivateUrls(raw);
     return new Response(sanitized, {
       headers: { "Content-Type": "application/json" },

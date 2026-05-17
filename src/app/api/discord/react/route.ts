@@ -35,14 +35,14 @@ export async function POST(request: any) {
       );
     }
 
-    const res = await fetch(`${LUPOS_BOT_URL}/guild/react`, {
+    const response = await fetch(`${LUPOS_BOT_URL}/guild/react`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ guildId: GUILD_ID, channelId, messageId, emoji }),
     });
 
-    const data = await res.json();
-    return Response.json(data, { status: res.status });
+    const data = await response.json();
+    return Response.json(data, { status: response.status });
   } catch (error) {
     console.error("[discord/react] Proxy error:", (error as any).message);
     return Response.json(
