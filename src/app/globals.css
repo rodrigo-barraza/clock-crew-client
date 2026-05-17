@@ -4,7 +4,7 @@
    then declares Clock Crew–specific accent tokens and overrides.
    ════════════════════════════════════════════════════════════ */
 
-@import "@rodrigo-barraza/components-library/src/styles/base.css";
+@import "@rodrigo-barraza/components-library/base.css";
 
 /* ── Clock Crew Accent Tokens ─────────────────────────────── */
 

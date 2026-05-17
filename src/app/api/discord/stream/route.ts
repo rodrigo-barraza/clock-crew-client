@@ -11,8 +11,8 @@
 // Private Network Access (PNA) prompt for all visitors.
 // ============================================================
 
-import { rewriteStream } from "../rewritePrivateUrls.js";
-import { GUILD_ID, TOOLS_SERVICE_URL } from "../discord-config.js";
+import { rewriteStream } from "../rewritePrivateUrls";
+import { GUILD_ID, TOOLS_SERVICE_URL } from "../discord-config";
 
 // Whitelist of allowed channel IDs (prevents arbitrary channel access)
 const ALLOWED_CHANNELS = new Set([

@@ -4,7 +4,7 @@
 // Proxies enriched profile card requests to clockcrew-api.
 // ============================================================
 
-import { CLOCK_CREW_SERVICE_URL } from "../../../../../../config.js";
+import { CLOCK_CREW_SERVICE_URL } from "../../../../../../config";
 
 export async function GET(request: any,  { params }: any) {
   const { username } = await params;

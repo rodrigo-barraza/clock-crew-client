@@ -6,7 +6,7 @@
 // Retries on 503 (Discord client not ready) with exponential backoff.
 // ============================================================
 
-import { GUILD_ID, LUPOS_BOT_URL } from "../discord-config.js";
+import { GUILD_ID, LUPOS_BOT_URL } from "../discord-config";
 const MAX_RETRIES = 3;
 
 export async function GET() {

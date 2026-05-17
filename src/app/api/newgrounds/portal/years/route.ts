@@ -4,7 +4,7 @@
 // Proxies year dropdown data requests to clockcrew-api /newgrounds/portal/years.
 // ============================================================
 
-import { CLOCK_CREW_SERVICE_URL } from "../../../../../../config.js";
+import { CLOCK_CREW_SERVICE_URL } from "../../../../../../config";
 
 export async function GET() {
   try {

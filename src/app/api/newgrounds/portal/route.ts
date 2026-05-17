@@ -4,7 +4,7 @@
 // Proxies search/browse requests to clockcrew-api /newgrounds/portal.
 // ============================================================
 
-import { CLOCK_CREW_SERVICE_URL } from "../../../../../config.js";
+import { CLOCK_CREW_SERVICE_URL } from "../../../../../config";
 
 export async function GET(request: any) {
   const { searchParams } = new URL(request.url);

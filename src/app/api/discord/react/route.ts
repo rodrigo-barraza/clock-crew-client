@@ -7,7 +7,7 @@
 // the whitelist.
 // ============================================================
 
-import { GUILD_ID, LUPOS_BOT_URL } from "../discord-config.js";
+import { GUILD_ID, LUPOS_BOT_URL } from "../discord-config";
 
 // Whitelist of allowed channel IDs (must match stream/route.js)
 const ALLOWED_CHANNELS = new Set([

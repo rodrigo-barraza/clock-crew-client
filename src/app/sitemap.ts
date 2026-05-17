@@ -4,7 +4,7 @@
 // ──────────────────────────────────────────────────────────────
 
 const BASE_URL = "https://clocktopia.com";
-import { CLOCK_CREW_SERVICE_URL } from "../../config.js";
+import { CLOCK_CREW_SERVICE_URL } from "../../config";
 
 export const revalidate = 86_400; // 1 day — must be a literal for Next.js static analysis
 

@@ -7,7 +7,7 @@
 // Guild is hardcoded for security.
 // ============================================================
 
-import { GUILD_ID, LUPOS_BOT_URL, TOOLS_SERVICE_URL } from "../discord-config.js";
+import { GUILD_ID, LUPOS_BOT_URL, TOOLS_SERVICE_URL } from "../discord-config";
 
 // Whitelisted channel IDs — must match DiscordChatComponent
 const CHANNEL_IDS = ["671089694397956116", "676318241689436170"];

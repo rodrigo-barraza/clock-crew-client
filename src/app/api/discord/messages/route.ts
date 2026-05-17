@@ -8,8 +8,8 @@
 // Private Network Access (PNA) prompt for all visitors.
 // ============================================================
 
-import { rewritePrivateUrls } from "../rewritePrivateUrls.js";
-import { GUILD_ID, TOOLS_SERVICE_URL } from "../discord-config.js";
+import { rewritePrivateUrls } from "../rewritePrivateUrls";
+import { GUILD_ID, TOOLS_SERVICE_URL } from "../discord-config";
 const CHANNEL_ID = "671089694397956116"; // #general-chat
 
 export async function GET(request: any) {

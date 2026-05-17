@@ -6,7 +6,7 @@
 // Guild is hardcoded for security.
 // ============================================================
 
-import { GUILD_ID, LUPOS_BOT_URL } from "../discord-config.js";
+import { GUILD_ID, LUPOS_BOT_URL } from "../discord-config";
 
 export async function GET() {
   try {

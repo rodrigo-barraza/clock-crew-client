@@ -7,7 +7,7 @@
 // the LLM-generated profile summary.
 // ============================================================
 
-import { CLOCK_CREW_SERVICE_URL } from "../../../../../../config.js";
+import { CLOCK_CREW_SERVICE_URL } from "../../../../../../config";
 
 export async function GET(_request: any,  { params }: any) {
   const { username } = await params;
