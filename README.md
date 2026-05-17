@@ -91,8 +91,8 @@ clock-crew-client/
 │   │       ├── NavBarComponent/
 │   │       ├── NewgroundsPortalComponent/
 │   │       └── WikiSidebarComponent/
-├── config.js                   # Runtime configuration
-├── secrets.js                  # Secret resolution (gitignored)
+├── config.ts                   # Runtime configuration
+├── secrets.ts                  # Secret resolution (gitignored)
 ├── next.config.mjs             # Next.js + Vault bootstrap
 └── deploy.sh                   # Synology NAS deploy script
 ```
