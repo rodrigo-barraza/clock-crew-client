@@ -14,7 +14,8 @@
     "test": "vitest run --passWithNoTests",
     "deploy": "bash deploy.sh",
     "deploy:dry": "bash deploy.sh --dry-run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@rodrigo-barraza/components-library": "git+https://github.com/rodrigo-barraza/components-library.git",
