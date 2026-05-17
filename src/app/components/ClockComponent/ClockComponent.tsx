@@ -11,10 +11,8 @@ import styles from "./ClockComponent.module.css";
  * Uses rAF for smooth second-hand sweeping and CSS custom properties
  * for GPU-accelerated rotation (no React re-renders).
  *
- * @param {object}  props
- * @param {number}  [props.size=160]       - Diameter in px
- * @param {boolean} [props.showSeconds=true] - Whether to show the second hand
- * @param {string}  [props.className]      - Additional CSS class
+
+
  */
 export default function ClockComponent({
   size = 160,  

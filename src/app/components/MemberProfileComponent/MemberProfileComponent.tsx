@@ -15,7 +15,6 @@ function formatDate(dateStr: any) {
 }
 
 
-
 // ── Tab definitions ──────────────────────────────────────────────
 const TABS = [
   { key: "overview", label: "Overview", icon: "📋" },
