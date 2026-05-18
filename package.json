@@ -41,6 +41,7 @@
     "typescript": "^6.0.3",
     "vitest": "^4.1.5",
     "vite": "^8.0.11",
-    "@types/testing-library__jest-dom": "^5.14.9"
+    "@types/testing-library__jest-dom": "^5.14.9",
+    "@types/luxon": "^3.7.1"
   }
 }

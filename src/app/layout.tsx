@@ -2,7 +2,7 @@ import { Inter } from "next/font/google";
 import Image from "next/image";
 import "./globals.css";
 import NavBarComponent from "./components/NavBarComponent/NavBarComponent";
-import { ThemeProvider, SessionTrackerComponent } from "@rodrigo-barraza/components-library";
+import { ThemeProvider, ComponentsProvider, SessionTrackerComponent } from "@rodrigo-barraza/components-library";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -166,6 +166,7 @@ export default function RootLayout({ children }: any) {
       </head>
       <body className={inter.variable}>
         <ThemeProvider>
+          <ComponentsProvider>
           <SessionTrackerComponent projectId="clock-crew-client" />
           <NavBarComponent />
           {children}
@@ -175,6 +176,7 @@ export default function RootLayout({ children }: any) {
               © 2023–2026 Rodrigo Barraza
             </a>
           </footer>
+          </ComponentsProvider>
         </ThemeProvider>
       </body>
     </html>
