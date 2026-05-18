@@ -2,13 +2,11 @@
 // Clock Crew — Runtime Configuration
 // ============================================================
 // Typed accessor layer over process.env. The Vault service is
-// the single source of truth — next.config.mjs hydrates
+// the single source of truth — next.config.ts hydrates
 // process.env from the Vault before any module imports run.
 //
 // This file contains NO defaults and NO secrets.
 // ============================================================
-
-export const PORT = (process.env.NEXT_PUBLIC_CLOCK_CREW_CLIENT_PORT || process.env.CLOCK_CREW_CLIENT_PORT);
 
 export const IS_PRODUCTION =
   typeof window !== "undefined" &&

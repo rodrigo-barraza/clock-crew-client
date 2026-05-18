@@ -5,7 +5,7 @@
 // Supports ?limit= and ?q= query params.
 // ============================================================
 
-import { CLOCK_CREW_SERVICE_URL } from "../../../../../config";
+import { CLOCK_CREW_SERVICE_URL } from "@/config";
 
 export async function GET(request: any) {
   const { searchParams } = new URL(request.url);

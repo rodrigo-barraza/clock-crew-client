@@ -6,5 +6,5 @@
 // ============================================================
 
 export const GUILD_ID = process.env.GUILD_ID; // Clock Crew — from vault
-import { LUPOS_BOT_URL, TOOLS_SERVICE_URL } from "../../../../config";
+import { LUPOS_BOT_URL, TOOLS_SERVICE_URL } from "@/config";
 export { LUPOS_BOT_URL, TOOLS_SERVICE_URL };
