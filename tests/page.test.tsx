@@ -5,9 +5,12 @@ vi.mock("@rodrigo-barraza/components-library", () => ({
   DiscordChatComponent: () => <div data-testid="discord-chat" />,
 }));
 
-vi.mock("@/app/components/NewgroundsPortalComponent/NewgroundsPortalComponent", () => ({
-  default: () => <div data-testid="newgrounds-portal" />,
-}));
+vi.mock(
+  "@/app/components/NewgroundsPortalComponent/NewgroundsPortalComponent",
+  () => ({
+    default: () => <div data-testid="newgrounds-portal" />,
+  }),
+);
 
 vi.mock("@/app/components/ClockComponent/ClockComponent", () => ({
   default: () => <div data-testid="clock" />,

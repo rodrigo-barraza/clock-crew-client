@@ -15,12 +15,12 @@ Community website for [clock-crew.com](https://clock-crew.com) — celebrating t
 
 ## Stack
 
-| Dependency | Purpose |
-|---|---|
-| Next.js 16 | React framework (App Router, standalone output) |
-| React 19 | UI library |
+| Dependency                            | Purpose                                         |
+| ------------------------------------- | ----------------------------------------------- |
+| Next.js 16                            | React framework (App Router, standalone output) |
+| React 19                              | UI library                                      |
 | `@rodrigo-barraza/components-library` | Shared component library (DiscordChatComponent) |
-| `@rodrigo-barraza/utilities-library` | Shared utility functions |
+| `@rodrigo-barraza/utilities-library`  | Shared utility functions                        |
 
 ## Getting Started
 
@@ -44,11 +44,11 @@ Secrets are resolved in priority order:
 3. Vault service (`VAULT_SERVICE_URL` + `VAULT_SERVICE_TOKEN`)
 4. Shared `../vault-service/.env` fallback
 
-| Variable | Description |
-|---|---|
-| `CLOCK_CREW_PORT` | Dev server port (default `3001`) |
-| `VAULT_SERVICE_URL` | Vault service endpoint |
-| `LUPOS_URL` | Lupos bot API for Discord data |
+| Variable             | Description                       |
+| -------------------- | --------------------------------- |
+| `CLOCK_CREW_PORT`    | Dev server port (default `3001`)  |
+| `VAULT_SERVICE_URL`  | Vault service endpoint            |
+| `LUPOS_URL`          | Lupos bot API for Discord data    |
 | `MINIO_INTERNAL_URL` | MinIO endpoint for media proxying |
 
 ## Scripts

@@ -91,7 +91,10 @@ export default function WikiSidebarComponent() {
 
           {/* ── A–Z Quick Jump (only on members pages) ───────────── */}
           {isMembersSection && (
-            <nav className={styles.alphaNav} aria-label="Alphabetical quick jump">
+            <nav
+              className={styles.alphaNav}
+              aria-label="Alphabetical quick jump"
+            >
               <span className={styles.sectionLabel}>Jump to</span>
               <div className={styles.alphaGrid}>
                 {ALPHABET.map((letter) => (

@@ -35,9 +35,6 @@ export async function GET(request: any) {
     });
   } catch (error) {
     console.error("[discord/messages] Proxy error:", (error as any).message);
-    return Response.json(
-      { error: "Service unavailable" },
-      { status: 503 },
-    );
+    return Response.json({ error: "Service unavailable" }, { status: 503 });
   }
 }

@@ -15,9 +15,9 @@ import styles from "./ClockComponent.module.css";
 
  */
 export default function ClockComponent({
-  size = 160,  
-  showSeconds = true,  
-  className = "",  
+  size = 160,
+  showSeconds = true,
+  className = "",
 }: any) {
   const clockRef = useRef(null);
 
@@ -61,7 +61,9 @@ export default function ClockComponent({
             <div
               key={i}
               className={styles.tick}
-              style={{ "--tick-rotation": `${i * 30}deg` } as React.CSSProperties}
+              style={
+                { "--tick-rotation": `${i * 30}deg` } as React.CSSProperties
+              }
             />
           ))}
 

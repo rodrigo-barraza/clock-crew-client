@@ -50,9 +50,7 @@ export default function NavBarComponent() {
         <ul className={styles.linkList}>
           {NAV_LINKS.map(({ href, label }) => {
             const isActive =
-              href === "/"
-                ? pathname === "/"
-                : pathname.startsWith(href);
+              href === "/" ? pathname === "/" : pathname.startsWith(href);
 
             return (
               <li key={href}>

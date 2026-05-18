@@ -11,7 +11,15 @@ export async function GET(request: any) {
 
   // Forward all supported query params
   const params = new URLSearchParams();
-  for (const key of ["q", "username", "type", "sort", "limit", "skip", "year"]) {
+  for (const key of [
+    "q",
+    "username",
+    "type",
+    "sort",
+    "limit",
+    "skip",
+    "year",
+  ]) {
     const value = searchParams.get(key);
     if (value) params.set(key, value);
   }
@@ -32,9 +40,6 @@ export async function GET(request: any) {
     return Response.json(data);
   } catch (error) {
     console.error("[newgrounds/portal] Proxy error:", (error as any).message);
-    return Response.json(
-      { error: "Service unavailable" },
-      { status: 503 },
-    );
+    return Response.json({ error: "Service unavailable" }, { status: 503 });
   }
 }

@@ -35,8 +35,22 @@ export async function generateMetadata({ params }: any) {
 
   const avatarUrl = member?.card?.avatar || member?.avatarUrl || null;
   const ogImages = avatarUrl
-    ? [{ url: avatarUrl, width: 300, height: 300, alt: `${decodedName} avatar` }]
-    : [{ url: `${SITE_URL}/og-image.png`, width: 1200, height: 630, alt: "The Clock Crew" }];
+    ? [
+        {
+          url: avatarUrl,
+          width: 300,
+          height: 300,
+          alt: `${decodedName} avatar`,
+        },
+      ]
+    : [
+        {
+          url: `${SITE_URL}/og-image.png`,
+          width: 1200,
+          height: 630,
+          alt: "The Clock Crew",
+        },
+      ];
 
   return {
     title,

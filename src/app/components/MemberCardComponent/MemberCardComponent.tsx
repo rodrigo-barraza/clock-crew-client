@@ -8,7 +8,7 @@ import styles from "./MemberCardComponent.module.css";
  * @param {object} props.user - CC forum user object
  * @param {number} props.index - render index for staggered animation
  */
-export default function MemberCardComponent({ user,   index = 0 }: any) {
+export default function MemberCardComponent({ user, index = 0 }: any) {
   const initials = (user.username || "?")
     .replace(/clock$/i, "")
     .slice(0, 2)
@@ -54,9 +54,7 @@ export default function MemberCardComponent({ user,   index = 0 }: any) {
             </span>
           )}
           {joinYear && (
-            <span className={styles.metaItem}>
-              Joined {joinYear}
-            </span>
+            <span className={styles.metaItem}>Joined {joinYear}</span>
           )}
         </div>
       </div>

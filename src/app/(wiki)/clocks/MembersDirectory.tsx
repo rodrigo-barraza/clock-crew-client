@@ -62,13 +62,15 @@ export default function MembersDirectory() {
       case "newest":
         sorted.sort(
           (a, b) =>
-            (new Date(b.dateRegistered || 0) as any) - (new Date(a.dateRegistered || 0) as any),
+            (new Date(b.dateRegistered || 0) as any) -
+            (new Date(a.dateRegistered || 0) as any),
         );
         break;
       case "oldest":
         sorted.sort(
           (a, b) =>
-            (new Date(a.dateRegistered || 0) as any) - (new Date(b.dateRegistered || 0) as any),
+            (new Date(a.dateRegistered || 0) as any) -
+            (new Date(b.dateRegistered || 0) as any),
         );
         break;
       case "alpha":

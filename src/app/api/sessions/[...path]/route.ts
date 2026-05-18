@@ -13,6 +13,12 @@ export const { GET, POST } = createNextjsProxy({
   serviceName: "sessions",
   publicUrlEnv: "SESSIONS_SERVICE_PUBLIC_URL",
   internalUrlEnv: "SESSIONS_SERVICE_URL",
-  forwardHeaders: ["x-forwarded-for", "x-real-ip", "user-agent", "x-session-id", "accept-language"],
+  forwardHeaders: [
+    "x-forwarded-for",
+    "x-real-ip",
+    "user-agent",
+    "x-session-id",
+    "accept-language",
+  ],
   methods: ["GET", "POST"],
 });

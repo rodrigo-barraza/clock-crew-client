@@ -6,7 +6,7 @@
 
 import { CLOCK_CREW_SERVICE_URL } from "@/config";
 
-export async function GET(request: any,  { params }: any) {
+export async function GET(request: any, { params }: any) {
   const { username } = await params;
 
   try {
@@ -24,9 +24,6 @@ export async function GET(request: any,  { params }: any) {
     return Response.json(data);
   } catch (error) {
     console.error("[newgrounds/card] Proxy error:", (error as any).message);
-    return Response.json(
-      { error: "Service unavailable" },
-      { status: 503 },
-    );
+    return Response.json({ error: "Service unavailable" }, { status: 503 });
   }
 }

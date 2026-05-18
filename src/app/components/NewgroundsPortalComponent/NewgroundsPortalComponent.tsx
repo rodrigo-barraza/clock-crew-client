@@ -28,7 +28,11 @@ function formatDate(dateStr: any) {
   if (!dateStr) return "—";
   const d = new Date(dateStr);
   if (isNaN(d as any)) return dateStr; // raw string like "2004-09-22"
-  return d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+  return d.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 }
 
 // ── Top Submissions Section ──────────────────────────────────
@@ -36,7 +40,9 @@ function TopSubmissionsSection({ title, emoji, items }: any) {
   if (!items?.length) return null;
   return (
     <div className={styles.topSubmissions}>
-      <div className={styles.topSubTitle}>{emoji} Top {title}</div>
+      <div className={styles.topSubTitle}>
+        {emoji} Top {title}
+      </div>
       <div className={styles.topSubList}>
         {items.map((sub: any, i: any) => (
           <a
@@ -48,13 +54,20 @@ function TopSubmissionsSection({ title, emoji, items }: any) {
           >
             {sub.thumbnailUrl && (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={sub.thumbnailUrl} alt={sub.title} className={styles.topSubThumb} loading="lazy" />
+              <img
+                src={sub.thumbnailUrl}
+                alt={sub.title}
+                className={styles.topSubThumb}
+                loading="lazy"
+              />
             )}
             <div className={styles.topSubInfo}>
               <span className={styles.topSubName}>{sub.title}</span>
             </div>
             {sub.score != null && (
-              <span className={styles.topSubScore}>★ {(Math.round(sub.score * 10) / 10).toFixed(1)}</span>
+              <span className={styles.topSubScore}>
+                ★ {(Math.round(sub.score * 10) / 10).toFixed(1)}
+              </span>
             )}
           </a>
         ))}
@@ -65,9 +78,24 @@ function TopSubmissionsSection({ title, emoji, items }: any) {
 
 // ── Type metadata ────────────────────────────────────────────────
 const TYPE_META = {
-  movie: { emoji: "🎬", label: "Movie", badgeClass: "typeBadgeMovie", action: "▶ Watch on Newgrounds" },
-  game:  { emoji: "🎮", label: "Game",  badgeClass: "typeBadgeGame",  action: "🎮 Play on Newgrounds" },
-  audio: { emoji: "🎵", label: "Audio", badgeClass: "typeBadgeAudio", action: "🎧 Listen on Newgrounds" },
+  movie: {
+    emoji: "🎬",
+    label: "Movie",
+    badgeClass: "typeBadgeMovie",
+    action: "▶ Watch on Newgrounds",
+  },
+  game: {
+    emoji: "🎮",
+    label: "Game",
+    badgeClass: "typeBadgeGame",
+    action: "🎮 Play on Newgrounds",
+  },
+  audio: {
+    emoji: "🎵",
+    label: "Audio",
+    badgeClass: "typeBadgeAudio",
+    action: "🎧 Listen on Newgrounds",
+  },
 };
 
 function getTypeMeta(contentType: any) {
@@ -75,7 +103,7 @@ function getTypeMeta(contentType: any) {
 }
 
 // ── Content Detail Modal ─────────────────────────────────────────
-function ContentDetailModal({ item,  onClose }: any) {
+function ContentDetailModal({ item, onClose }: any) {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -85,13 +113,24 @@ function ContentDetailModal({ item,  onClose }: any) {
     setLoading(true);
     fetch(`/api/newgrounds/card/${encodeURIComponent(item.usernameLower)}`)
       .then((res) => (res.ok ? res.json() : Promise.reject()))
-      .then((d: any) => { if (!cancelled) { setData(d); setLoading(false); } })
-      .catch(() => { if (!cancelled) setLoading(false); });
-    return () => { cancelled = true; };
+      .then((d: any) => {
+        if (!cancelled) {
+          setData(d);
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [item?.usernameLower]);
 
   useEffect(() => {
-    const handler = (e: any) => { if (e.key === "Escape") onClose(); };
+    const handler = (e: any) => {
+      if (e.key === "Escape") onClose();
+    };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [onClose]);
@@ -103,13 +142,20 @@ function ContentDetailModal({ item,  onClose }: any) {
 
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
-      <div className={styles.modalCard} onClick={(e: any) => e.stopPropagation()}>
+      <div
+        className={styles.modalCard}
+        onClick={(e: any) => e.stopPropagation()}
+      >
         <CloseButtonComponent onClick={onClose} />
 
         {/* ══ CONTENT HERO — the clicked content ══════════ */}
         <div
           className={styles.contentHero}
-          style={item?.thumbnailUrl ? { backgroundImage: `url(${item.thumbnailUrl})` } : undefined}
+          style={
+            item?.thumbnailUrl
+              ? { backgroundImage: `url(${item.thumbnailUrl})` }
+              : undefined
+          }
         >
           <div className={styles.contentHeroOverlay} />
           <div className={styles.contentHeroBody}>
@@ -118,14 +164,21 @@ function ContentDetailModal({ item,  onClose }: any) {
             </span>
             <h2 className={styles.contentHeroTitle}>{item?.title}</h2>
             <div className={styles.contentHeroMeta}>
-              <span className={styles.contentHeroAuthor}>by {item?.usernameLower}</span>
+              <span className={styles.contentHeroAuthor}>
+                by {item?.usernameLower}
+              </span>
               {item?.score != null && (
-                <span className={styles.contentHeroScore}>★ {item.score.toFixed(1)} / 5.0</span>
+                <span className={styles.contentHeroScore}>
+                  ★ {item.score.toFixed(1)} / 5.0
+                </span>
               )}
             </div>
             {item?.score != null && (
               <div className={styles.scoreBar}>
-                <div className={styles.scoreBarFill} style={{ width: `${(item.score / 5) * 100}%` }} />
+                <div
+                  className={styles.scoreBarFill}
+                  style={{ width: `${(item.score / 5) * 100}%` }}
+                />
               </div>
             )}
             <a
@@ -153,80 +206,283 @@ function ContentDetailModal({ item,  onClose }: any) {
         ) : (
           <>
             <div className={styles.creatorHeader}>
-              <div className={styles.cardAvatarWrap} style={{ margin: 0, width: 56, height: 56 }}>
+              <div
+                className={styles.cardAvatarWrap}
+                style={{ margin: 0, width: 56, height: 56 }}
+              >
                 {profile.avatarUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={profile.avatarUrl} alt={profile.username} className={styles.cardAvatar} />
+                  <img
+                    src={profile.avatarUrl}
+                    alt={profile.username}
+                    className={styles.cardAvatar}
+                  />
                 ) : (
-                  <div className={styles.cardAvatarFallback}>{(profile.username || "?")[0].toUpperCase()}</div>
+                  <div className={styles.cardAvatarFallback}>
+                    {(profile.username || "?")[0].toUpperCase()}
+                  </div>
                 )}
               </div>
               <div>
                 <span className={styles.cardUsername}>{profile.username}</span>
                 <div className={styles.cardRankRow}>
-                  {profile.rank && <span className={`${styles.cardRankBadge} ${styles.ngBadge}`}>{profile.rank}</span>}
-                  {profile.level != null && <span className={`${styles.cardRankBadge} ${styles.levelBadge}`}>Lvl {profile.level}</span>}
-                  {profile.supporter && <span className={`${styles.cardRankBadge} ${styles.supporterBadge}`}>⭐ Supporter</span>}
-                  {ccUser?.position && <span className={`${styles.cardRankBadge} ${styles.ccBadge}`}>{ccUser.position}</span>}
+                  {profile.rank && (
+                    <span
+                      className={`${styles.cardRankBadge} ${styles.ngBadge}`}
+                    >
+                      {profile.rank}
+                    </span>
+                  )}
+                  {profile.level != null && (
+                    <span
+                      className={`${styles.cardRankBadge} ${styles.levelBadge}`}
+                    >
+                      Lvl {profile.level}
+                    </span>
+                  )}
+                  {profile.supporter && (
+                    <span
+                      className={`${styles.cardRankBadge} ${styles.supporterBadge}`}
+                    >
+                      ⭐ Supporter
+                    </span>
+                  )}
+                  {ccUser?.position && (
+                    <span
+                      className={`${styles.cardRankBadge} ${styles.ccBadge}`}
+                    >
+                      {ccUser.position}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
 
-            {profile.description && <p className={styles.cardDescription}>{profile.description}</p>}
+            {profile.description && (
+              <p className={styles.cardDescription}>{profile.description}</p>
+            )}
 
             <div className={styles.cardPersonalInfo}>
-              {profile.joinDate && <span className={styles.personalInfoItem}><span className={styles.personalInfoIcon}>📅</span> Joined <span className={styles.personalInfoValue}>{profile.joinDate}</span></span>}
-              {profile.location && <span className={styles.personalInfoItem}><span className={styles.personalInfoIcon}>📍</span> <span className={styles.personalInfoValue}>{profile.location}</span></span>}
-              {profile.age != null && <span className={styles.personalInfoItem}><span className={styles.personalInfoIcon}>🎂</span> <span className={styles.personalInfoValue}>Age {profile.age}</span></span>}
-              {profile.sex && <span className={styles.personalInfoItem}><span className={styles.personalInfoIcon}>👤</span> <span className={styles.personalInfoValue}>{profile.sex}</span></span>}
-              {profile.job && <span className={styles.personalInfoItem}><span className={styles.personalInfoIcon}>💼</span> <span className={styles.personalInfoValue}>{profile.job}</span></span>}
-              {profile.globalRank != null && <span className={styles.personalInfoItem}><span className={styles.personalInfoIcon}>🌍</span> Rank #<span className={styles.personalInfoValue}>{formatNumber(profile.globalRank)}</span></span>}
-              {profile.expPoints && <span className={styles.personalInfoItem}><span className={styles.personalInfoIcon}>✨</span> EXP <span className={styles.personalInfoValue}>{profile.expPoints}</span></span>}
-              {profile.votePower && <span className={styles.personalInfoItem}><span className={styles.personalInfoIcon}>⚡</span> <span className={styles.personalInfoValue}>{profile.votePower}</span></span>}
+              {profile.joinDate && (
+                <span className={styles.personalInfoItem}>
+                  <span className={styles.personalInfoIcon}>📅</span> Joined{" "}
+                  <span className={styles.personalInfoValue}>
+                    {profile.joinDate}
+                  </span>
+                </span>
+              )}
+              {profile.location && (
+                <span className={styles.personalInfoItem}>
+                  <span className={styles.personalInfoIcon}>📍</span>{" "}
+                  <span className={styles.personalInfoValue}>
+                    {profile.location}
+                  </span>
+                </span>
+              )}
+              {profile.age != null && (
+                <span className={styles.personalInfoItem}>
+                  <span className={styles.personalInfoIcon}>🎂</span>{" "}
+                  <span className={styles.personalInfoValue}>
+                    Age {profile.age}
+                  </span>
+                </span>
+              )}
+              {profile.sex && (
+                <span className={styles.personalInfoItem}>
+                  <span className={styles.personalInfoIcon}>👤</span>{" "}
+                  <span className={styles.personalInfoValue}>
+                    {profile.sex}
+                  </span>
+                </span>
+              )}
+              {profile.job && (
+                <span className={styles.personalInfoItem}>
+                  <span className={styles.personalInfoIcon}>💼</span>{" "}
+                  <span className={styles.personalInfoValue}>
+                    {profile.job}
+                  </span>
+                </span>
+              )}
+              {profile.globalRank != null && (
+                <span className={styles.personalInfoItem}>
+                  <span className={styles.personalInfoIcon}>🌍</span> Rank #
+                  <span className={styles.personalInfoValue}>
+                    {formatNumber(profile.globalRank)}
+                  </span>
+                </span>
+              )}
+              {profile.expPoints && (
+                <span className={styles.personalInfoItem}>
+                  <span className={styles.personalInfoIcon}>✨</span> EXP{" "}
+                  <span className={styles.personalInfoValue}>
+                    {profile.expPoints}
+                  </span>
+                </span>
+              )}
+              {profile.votePower && (
+                <span className={styles.personalInfoItem}>
+                  <span className={styles.personalInfoIcon}>⚡</span>{" "}
+                  <span className={styles.personalInfoValue}>
+                    {profile.votePower}
+                  </span>
+                </span>
+              )}
             </div>
 
             <div className={styles.statsGrid}>
-              <div className={styles.statItem}><span className={styles.statValue}>{formatNumber(profile.fans)}</span><span className={styles.statLabel}>Fans</span></div>
-              <div className={styles.statItem}><span className={styles.statValue}>{formatNumber(profile.blams)}</span><span className={styles.statLabel}>Blams</span></div>
-              <div className={styles.statItem}><span className={styles.statValue}>{formatNumber(profile.saves)}</span><span className={styles.statLabel}>Saves</span></div>
-              <div className={styles.statItem}><span className={styles.statValue}>{formatNumber(profile.medals)}</span><span className={styles.statLabel}>Medals</span></div>
-              <div className={styles.statItem}><span className={styles.statValue}>{formatNumber(profile.trophies)}</span><span className={styles.statLabel}>Trophies</span></div>
-              {profile.expRank != null && <div className={styles.statItem}><span className={styles.statValue}>#{formatNumber(profile.expRank)}</span><span className={styles.statLabel}>EXP Rank</span></div>}
+              <div className={styles.statItem}>
+                <span className={styles.statValue}>
+                  {formatNumber(profile.fans)}
+                </span>
+                <span className={styles.statLabel}>Fans</span>
+              </div>
+              <div className={styles.statItem}>
+                <span className={styles.statValue}>
+                  {formatNumber(profile.blams)}
+                </span>
+                <span className={styles.statLabel}>Blams</span>
+              </div>
+              <div className={styles.statItem}>
+                <span className={styles.statValue}>
+                  {formatNumber(profile.saves)}
+                </span>
+                <span className={styles.statLabel}>Saves</span>
+              </div>
+              <div className={styles.statItem}>
+                <span className={styles.statValue}>
+                  {formatNumber(profile.medals)}
+                </span>
+                <span className={styles.statLabel}>Medals</span>
+              </div>
+              <div className={styles.statItem}>
+                <span className={styles.statValue}>
+                  {formatNumber(profile.trophies)}
+                </span>
+                <span className={styles.statLabel}>Trophies</span>
+              </div>
+              {profile.expRank != null && (
+                <div className={styles.statItem}>
+                  <span className={styles.statValue}>
+                    #{formatNumber(profile.expRank)}
+                  </span>
+                  <span className={styles.statLabel}>EXP Rank</span>
+                </div>
+              )}
             </div>
 
             <div className={styles.contentCounts}>
-              {profile.movieCount > 0 && <span className={styles.contentPill}><span className={styles.contentPillIcon}>🎬</span><span className={styles.contentPillCount}>{profile.movieCount}</span> Movies</span>}
-              {profile.gameCount > 0 && <span className={styles.contentPill}><span className={styles.contentPillIcon}>🎮</span><span className={styles.contentPillCount}>{profile.gameCount}</span> Games</span>}
-              {profile.audioCount > 0 && <span className={styles.contentPill}><span className={styles.contentPillIcon}>🎵</span><span className={styles.contentPillCount}>{profile.audioCount}</span> Audio</span>}
+              {profile.movieCount > 0 && (
+                <span className={styles.contentPill}>
+                  <span className={styles.contentPillIcon}>🎬</span>
+                  <span className={styles.contentPillCount}>
+                    {profile.movieCount}
+                  </span>{" "}
+                  Movies
+                </span>
+              )}
+              {profile.gameCount > 0 && (
+                <span className={styles.contentPill}>
+                  <span className={styles.contentPillIcon}>🎮</span>
+                  <span className={styles.contentPillCount}>
+                    {profile.gameCount}
+                  </span>{" "}
+                  Games
+                </span>
+              )}
+              {profile.audioCount > 0 && (
+                <span className={styles.contentPill}>
+                  <span className={styles.contentPillIcon}>🎵</span>
+                  <span className={styles.contentPillCount}>
+                    {profile.audioCount}
+                  </span>{" "}
+                  Audio
+                </span>
+              )}
 
-              {profile.reviewCount > 0 && <span className={styles.contentPill}><span className={styles.contentPillIcon}>📝</span><span className={styles.contentPillCount}>{profile.reviewCount}</span> Reviews</span>}
-              {profile.postCount > 0 && <span className={styles.contentPill}><span className={styles.contentPillIcon}>💬</span><span className={styles.contentPillCount}>{profile.postCount}</span> Posts</span>}
-              {profile.faveCount > 0 && <span className={styles.contentPill}><span className={styles.contentPillIcon}>❤️</span><span className={styles.contentPillCount}>{profile.faveCount}</span> Faves</span>}
+              {profile.reviewCount > 0 && (
+                <span className={styles.contentPill}>
+                  <span className={styles.contentPillIcon}>📝</span>
+                  <span className={styles.contentPillCount}>
+                    {profile.reviewCount}
+                  </span>{" "}
+                  Reviews
+                </span>
+              )}
+              {profile.postCount > 0 && (
+                <span className={styles.contentPill}>
+                  <span className={styles.contentPillIcon}>💬</span>
+                  <span className={styles.contentPillCount}>
+                    {profile.postCount}
+                  </span>{" "}
+                  Posts
+                </span>
+              )}
+              {profile.faveCount > 0 && (
+                <span className={styles.contentPill}>
+                  <span className={styles.contentPillIcon}>❤️</span>
+                  <span className={styles.contentPillCount}>
+                    {profile.faveCount}
+                  </span>{" "}
+                  Faves
+                </span>
+              )}
             </div>
 
             {ccUser && (
               <div className={styles.ccSection}>
-                <div className={styles.ccSectionTitle}>🕰️ ClockCrew.net Forum</div>
+                <div className={styles.ccSectionTitle}>
+                  🕰️ ClockCrew.net Forum
+                </div>
                 <div className={styles.ccRow}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  {ccUser.avatarUrl && <img src={ccUser.avatarUrl} alt={ccUser.username} className={styles.ccAvatar} />}
+                  {ccUser.avatarUrl && (
+                    <img
+                      src={ccUser.avatarUrl}
+                      alt={ccUser.username}
+                      className={styles.ccAvatar}
+                    />
+                  )}
                   <div className={styles.ccInfo}>
                     <span className={styles.ccUsername}>{ccUser.username}</span>
-                    {ccUser.customTitle && <div className={styles.ccCustomTitle}>&ldquo;{ccUser.customTitle}&rdquo;</div>}
+                    {ccUser.customTitle && (
+                      <div className={styles.ccCustomTitle}>
+                        &ldquo;{ccUser.customTitle}&rdquo;
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className={styles.ccStats}>
-                  {ccUser.postCount != null && <span className={styles.ccStatItem}>Forum Posts: <span className={styles.ccStatValue}>{formatNumber(ccUser.postCount)}</span></span>}
-                  {ccUser.dateRegistered && <span className={styles.ccStatItem}>Registered: <span className={styles.ccStatValue}>{formatDate(ccUser.dateRegistered)}</span></span>}
+                  {ccUser.postCount != null && (
+                    <span className={styles.ccStatItem}>
+                      Forum Posts:{" "}
+                      <span className={styles.ccStatValue}>
+                        {formatNumber(ccUser.postCount)}
+                      </span>
+                    </span>
+                  )}
+                  {ccUser.dateRegistered && (
+                    <span className={styles.ccStatItem}>
+                      Registered:{" "}
+                      <span className={styles.ccStatValue}>
+                        {formatDate(ccUser.dateRegistered)}
+                      </span>
+                    </span>
+                  )}
                 </div>
 
                 {randomPost?.body && (
                   <blockquote className={styles.ccForumQuote}>
                     <p className={styles.ccQuoteBody}>
-                      &ldquo;{(() => {
-                        const stripped = randomPost.body.replace(/<[^>]*>/g, "").trim();
-                        return stripped.length > 280 ? stripped.slice(0, 277) + "…" : stripped;
-                      })()}&rdquo;
+                      &ldquo;
+                      {(() => {
+                        const stripped = randomPost.body
+                          .replace(/<[^>]*>/g, "")
+                          .trim();
+                        return stripped.length > 280
+                          ? stripped.slice(0, 277) + "…"
+                          : stripped;
+                      })()}
+                      &rdquo;
                     </p>
                     <footer className={styles.ccQuoteFooter}>
                       {randomPost.threadTitle && (
@@ -236,7 +492,9 @@ function ContentDetailModal({ item,  onClose }: any) {
                         </span>
                       )}
                       {randomPost.date && (
-                        <span className={styles.ccQuoteDate}>{formatDate(randomPost.date)}</span>
+                        <span className={styles.ccQuoteDate}>
+                          {formatDate(randomPost.date)}
+                        </span>
                       )}
                     </footer>
                   </blockquote>
@@ -244,14 +502,41 @@ function ContentDetailModal({ item,  onClose }: any) {
               </div>
             )}
 
-            <TopSubmissionsSection title="Movies" emoji="🎬" items={data?.topMovies} />
-            <TopSubmissionsSection title="Games" emoji="🎮" items={data?.topGames} />
-            <TopSubmissionsSection title="Audio" emoji="🎵" items={data?.topAudio} />
-
+            <TopSubmissionsSection
+              title="Movies"
+              emoji="🎬"
+              items={data?.topMovies}
+            />
+            <TopSubmissionsSection
+              title="Games"
+              emoji="🎮"
+              items={data?.topGames}
+            />
+            <TopSubmissionsSection
+              title="Audio"
+              emoji="🎵"
+              items={data?.topAudio}
+            />
 
             <div className={styles.cardActions}>
-              <a href={profile.profileUrl} target="_blank" rel="noopener noreferrer" className={`${styles.actionButton} ${styles.actionSecondary}`}>🌐 NG Profile</a>
-              {ccUser?.profileUrl && <a href={ccUser.profileUrl} target="_blank" rel="noopener noreferrer" className={`${styles.actionButton} ${styles.actionSecondary}`}>🕰️ Forum Profile</a>}
+              <a
+                href={profile.profileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${styles.actionButton} ${styles.actionSecondary}`}
+              >
+                🌐 NG Profile
+              </a>
+              {ccUser?.profileUrl && (
+                <a
+                  href={ccUser.profileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${styles.actionButton} ${styles.actionSecondary}`}
+                >
+                  🕰️ Forum Profile
+                </a>
+              )}
             </div>
           </>
         )}
@@ -261,7 +546,7 @@ function ContentDetailModal({ item,  onClose }: any) {
 }
 
 // ── Profile Detail Modal (for Clocks tab) ────────────────────
-function ProfileDetailModal({ username,  onClose }: any) {
+function ProfileDetailModal({ username, onClose }: any) {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -271,13 +556,24 @@ function ProfileDetailModal({ username,  onClose }: any) {
     setLoading(true);
     fetch(`/api/newgrounds/card/${encodeURIComponent(username)}`)
       .then((res) => (res.ok ? res.json() : Promise.reject()))
-      .then((d: any) => { if (!cancelled) { setData(d); setLoading(false); } })
-      .catch(() => { if (!cancelled) setLoading(false); });
-    return () => { cancelled = true; };
+      .then((d: any) => {
+        if (!cancelled) {
+          setData(d);
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [username]);
 
   useEffect(() => {
-    const handler = (e: any) => { if (e.key === "Escape") onClose(); };
+    const handler = (e: any) => {
+      if (e.key === "Escape") onClose();
+    };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [onClose]);
@@ -288,7 +584,10 @@ function ProfileDetailModal({ username,  onClose }: any) {
 
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
-      <div className={styles.modalCard} onClick={(e: any) => e.stopPropagation()}>
+      <div
+        className={styles.modalCard}
+        onClick={(e: any) => e.stopPropagation()}
+      >
         <CloseButtonComponent onClick={onClose} />
 
         {/* ══ PROFILE BANNER ════════════════════════════════ */}
@@ -309,86 +608,313 @@ function ProfileDetailModal({ username,  onClose }: any) {
               <div className={styles.profileAvatarWrap}>
                 {profile.avatarUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={profile.avatarUrl} alt={profile.username} className={styles.cardAvatar} />
+                  <img
+                    src={profile.avatarUrl}
+                    alt={profile.username}
+                    className={styles.cardAvatar}
+                  />
                 ) : (
-                  <div className={styles.cardAvatarFallback}>{(profile.username || "?")[0].toUpperCase()}</div>
+                  <div className={styles.cardAvatarFallback}>
+                    {(profile.username || "?")[0].toUpperCase()}
+                  </div>
                 )}
               </div>
               <div className={styles.profileNameBlock}>
-                <span className={styles.profileDisplayName}>{profile.username}</span>
+                <span className={styles.profileDisplayName}>
+                  {profile.username}
+                </span>
                 <div className={styles.cardRankRow}>
-                  {profile.rank && <span className={`${styles.cardRankBadge} ${styles.ngBadge}`}>{profile.rank}</span>}
-                  {profile.level != null && <span className={`${styles.cardRankBadge} ${styles.levelBadge}`}>Lvl {profile.level}</span>}
-                  {profile.supporter && <span className={`${styles.cardRankBadge} ${styles.supporterBadge}`}>⭐ Supporter</span>}
-                  {ccUser?.position && <span className={`${styles.cardRankBadge} ${styles.ccBadge}`}>{ccUser.position}</span>}
+                  {profile.rank && (
+                    <span
+                      className={`${styles.cardRankBadge} ${styles.ngBadge}`}
+                    >
+                      {profile.rank}
+                    </span>
+                  )}
+                  {profile.level != null && (
+                    <span
+                      className={`${styles.cardRankBadge} ${styles.levelBadge}`}
+                    >
+                      Lvl {profile.level}
+                    </span>
+                  )}
+                  {profile.supporter && (
+                    <span
+                      className={`${styles.cardRankBadge} ${styles.supporterBadge}`}
+                    >
+                      ⭐ Supporter
+                    </span>
+                  )}
+                  {ccUser?.position && (
+                    <span
+                      className={`${styles.cardRankBadge} ${styles.ccBadge}`}
+                    >
+                      {ccUser.position}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
 
-            {profile.description && <p className={styles.cardDescription}>{profile.description}</p>}
+            {profile.description && (
+              <p className={styles.cardDescription}>{profile.description}</p>
+            )}
 
             <div className={styles.cardPersonalInfo}>
-              {profile.joinDate && <span className={styles.personalInfoItem}><span className={styles.personalInfoIcon}>📅</span> Joined <span className={styles.personalInfoValue}>{profile.joinDate}</span></span>}
-              {profile.location && <span className={styles.personalInfoItem}><span className={styles.personalInfoIcon}>📍</span> <span className={styles.personalInfoValue}>{profile.location}</span></span>}
-              {profile.age != null && <span className={styles.personalInfoItem}><span className={styles.personalInfoIcon}>🎂</span> <span className={styles.personalInfoValue}>Age {profile.age}</span></span>}
-              {profile.sex && <span className={styles.personalInfoItem}><span className={styles.personalInfoIcon}>👤</span> <span className={styles.personalInfoValue}>{profile.sex}</span></span>}
-              {profile.job && <span className={styles.personalInfoItem}><span className={styles.personalInfoIcon}>💼</span> <span className={styles.personalInfoValue}>{profile.job}</span></span>}
-              {profile.realName && <span className={styles.personalInfoItem}><span className={styles.personalInfoIcon}>🪪</span> <span className={styles.personalInfoValue}>{profile.realName}</span></span>}
-              {profile.school && <span className={styles.personalInfoItem}><span className={styles.personalInfoIcon}>🎓</span> <span className={styles.personalInfoValue}>{profile.school}</span></span>}
-              {profile.globalRank != null && <span className={styles.personalInfoItem}><span className={styles.personalInfoIcon}>🌍</span> Rank #<span className={styles.personalInfoValue}>{formatNumber(profile.globalRank)}</span></span>}
-              {profile.expPoints && <span className={styles.personalInfoItem}><span className={styles.personalInfoIcon}>✨</span> EXP <span className={styles.personalInfoValue}>{profile.expPoints}</span></span>}
-              {profile.votePower && <span className={styles.personalInfoItem}><span className={styles.personalInfoIcon}>⚡</span> <span className={styles.personalInfoValue}>{profile.votePower}</span></span>}
+              {profile.joinDate && (
+                <span className={styles.personalInfoItem}>
+                  <span className={styles.personalInfoIcon}>📅</span> Joined{" "}
+                  <span className={styles.personalInfoValue}>
+                    {profile.joinDate}
+                  </span>
+                </span>
+              )}
+              {profile.location && (
+                <span className={styles.personalInfoItem}>
+                  <span className={styles.personalInfoIcon}>📍</span>{" "}
+                  <span className={styles.personalInfoValue}>
+                    {profile.location}
+                  </span>
+                </span>
+              )}
+              {profile.age != null && (
+                <span className={styles.personalInfoItem}>
+                  <span className={styles.personalInfoIcon}>🎂</span>{" "}
+                  <span className={styles.personalInfoValue}>
+                    Age {profile.age}
+                  </span>
+                </span>
+              )}
+              {profile.sex && (
+                <span className={styles.personalInfoItem}>
+                  <span className={styles.personalInfoIcon}>👤</span>{" "}
+                  <span className={styles.personalInfoValue}>
+                    {profile.sex}
+                  </span>
+                </span>
+              )}
+              {profile.job && (
+                <span className={styles.personalInfoItem}>
+                  <span className={styles.personalInfoIcon}>💼</span>{" "}
+                  <span className={styles.personalInfoValue}>
+                    {profile.job}
+                  </span>
+                </span>
+              )}
+              {profile.realName && (
+                <span className={styles.personalInfoItem}>
+                  <span className={styles.personalInfoIcon}>🪪</span>{" "}
+                  <span className={styles.personalInfoValue}>
+                    {profile.realName}
+                  </span>
+                </span>
+              )}
+              {profile.school && (
+                <span className={styles.personalInfoItem}>
+                  <span className={styles.personalInfoIcon}>🎓</span>{" "}
+                  <span className={styles.personalInfoValue}>
+                    {profile.school}
+                  </span>
+                </span>
+              )}
+              {profile.globalRank != null && (
+                <span className={styles.personalInfoItem}>
+                  <span className={styles.personalInfoIcon}>🌍</span> Rank #
+                  <span className={styles.personalInfoValue}>
+                    {formatNumber(profile.globalRank)}
+                  </span>
+                </span>
+              )}
+              {profile.expPoints && (
+                <span className={styles.personalInfoItem}>
+                  <span className={styles.personalInfoIcon}>✨</span> EXP{" "}
+                  <span className={styles.personalInfoValue}>
+                    {profile.expPoints}
+                  </span>
+                </span>
+              )}
+              {profile.votePower && (
+                <span className={styles.personalInfoItem}>
+                  <span className={styles.personalInfoIcon}>⚡</span>{" "}
+                  <span className={styles.personalInfoValue}>
+                    {profile.votePower}
+                  </span>
+                </span>
+              )}
             </div>
 
             <div className={styles.statsGrid}>
-              <div className={styles.statItem}><span className={styles.statValue}>{formatNumber(profile.fans)}</span><span className={styles.statLabel}>Fans</span></div>
-              <div className={styles.statItem}><span className={styles.statValue}>{formatNumber(profile.blams)}</span><span className={styles.statLabel}>Blams</span></div>
-              <div className={styles.statItem}><span className={styles.statValue}>{formatNumber(profile.saves)}</span><span className={styles.statLabel}>Saves</span></div>
-              <div className={styles.statItem}><span className={styles.statValue}>{formatNumber(profile.medals)}</span><span className={styles.statLabel}>Medals</span></div>
-              <div className={styles.statItem}><span className={styles.statValue}>{formatNumber(profile.trophies)}</span><span className={styles.statLabel}>Trophies</span></div>
-              {profile.expRank != null && <div className={styles.statItem}><span className={styles.statValue}>#{formatNumber(profile.expRank)}</span><span className={styles.statLabel}>EXP Rank</span></div>}
+              <div className={styles.statItem}>
+                <span className={styles.statValue}>
+                  {formatNumber(profile.fans)}
+                </span>
+                <span className={styles.statLabel}>Fans</span>
+              </div>
+              <div className={styles.statItem}>
+                <span className={styles.statValue}>
+                  {formatNumber(profile.blams)}
+                </span>
+                <span className={styles.statLabel}>Blams</span>
+              </div>
+              <div className={styles.statItem}>
+                <span className={styles.statValue}>
+                  {formatNumber(profile.saves)}
+                </span>
+                <span className={styles.statLabel}>Saves</span>
+              </div>
+              <div className={styles.statItem}>
+                <span className={styles.statValue}>
+                  {formatNumber(profile.medals)}
+                </span>
+                <span className={styles.statLabel}>Medals</span>
+              </div>
+              <div className={styles.statItem}>
+                <span className={styles.statValue}>
+                  {formatNumber(profile.trophies)}
+                </span>
+                <span className={styles.statLabel}>Trophies</span>
+              </div>
+              {profile.expRank != null && (
+                <div className={styles.statItem}>
+                  <span className={styles.statValue}>
+                    #{formatNumber(profile.expRank)}
+                  </span>
+                  <span className={styles.statLabel}>EXP Rank</span>
+                </div>
+              )}
             </div>
 
             <div className={styles.contentCounts}>
-              {profile.movieCount > 0 && <span className={styles.contentPill}><span className={styles.contentPillIcon}>🎬</span><span className={styles.contentPillCount}>{profile.movieCount}</span> Movies</span>}
-              {profile.gameCount > 0 && <span className={styles.contentPill}><span className={styles.contentPillIcon}>🎮</span><span className={styles.contentPillCount}>{profile.gameCount}</span> Games</span>}
-              {profile.audioCount > 0 && <span className={styles.contentPill}><span className={styles.contentPillIcon}>🎵</span><span className={styles.contentPillCount}>{profile.audioCount}</span> Audio</span>}
+              {profile.movieCount > 0 && (
+                <span className={styles.contentPill}>
+                  <span className={styles.contentPillIcon}>🎬</span>
+                  <span className={styles.contentPillCount}>
+                    {profile.movieCount}
+                  </span>{" "}
+                  Movies
+                </span>
+              )}
+              {profile.gameCount > 0 && (
+                <span className={styles.contentPill}>
+                  <span className={styles.contentPillIcon}>🎮</span>
+                  <span className={styles.contentPillCount}>
+                    {profile.gameCount}
+                  </span>{" "}
+                  Games
+                </span>
+              )}
+              {profile.audioCount > 0 && (
+                <span className={styles.contentPill}>
+                  <span className={styles.contentPillIcon}>🎵</span>
+                  <span className={styles.contentPillCount}>
+                    {profile.audioCount}
+                  </span>{" "}
+                  Audio
+                </span>
+              )}
 
-              {profile.reviewCount > 0 && <span className={styles.contentPill}><span className={styles.contentPillIcon}>📝</span><span className={styles.contentPillCount}>{profile.reviewCount}</span> Reviews</span>}
-              {profile.postCount > 0 && <span className={styles.contentPill}><span className={styles.contentPillIcon}>💬</span><span className={styles.contentPillCount}>{profile.postCount}</span> Posts</span>}
-              {profile.faveCount > 0 && <span className={styles.contentPill}><span className={styles.contentPillIcon}>❤️</span><span className={styles.contentPillCount}>{profile.faveCount}</span> Faves</span>}
+              {profile.reviewCount > 0 && (
+                <span className={styles.contentPill}>
+                  <span className={styles.contentPillIcon}>📝</span>
+                  <span className={styles.contentPillCount}>
+                    {profile.reviewCount}
+                  </span>{" "}
+                  Reviews
+                </span>
+              )}
+              {profile.postCount > 0 && (
+                <span className={styles.contentPill}>
+                  <span className={styles.contentPillIcon}>💬</span>
+                  <span className={styles.contentPillCount}>
+                    {profile.postCount}
+                  </span>{" "}
+                  Posts
+                </span>
+              )}
+              {profile.faveCount > 0 && (
+                <span className={styles.contentPill}>
+                  <span className={styles.contentPillIcon}>❤️</span>
+                  <span className={styles.contentPillCount}>
+                    {profile.faveCount}
+                  </span>{" "}
+                  Faves
+                </span>
+              )}
             </div>
 
             {/* ── Top Submissions ─────────────────────────────── */}
-            <TopSubmissionsSection title="Movies" emoji="🎬" items={data?.topMovies} />
-            <TopSubmissionsSection title="Games" emoji="🎮" items={data?.topGames} />
-            <TopSubmissionsSection title="Audio" emoji="🎵" items={data?.topAudio} />
-
+            <TopSubmissionsSection
+              title="Movies"
+              emoji="🎬"
+              items={data?.topMovies}
+            />
+            <TopSubmissionsSection
+              title="Games"
+              emoji="🎮"
+              items={data?.topGames}
+            />
+            <TopSubmissionsSection
+              title="Audio"
+              emoji="🎵"
+              items={data?.topAudio}
+            />
 
             {/* ── CC Forum ─────────────────────────────────────── */}
             {ccUser && (
               <div className={styles.ccSection}>
-                <div className={styles.ccSectionTitle}>🕰️ ClockCrew.net Forum</div>
+                <div className={styles.ccSectionTitle}>
+                  🕰️ ClockCrew.net Forum
+                </div>
                 <div className={styles.ccRow}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  {ccUser.avatarUrl && <img src={ccUser.avatarUrl} alt={ccUser.username} className={styles.ccAvatar} />}
+                  {ccUser.avatarUrl && (
+                    <img
+                      src={ccUser.avatarUrl}
+                      alt={ccUser.username}
+                      className={styles.ccAvatar}
+                    />
+                  )}
                   <div className={styles.ccInfo}>
                     <span className={styles.ccUsername}>{ccUser.username}</span>
-                    {ccUser.customTitle && <div className={styles.ccCustomTitle}>&ldquo;{ccUser.customTitle}&rdquo;</div>}
+                    {ccUser.customTitle && (
+                      <div className={styles.ccCustomTitle}>
+                        &ldquo;{ccUser.customTitle}&rdquo;
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className={styles.ccStats}>
-                  {ccUser.postCount != null && <span className={styles.ccStatItem}>Forum Posts: <span className={styles.ccStatValue}>{formatNumber(ccUser.postCount)}</span></span>}
-                  {ccUser.dateRegistered && <span className={styles.ccStatItem}>Registered: <span className={styles.ccStatValue}>{formatDate(ccUser.dateRegistered)}</span></span>}
+                  {ccUser.postCount != null && (
+                    <span className={styles.ccStatItem}>
+                      Forum Posts:{" "}
+                      <span className={styles.ccStatValue}>
+                        {formatNumber(ccUser.postCount)}
+                      </span>
+                    </span>
+                  )}
+                  {ccUser.dateRegistered && (
+                    <span className={styles.ccStatItem}>
+                      Registered:{" "}
+                      <span className={styles.ccStatValue}>
+                        {formatDate(ccUser.dateRegistered)}
+                      </span>
+                    </span>
+                  )}
                 </div>
 
                 {randomPost?.body && (
                   <blockquote className={styles.ccForumQuote}>
                     <p className={styles.ccQuoteBody}>
-                      &ldquo;{(() => {
-                        const stripped = randomPost.body.replace(/<[^>]*>/g, "").trim();
-                        return stripped.length > 280 ? stripped.slice(0, 277) + "…" : stripped;
-                      })()}&rdquo;
+                      &ldquo;
+                      {(() => {
+                        const stripped = randomPost.body
+                          .replace(/<[^>]*>/g, "")
+                          .trim();
+                        return stripped.length > 280
+                          ? stripped.slice(0, 277) + "…"
+                          : stripped;
+                      })()}
+                      &rdquo;
                     </p>
                     <footer className={styles.ccQuoteFooter}>
                       {randomPost.threadTitle && (
@@ -398,7 +924,9 @@ function ProfileDetailModal({ username,  onClose }: any) {
                         </span>
                       )}
                       {randomPost.date && (
-                        <span className={styles.ccQuoteDate}>{formatDate(randomPost.date)}</span>
+                        <span className={styles.ccQuoteDate}>
+                          {formatDate(randomPost.date)}
+                        </span>
                       )}
                     </footer>
                   </blockquote>
@@ -412,8 +940,16 @@ function ProfileDetailModal({ username,  onClose }: any) {
                 <div className={styles.topSubTitle}>🔗 Links</div>
                 <div className={styles.profileLinksList}>
                   {profile.links.map((link: any, i: any) => (
-                    <a key={i} href={link.url || link} target="_blank" rel="noopener noreferrer" className={styles.profileLinkItem}>
-                      {link.label || link.name || new URL(link.url || link).hostname}
+                    <a
+                      key={i}
+                      href={link.url || link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.profileLinkItem}
+                    >
+                      {link.label ||
+                        link.name ||
+                        new URL(link.url || link).hostname}
                     </a>
                   ))}
                 </div>
@@ -421,8 +957,24 @@ function ProfileDetailModal({ username,  onClose }: any) {
             )}
 
             <div className={styles.cardActions}>
-              <a href={profile.profileUrl} target="_blank" rel="noopener noreferrer" className={`${styles.actionButton} ${styles.actionPrimary}`}>🌐 NG Profile</a>
-              {ccUser?.profileUrl && <a href={ccUser.profileUrl} target="_blank" rel="noopener noreferrer" className={`${styles.actionButton} ${styles.actionSecondary}`}>🕰️ Forum Profile</a>}
+              <a
+                href={profile.profileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${styles.actionButton} ${styles.actionPrimary}`}
+              >
+                🌐 NG Profile
+              </a>
+              {ccUser?.profileUrl && (
+                <a
+                  href={ccUser.profileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${styles.actionButton} ${styles.actionSecondary}`}
+                >
+                  🕰️ Forum Profile
+                </a>
+              )}
             </div>
           </>
         )}
@@ -466,7 +1018,9 @@ function ClockCard({ profile, style, onClick }: any) {
       <div className={styles.itemInfo}>
         <span className={styles.itemTitle}>{profile.username}</span>
         <div className={styles.itemMeta}>
-          <span className={styles.itemAuthor}>{profile.location || profile.joinDate || ""}</span>
+          <span className={styles.itemAuthor}>
+            {profile.location || profile.joinDate || ""}
+          </span>
           {fanCount > 0 && (
             <span className={styles.clockFanCount}>
               <span className={styles.scoreStar}>♥</span>
@@ -487,10 +1041,10 @@ const PAGE_SIZE = 40;
 
 // Tab definitions — "clocks" uses a separate endpoint
 const TABS = [
-  { key: "all",    label: "All" },
-  { key: "movie",  label: "🎬 Movies" },
-  { key: "game",   label: "🎮 Games" },
-  { key: "audio",  label: "🎵 Audio" },
+  { key: "all", label: "All" },
+  { key: "movie", label: "🎬 Movies" },
+  { key: "game", label: "🎮 Games" },
+  { key: "audio", label: "🎵 Audio" },
   { key: "clocks", label: "🕰️ Clocks" },
 ];
 
@@ -502,8 +1056,16 @@ export default function NewgroundsPortalComponent() {
   const [query, setQuery] = useState("");
   const [type, setType] = useState("all");
   const [year, setYear] = useState("");
-  const [availableYears, setAvailableYears] = useState({ contentYears: [], profileYears: [] });
-  const [counts, setCounts] = useState({ movies: 0, games: 0, audio: 0, clocks: 0 });
+  const [availableYears, setAvailableYears] = useState({
+    contentYears: [],
+    profileYears: [],
+  });
+  const [counts, setCounts] = useState({
+    movies: 0,
+    games: 0,
+    audio: 0,
+    clocks: 0,
+  });
   const [selectedItem, setSelectedItem] = useState<any>(null);
   const [selectedProfile, setSelectedProfile] = useState<any>(null);
   const debounceRef = useRef<any>(null);
@@ -514,10 +1076,13 @@ export default function NewgroundsPortalComponent() {
   // ── Build title bar summary ────────────────────────────────────
   const titleSummary = (() => {
     if (type === "clocks") {
-      return counts.clocks > 0 ? `${counts.clocks.toLocaleString()} clocks` : "";
+      return counts.clocks > 0
+        ? `${counts.clocks.toLocaleString()} clocks`
+        : "";
     }
     const parts = [];
-    if (counts.movies > 0) parts.push(`${counts.movies.toLocaleString()} movies`);
+    if (counts.movies > 0)
+      parts.push(`${counts.movies.toLocaleString()} movies`);
     if (counts.games > 0) parts.push(`${counts.games.toLocaleString()} games`);
     if (counts.audio > 0) parts.push(`${counts.audio.toLocaleString()} audio`);
     return parts.join(" · ");
@@ -528,86 +1093,104 @@ export default function NewgroundsPortalComponent() {
     let cancelled = false;
     fetch("/api/newgrounds/portal/years")
       .then((res) => (res.ok ? res.json() : Promise.reject()))
-      .then((data) => { if (!cancelled) setAvailableYears(data); })
+      .then((data) => {
+        if (!cancelled) setAvailableYears(data);
+      })
       .catch(() => {});
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   // ── Fetch portal data ──────────────────────────────────────────
-  const fetchPortal = useCallback(async (q = "", t = "all", append = false, yr = "") => {
-    if (fetchingRef.current) return;
-    fetchingRef.current = true;
+  const fetchPortal = useCallback(
+    async (q = "", t = "all", append = false, yr = "") => {
+      if (fetchingRef.current) return;
+      fetchingRef.current = true;
 
-    const skip = append ? skipRef.current : 0;
-    if (!append) {
-      setLoading(true);
-      setHasMore(true);
-      skipRef.current = 0;
-    } else {
-      setLoadingMore(true);
-    }
-
-    try {
-      const isClocks = t === "clocks";
-      const params = new URLSearchParams({
-        sort: isClocks ? "fans" : "score",
-        limit: String(PAGE_SIZE),
-        skip: String(skip),
-      });
-      if (q) {
-        params.set("q", q);
-        if (!isClocks) params.set("username", q);
+      const skip = append ? skipRef.current : 0;
+      if (!append) {
+        setLoading(true);
+        setHasMore(true);
+        skipRef.current = 0;
+      } else {
+        setLoadingMore(true);
       }
-      if (!isClocks) params.set("type", t);
-      if (yr) params.set("year", yr);
 
-      const endpoint = isClocks ? "/api/newgrounds/portal/clocks" : "/api/newgrounds/portal";
-      const response = await fetch(`${endpoint}?${params}`);
+      try {
+        const isClocks = t === "clocks";
+        const params = new URLSearchParams({
+          sort: isClocks ? "fans" : "score",
+          limit: String(PAGE_SIZE),
+          skip: String(skip),
+        });
+        if (q) {
+          params.set("q", q);
+          if (!isClocks) params.set("username", q);
+        }
+        if (!isClocks) params.set("type", t);
+        if (yr) params.set("year", yr);
 
-      if (response.ok) {
-        const data = await response.json();
+        const endpoint = isClocks
+          ? "/api/newgrounds/portal/clocks"
+          : "/api/newgrounds/portal";
+        const response = await fetch(`${endpoint}?${params}`);
 
-        if (isClocks) {
-          const profiles = data.profiles || [];
-          if (append) {
-            setItems((prev) => [...prev, ...profiles]);
+        if (response.ok) {
+          const data = await response.json();
+
+          if (isClocks) {
+            const profiles = data.profiles || [];
+            if (append) {
+              setItems((prev) => [...prev, ...profiles]);
+            } else {
+              setItems(profiles);
+              setCounts((prev) => ({ ...prev, clocks: data.totalClocks || 0 }));
+            }
+            skipRef.current = skip + profiles.length;
+            if (
+              profiles.length < PAGE_SIZE ||
+              skipRef.current >= (data.totalClocks || 0)
+            ) {
+              setHasMore(false);
+            }
           } else {
-            setItems(profiles);
-            setCounts((prev) => ({ ...prev, clocks: data.totalClocks || 0 }));
-          }
-          skipRef.current = skip + profiles.length;
-          if (profiles.length < PAGE_SIZE || skipRef.current >= (data.totalClocks || 0)) {
-            setHasMore(false);
-          }
-        } else {
-          const newItems = data.items || [];
-          if (append) {
-            setItems((prev) => [...prev, ...newItems]);
-          } else {
-            setItems(newItems);
-            setCounts({
-              movies: data.totalMovies || 0,
-              games: data.totalGames || 0,
-              audio: data.totalAudio || 0,
-              clocks: counts.clocks,
-            });
-          }
-          skipRef.current = skip + newItems.length;
-          const totalFiltered = (data.totalMovies || 0) + (data.totalGames || 0) + (data.totalAudio || 0);
-          if (newItems.length < PAGE_SIZE || skipRef.current >= totalFiltered) {
-            setHasMore(false);
+            const newItems = data.items || [];
+            if (append) {
+              setItems((prev) => [...prev, ...newItems]);
+            } else {
+              setItems(newItems);
+              setCounts({
+                movies: data.totalMovies || 0,
+                games: data.totalGames || 0,
+                audio: data.totalAudio || 0,
+                clocks: counts.clocks,
+              });
+            }
+            skipRef.current = skip + newItems.length;
+            const totalFiltered =
+              (data.totalMovies || 0) +
+              (data.totalGames || 0) +
+              (data.totalAudio || 0);
+            if (
+              newItems.length < PAGE_SIZE ||
+              skipRef.current >= totalFiltered
+            ) {
+              setHasMore(false);
+            }
           }
         }
+      } catch (error) {
+        console.error("[NewgroundsPortal] Fetch error:", error as any);
+      } finally {
+        setLoading(false);
+        setLoadingMore(false);
+        fetchingRef.current = false;
       }
-    } catch (error) {
-      console.error("[NewgroundsPortal] Fetch error:", (error as any));
-    } finally {
-      setLoading(false);
-      setLoadingMore(false);
-      fetchingRef.current = false;
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [],
+  );
 
   // ── Initial load ───────────────────────────────────────────────
   useEffect(() => {
@@ -634,30 +1217,39 @@ export default function NewgroundsPortalComponent() {
   }, [hasMore, loading, loadingMore, query, type, year, fetchPortal]);
 
   // ── Debounced search ───────────────────────────────────────────
-  const handleSearchChange = useCallback((e: any) => {
-    const value = e.target.value;
-    setQuery(value);
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => {
-      fetchPortal(value, type, false, year);
-    }, 350);
-  }, [fetchPortal, type, year]);
+  const handleSearchChange = useCallback(
+    (e: any) => {
+      const value = e.target.value;
+      setQuery(value);
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      debounceRef.current = setTimeout(() => {
+        fetchPortal(value, type, false, year);
+      }, 350);
+    },
+    [fetchPortal, type, year],
+  );
 
   // ── Type tab switch ────────────────────────────────────────────
-  const handleTypeChange = useCallback((newType: any) => {
-    setType(newType);
-    // Reset year when switching between content and clocks tabs
-    // since they use different year pools
-    setYear("");
-    fetchPortal(query, newType, false, "");
-  }, [fetchPortal, query]);
+  const handleTypeChange = useCallback(
+    (newType: any) => {
+      setType(newType);
+      // Reset year when switching between content and clocks tabs
+      // since they use different year pools
+      setYear("");
+      fetchPortal(query, newType, false, "");
+    },
+    [fetchPortal, query],
+  );
 
   // ── Year filter change ────────────────────────────────────────
-  const handleYearChange = useCallback((e: any) => {
-    const newYear = e.target.value;
-    setYear(newYear);
-    fetchPortal(query, type, false, newYear);
-  }, [fetchPortal, query, type]);
+  const handleYearChange = useCallback(
+    (e: any) => {
+      const newYear = e.target.value;
+      setYear(newYear);
+      fetchPortal(query, type, false, newYear);
+    },
+    [fetchPortal, query, type],
+  );
 
   // ── Card click → content detail modal ──────────────────────────
   const handleItemClick = useCallback((item: any) => {
@@ -666,7 +1258,9 @@ export default function NewgroundsPortalComponent() {
 
   // ── Clock card click → open profile modal ──────────────────────
   const handleClockClick = useCallback((profile: any) => {
-    setSelectedProfile(profile.usernameLower || profile.username?.toLowerCase());
+    setSelectedProfile(
+      profile.usernameLower || profile.username?.toLowerCase(),
+    );
   }, []);
 
   const isClocks = type === "clocks";
@@ -682,11 +1276,11 @@ export default function NewgroundsPortalComponent() {
             <span className={styles.trafficDot} />
           </div>
           <span className={styles.titleBarCenter}>
-            <span className={styles.titleText}>{isClocks ? "Clock Crew" : "Flash Portal"}</span>
+            <span className={styles.titleText}>
+              {isClocks ? "Clock Crew" : "Flash Portal"}
+            </span>
           </span>
-          <span className={styles.titleCount}>
-            {titleSummary}
-          </span>
+          <span className={styles.titleCount}>{titleSummary}</span>
         </div>
 
         {/* ── Content ───────────────────────────────────────── */}
@@ -695,8 +1289,14 @@ export default function NewgroundsPortalComponent() {
           <div className={styles.searchBar}>
             <SearchInputComponent
               value={query}
-              onChange={(value: any) => handleSearchChange({ target: { value: value } })}
-              placeholder={isClocks ? "Search clocks by name…" : "Search movies, games, audio, or usernames…"}
+              onChange={(value: any) =>
+                handleSearchChange({ target: { value: value } })
+              }
+              placeholder={
+                isClocks
+                  ? "Search clocks by name…"
+                  : "Search movies, games, audio, or usernames…"
+              }
               leadingIcon={<Search size={14} />}
               className={styles.searchInputWrap}
             />
@@ -715,10 +1315,15 @@ export default function NewgroundsPortalComponent() {
               <div className={styles.yearFilter}>
                 <SelectComponent
                   value={year}
-                  onChange={(value: any) => handleYearChange({ target: { value: value } })}
+                  onChange={(value: any) =>
+                    handleYearChange({ target: { value: value } })
+                  }
                   options={[
                     { value: "", label: "All Years" },
-                    ...(isClocks ? availableYears.profileYears : availableYears.contentYears).map((y: any) => ({ value: String(y), label: String(y) })),
+                    ...(isClocks
+                      ? availableYears.profileYears
+                      : availableYears.contentYears
+                    ).map((y: any) => ({ value: String(y), label: String(y) })),
                   ]}
                 />
               </div>
@@ -738,55 +1343,69 @@ export default function NewgroundsPortalComponent() {
               <div style={{ gridColumn: "1 / -1" }}>
                 <EmptyStateComponent
                   icon={<span style={{ fontSize: 40 }}>🔍</span>}
-                  subtitle={query ? `No results for "${query}"` : isClocks ? "No clocks found" : "No submissions found"}
+                  subtitle={
+                    query
+                      ? `No results for "${query}"`
+                      : isClocks
+                        ? "No clocks found"
+                        : "No submissions found"
+                  }
                 />
               </div>
             )}
 
-            {!isClocks && items.map((item: any, i: any) => {
-              const meta = getTypeMeta(item.contentType);
-              return (
-                <div
-                  key={`${item.contentId || item._id}-${i}`}
-                  className={styles.itemCard}
-                  onClick={() => handleItemClick(item)}
-                  style={{ animationDelay: `${Math.min(i * 30, 600)}ms` }}
-                  title={`${item.title} by ${item.usernameLower}`}
-                >
-                  <div className={styles.itemThumbWrap}>
-                    {item.thumbnailUrl && (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={item.thumbnailUrl}
-                        alt={item.title}
-                        className={styles.itemThumb}
-                        loading="lazy"
-                        onError={(e: any) => { (e.target as any).style.display = "none"; }}
-                      />
-                    )}
-                    <span className={`${styles.typeBadge} ${styles[meta.badgeClass]}`}>
-                      {meta.emoji}
-                    </span>
-                  </div>
-                  <div className={styles.itemInfo}>
-                    <span className={styles.itemTitle}>{item.title}</span>
-                    <div className={styles.itemMeta}>
-                      <span className={styles.itemAuthor}>{item.usernameLower}</span>
-                      <ScoreDisplay score={item.score} />
+            {!isClocks &&
+              items.map((item: any, i: any) => {
+                const meta = getTypeMeta(item.contentType);
+                return (
+                  <div
+                    key={`${item.contentId || item._id}-${i}`}
+                    className={styles.itemCard}
+                    onClick={() => handleItemClick(item)}
+                    style={{ animationDelay: `${Math.min(i * 30, 600)}ms` }}
+                    title={`${item.title} by ${item.usernameLower}`}
+                  >
+                    <div className={styles.itemThumbWrap}>
+                      {item.thumbnailUrl && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={item.thumbnailUrl}
+                          alt={item.title}
+                          className={styles.itemThumb}
+                          loading="lazy"
+                          onError={(e: any) => {
+                            (e.target as any).style.display = "none";
+                          }}
+                        />
+                      )}
+                      <span
+                        className={`${styles.typeBadge} ${styles[meta.badgeClass]}`}
+                      >
+                        {meta.emoji}
+                      </span>
+                    </div>
+                    <div className={styles.itemInfo}>
+                      <span className={styles.itemTitle}>{item.title}</span>
+                      <div className={styles.itemMeta}>
+                        <span className={styles.itemAuthor}>
+                          {item.usernameLower}
+                        </span>
+                        <ScoreDisplay score={item.score} />
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
 
-            {isClocks && items.map((profile: any, i: any) => (
-              <ClockCard
-                key={`${profile.usernameLower || profile._id}-${i}`}
-                profile={profile}
-                style={{ animationDelay: `${Math.min(i * 30, 600)}ms` }}
-                onClick={() => handleClockClick(profile)}
-              />
-            ))}
+            {isClocks &&
+              items.map((profile: any, i: any) => (
+                <ClockCard
+                  key={`${profile.usernameLower || profile._id}-${i}`}
+                  profile={profile}
+                  style={{ animationDelay: `${Math.min(i * 30, 600)}ms` }}
+                  onClick={() => handleClockClick(profile)}
+                />
+              ))}
 
             {/* ── Infinite scroll sentinel ─────────────────────── */}
             <div ref={sentinelRef} className={styles.sentinel} />
@@ -799,7 +1418,8 @@ export default function NewgroundsPortalComponent() {
 
             {!loading && !hasMore && items.length > 0 && (
               <div className={styles.endOfList}>
-                All {items.length.toLocaleString()} {isClocks ? "clocks" : "submissions"} loaded
+                All {items.length.toLocaleString()}{" "}
+                {isClocks ? "clocks" : "submissions"} loaded
               </div>
             )}
           </div>

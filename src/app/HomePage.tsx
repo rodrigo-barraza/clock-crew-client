@@ -6,8 +6,8 @@ import NewgroundsPortalComponent from "./components/NewgroundsPortalComponent/Ne
 import ClockComponent from "./components/ClockComponent/ClockComponent";
 
 // ── Sunburst spin speeds (deg/s) ──────────────────────────────────
-const IDLE_SPEED = 6;       // 360° / 60s — gentle idle rotation
-const MAX_SPEED = 720;      // 2 full revolutions/s at peak — really fast
+const IDLE_SPEED = 6; // 360° / 60s — gentle idle rotation
+const MAX_SPEED = 720; // 2 full revolutions/s at peak — really fast
 
 // Exponential decay rate for deceleration (hover-out)
 // ~95% convergence at t ≈ 3/rate → ~2s, 99% at ~3s
@@ -41,11 +41,14 @@ export default function HomePage() {
         // Continuous ramp: exponential approach toward MAX_SPEED
         // Speed increases faster and faster over ~10s
         const elapsed = (now - state.hoverStart) / 1000;
-        const targetSpeed = IDLE_SPEED + (MAX_SPEED - IDLE_SPEED) * (1 - Math.exp(-elapsed * RATE_RAMP));
+        const targetSpeed =
+          IDLE_SPEED +
+          (MAX_SPEED - IDLE_SPEED) * (1 - Math.exp(-elapsed * RATE_RAMP));
         state.speed += (targetSpeed - state.speed) * (1 - Math.exp(-dt * 6));
       } else {
         // Decelerate smoothly back to idle
-        state.speed += (IDLE_SPEED - state.speed) * (1 - Math.exp(-dt * RATE_DECEL));
+        state.speed +=
+          (IDLE_SPEED - state.speed) * (1 - Math.exp(-dt * RATE_DECEL));
       }
 
       // Accumulate angle
@@ -53,7 +56,10 @@ export default function HomePage() {
 
       // Write to DOM via custom property (no React re-render)
       if (heroRef.current) {
-        (heroRef.current as any).style.setProperty("--sunburst-rotation", `${state.angle}deg`);
+        (heroRef.current as any).style.setProperty(
+          "--sunburst-rotation",
+          `${state.angle}deg`,
+        );
       }
 
       state.rafId = requestAnimationFrame(tick);
@@ -81,10 +87,7 @@ export default function HomePage() {
         <p className="hero-subtitle">
           The legendary Newgrounds Flash animation collective — est. 2002
         </p>
-        <section
-          aria-label="Community Hub"
-          className="dual-panel-section"
-        >
+        <section aria-label="Community Hub" className="dual-panel-section">
           <div className="dual-panel-wrap">
             <DiscordChatComponent
               messageCount={500}

@@ -19,7 +19,10 @@ Object.assign(process.env, secrets);
 const nextConfig: NextConfig = {
   output: "standalone",
   allowedDevOrigins: ["clocktopia.com"],
-  transpilePackages: ["@rodrigo-barraza/components-library", "@rodrigo-barraza/utilities-library"],
+  transpilePackages: [
+    "@rodrigo-barraza/components-library",
+    "@rodrigo-barraza/utilities-library",
+  ],
   turbopack: {},
 
   // Discord avatar and attachment images
@@ -57,7 +60,7 @@ const nextConfig: NextConfig = {
     MINIO_INTERNAL_URL: secrets.MINIO_INTERNAL_URL,
     SESSIONS_SERVICE_URL: secrets.SESSIONS_SERVICE_URL,
     SESSIONS_SERVICE_PUBLIC_URL: secrets.SESSIONS_SERVICE_PUBLIC_URL,
-  
+
     // Explicit NEXT_PUBLIC_ variables for Turbopack client-side injection
     NEXT_PUBLIC_CLOCK_CREW_CLIENT_PORT: secrets.CLOCK_CREW_CLIENT_PORT,
     NEXT_PUBLIC_CLOCK_CREW_SERVICE_URL: secrets.CLOCK_CREW_SERVICE_URL,

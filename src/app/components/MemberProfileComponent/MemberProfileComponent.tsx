@@ -11,9 +11,12 @@ function formatDate(dateStr: any) {
   if (!dateStr) return "—";
   const d = new Date(dateStr);
   if (isNaN(d as any)) return dateStr;
-  return d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+  return d.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 }
-
 
 // ── Tab definitions ──────────────────────────────────────────────
 const TABS = [
@@ -32,14 +35,21 @@ function StatCard({ label, value, icon }: any) {
   return (
     <div className={styles.statCard}>
       {icon && <span className={styles.statIcon}>{icon}</span>}
-      <span className={styles.statValue}>{(value as any)}</span>
+      <span className={styles.statValue}>{value as any}</span>
       <span className={styles.statLabel}>{label}</span>
     </div>
   );
 }
 
-function ContentCard({ item,  type }: any) {
-  const emoji = type === "movie" ? "🎬" : type === "game" ? "🎮" : type === "audio" ? "🎵" : "🎨";
+function ContentCard({ item, type }: any) {
+  const emoji =
+    type === "movie"
+      ? "🎬"
+      : type === "game"
+        ? "🎮"
+        : type === "audio"
+          ? "🎵"
+          : "🎨";
   return (
     <a
       href={item.url}
@@ -54,7 +64,9 @@ function ContentCard({ item,  type }: any) {
           alt={item.title}
           className={styles.contentThumb}
           loading="lazy"
-          onError={(e: any) => { (e.target as any).style.display = "none"; }}
+          onError={(e: any) => {
+            (e.target as any).style.display = "none";
+          }}
         />
       )}
       <div className={styles.contentInfo}>
@@ -62,18 +74,26 @@ function ContentCard({ item,  type }: any) {
         <div className={styles.contentMeta}>
           <span className={styles.contentType}>{emoji}</span>
           {item.score != null && (
-            <span className={styles.contentScore}>★ {(Math.round(item.score * 10) / 10).toFixed(1)}</span>
+            <span className={styles.contentScore}>
+              ★ {(Math.round(item.score * 10) / 10).toFixed(1)}
+            </span>
           )}
           {item.views != null && (
-            <span className={styles.contentViews}>{formatNumber(item.views)} views</span>
+            <span className={styles.contentViews}>
+              {formatNumber(item.views)} views
+            </span>
           )}
           {item.publishedDate && (
-            <span className={styles.contentDate}>{formatDate(item.publishedDate)}</span>
+            <span className={styles.contentDate}>
+              {formatDate(item.publishedDate)}
+            </span>
           )}
         </div>
         {item.description && (
           <p className={styles.contentDesc}>
-            {item.description.length > 120 ? item.description.slice(0, 120) + "…" : item.description}
+            {item.description.length > 120
+              ? item.description.slice(0, 120) + "…"
+              : item.description}
           </p>
         )}
       </div>
@@ -81,7 +101,7 @@ function ContentCard({ item,  type }: any) {
   );
 }
 
-function PostItem({ post,  showThread = true }: any) {
+function PostItem({ post, showThread = true }: any) {
   const body = stripHtml(post.body || post.content || "");
   return (
     <div className={styles.postItem}>
@@ -107,7 +127,9 @@ function ReviewItem({ review }: any) {
   return (
     <div className={styles.reviewItem}>
       <div className={styles.reviewHeader}>
-        <span className={styles.reviewTarget}>{review.contentTitle || review.contentUrl || "Unknown"}</span>
+        <span className={styles.reviewTarget}>
+          {review.contentTitle || review.contentUrl || "Unknown"}
+        </span>
         {review.score != null && (
           <span className={styles.reviewScore}>{review.score}/10</span>
         )}
@@ -121,7 +143,7 @@ function ReviewItem({ review }: any) {
   );
 }
 
-function ContentSection({ items, type: any,  emptyLabel }: any) {
+function ContentSection({ items, type: any, emptyLabel }: any) {
   if (!items?.length) {
     return (
       <div className={styles.emptyTab}>
@@ -133,7 +155,11 @@ function ContentSection({ items, type: any,  emptyLabel }: any) {
   return (
     <div className={styles.contentGrid}>
       {items.map((item: any, i: any) => (
-        <ContentCard key={item.contentId || item._id || i} item={item} type={(item.type as any)} />
+        <ContentCard
+          key={item.contentId || item._id || i}
+          item={item}
+          type={item.type as any}
+        />
       ))}
     </div>
   );
@@ -161,7 +187,9 @@ function OverviewTab({ data }: any) {
             <span className={styles.sectionIcon}>🤖</span>
             AI-Generated Profile
             <span className={styles.summaryMeta}>
-              {summary.model && <span className={styles.summaryModel}>{summary.model}</span>}
+              {summary.model && (
+                <span className={styles.summaryModel}>{summary.model}</span>
+              )}
             </span>
           </h2>
           <div className={styles.summaryContent}>
@@ -182,24 +210,48 @@ function OverviewTab({ data }: any) {
             <StatCard label="Level" value={ng.level ?? "—"} icon="⬆" />
             <StatCard label="Blams" value={formatNumber(ng.blams)} icon="💣" />
             <StatCard label="Saves" value={formatNumber(ng.saves)} icon="🛡" />
-            <StatCard label="Medals" value={formatNumber(ng.medals)} icon="🏅" />
-            <StatCard label="Trophies" value={formatNumber(ng.trophies)} icon="🏆" />
-            {ng.expPoints && <StatCard label="EXP" value={ng.expPoints} icon="✨" />}
-            {ng.votePower && <StatCard label="Vote Power" value={ng.votePower} icon="⚡" />}
+            <StatCard
+              label="Medals"
+              value={formatNumber(ng.medals)}
+              icon="🏅"
+            />
+            <StatCard
+              label="Trophies"
+              value={formatNumber(ng.trophies)}
+              icon="🏆"
+            />
+            {ng.expPoints && (
+              <StatCard label="EXP" value={ng.expPoints} icon="✨" />
+            )}
+            {ng.votePower && (
+              <StatCard label="Vote Power" value={ng.votePower} icon="⚡" />
+            )}
           </div>
-          {ng.description && (
-            <p className={styles.ngBio}>{ng.description}</p>
-          )}
+          {ng.description && <p className={styles.ngBio}>{ng.description}</p>}
           <div className={styles.personalInfo}>
-            {ng.joinDate && <span className={styles.infoItem}>📅 Joined {ng.joinDate}</span>}
-            {ng.location && <span className={styles.infoItem}>📍 {ng.location}</span>}
+            {ng.joinDate && (
+              <span className={styles.infoItem}>📅 Joined {ng.joinDate}</span>
+            )}
+            {ng.location && (
+              <span className={styles.infoItem}>📍 {ng.location}</span>
+            )}
             {ng.job && <span className={styles.infoItem}>💼 {ng.job}</span>}
-            {ng.age != null && <span className={styles.infoItem}>🎂 Age {ng.age}</span>}
+            {ng.age != null && (
+              <span className={styles.infoItem}>🎂 Age {ng.age}</span>
+            )}
             {ng.sex && <span className={styles.infoItem}>👤 {ng.sex}</span>}
-            {ng.realName && <span className={styles.infoItem}>🪪 {ng.realName}</span>}
-            {ng.school && <span className={styles.infoItem}>🎓 {ng.school}</span>}
+            {ng.realName && (
+              <span className={styles.infoItem}>🪪 {ng.realName}</span>
+            )}
+            {ng.school && (
+              <span className={styles.infoItem}>🎓 {ng.school}</span>
+            )}
             {ng.rank && <span className={styles.infoItem}>🎖 {ng.rank}</span>}
-            {ng.globalRank != null && <span className={styles.infoItem}>🌍 Rank #{formatNumber(ng.globalRank)}</span>}
+            {ng.globalRank != null && (
+              <span className={styles.infoItem}>
+                🌍 Rank #{formatNumber(ng.globalRank)}
+              </span>
+            )}
           </div>
         </section>
       )}
@@ -214,24 +266,49 @@ function OverviewTab({ data }: any) {
           <div className={styles.ccIdentity}>
             {cc.avatarUrl && (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={cc.avatarUrl} alt={cc.username} className={styles.ccAvatar} />
+              <img
+                src={cc.avatarUrl}
+                alt={cc.username}
+                className={styles.ccAvatar}
+              />
             )}
             <div>
               <span className={styles.ccName}>{cc.username}</span>
-              {cc.customTitle && <span className={styles.ccTitle}>&ldquo;{cc.customTitle}&rdquo;</span>}
-              {cc.position && <span className={styles.ccBadge}>{cc.position}</span>}
+              {cc.customTitle && (
+                <span className={styles.ccTitle}>
+                  &ldquo;{cc.customTitle}&rdquo;
+                </span>
+              )}
+              {cc.position && (
+                <span className={styles.ccBadge}>{cc.position}</span>
+              )}
             </div>
           </div>
           <div className={styles.miniStatsGrid}>
-            <StatCard label="Posts" value={formatNumber(cc.postCount)} icon="💬" />
-            <StatCard label="Registered" value={formatDate(cc.dateRegistered)} icon="📅" />
-            {cc.location && <StatCard label="Location" value={cc.location} icon="📍" />}
-            {cc.gender && <StatCard label="Gender" value={cc.gender} icon="👤" />}
+            <StatCard
+              label="Posts"
+              value={formatNumber(cc.postCount)}
+              icon="💬"
+            />
+            <StatCard
+              label="Registered"
+              value={formatDate(cc.dateRegistered)}
+              icon="📅"
+            />
+            {cc.location && (
+              <StatCard label="Location" value={cc.location} icon="📍" />
+            )}
+            {cc.gender && (
+              <StatCard label="Gender" value={cc.gender} icon="👤" />
+            )}
           </div>
           {cc.signatureHtml && (
             <div className={styles.signatureWrap}>
               <span className={styles.signatureLabel}>Signature</span>
-              <div className={styles.signatureContent} dangerouslySetInnerHTML={{ __html: cc.signatureHtml }} />
+              <div
+                className={styles.signatureContent}
+                dangerouslySetInnerHTML={{ __html: cc.signatureHtml }}
+              />
             </div>
           )}
         </section>
@@ -245,13 +322,27 @@ function OverviewTab({ data }: any) {
             Content Overview
           </h2>
           <div className={styles.contentPills}>
-            {ng.movieCount > 0 && <span className={styles.pill}>🎬 {ng.movieCount} Movies</span>}
-            {ng.gameCount > 0 && <span className={styles.pill}>🎮 {ng.gameCount} Games</span>}
-            {ng.audioCount > 0 && <span className={styles.pill}>🎵 {ng.audioCount} Audio</span>}
-            {ng.reviewCount > 0 && <span className={styles.pill}>📝 {ng.reviewCount} Reviews</span>}
-            {ng.postCount > 0 && <span className={styles.pill}>💬 {ng.postCount} Posts</span>}
-            {ng.faveCount > 0 && <span className={styles.pill}>❤️ {ng.faveCount} Faves</span>}
-            {ng.newsCount > 0 && <span className={styles.pill}>📰 {ng.newsCount} News</span>}
+            {ng.movieCount > 0 && (
+              <span className={styles.pill}>🎬 {ng.movieCount} Movies</span>
+            )}
+            {ng.gameCount > 0 && (
+              <span className={styles.pill}>🎮 {ng.gameCount} Games</span>
+            )}
+            {ng.audioCount > 0 && (
+              <span className={styles.pill}>🎵 {ng.audioCount} Audio</span>
+            )}
+            {ng.reviewCount > 0 && (
+              <span className={styles.pill}>📝 {ng.reviewCount} Reviews</span>
+            )}
+            {ng.postCount > 0 && (
+              <span className={styles.pill}>💬 {ng.postCount} Posts</span>
+            )}
+            {ng.faveCount > 0 && (
+              <span className={styles.pill}>❤️ {ng.faveCount} Faves</span>
+            )}
+            {ng.newsCount > 0 && (
+              <span className={styles.pill}>📰 {ng.newsCount} News</span>
+            )}
           </div>
         </section>
       )}
@@ -311,9 +402,13 @@ function OverviewTab({ data }: any) {
           </h2>
           <div className={styles.fansList}>
             {fans.slice(0, 50).map((fan: any, i: any) => (
-              <span key={i} className={styles.fanTag}>{fan}</span>
+              <span key={i} className={styles.fanTag}>
+                {fan}
+              </span>
             ))}
-            {fans.length > 50 && <span className={styles.fanMore}>+{fans.length - 50} more</span>}
+            {fans.length > 50 && (
+              <span className={styles.fanMore}>+{fans.length - 50} more</span>
+            )}
           </div>
         </section>
       )}
@@ -333,7 +428,9 @@ function OverviewTab({ data }: any) {
                 <span className={styles.threadMeta}>
                   {t.totalPosts != null && <span>{t.totalPosts} replies</span>}
                   {t.date && <span>{formatDate(t.date)}</span>}
-                  {t.boardName && <span className={styles.threadBoard}>{t.boardName}</span>}
+                  {t.boardName && (
+                    <span className={styles.threadBoard}>{t.boardName}</span>
+                  )}
                 </span>
               </li>
             ))}
@@ -373,7 +470,15 @@ function OverviewTab({ data }: any) {
                 rel="noopener noreferrer"
                 className={styles.linkItem}
               >
-                {link.label || link.name || (() => { try { return new URL(link.url || link).hostname; } catch { return "Link"; } })()}
+                {link.label ||
+                  link.name ||
+                  (() => {
+                    try {
+                      return new URL(link.url || link).hostname;
+                    } catch {
+                      return "Link";
+                    }
+                  })()}
               </a>
             ))}
           </div>
@@ -395,31 +500,58 @@ function MarkdownRenderer({ markdown }: any) {
     const line = lines[i];
 
     if (line.startsWith("# ")) {
-      elements.push(<h1 key={i} className={styles.mdH1}>{line.slice(2)}</h1>);
+      elements.push(
+        <h1 key={i} className={styles.mdH1}>
+          {line.slice(2)}
+        </h1>,
+      );
     } else if (line.startsWith("## ")) {
-      elements.push(<h2 key={i} className={styles.mdH2}>{line.slice(3)}</h2>);
+      elements.push(
+        <h2 key={i} className={styles.mdH2}>
+          {line.slice(3)}
+        </h2>,
+      );
     } else if (line.startsWith("### ")) {
-      elements.push(<h3 key={i} className={styles.mdH3}>{line.slice(4)}</h3>);
+      elements.push(
+        <h3 key={i} className={styles.mdH3}>
+          {line.slice(4)}
+        </h3>,
+      );
     } else if (line.startsWith("> ")) {
-      elements.push(<blockquote key={i} className={styles.mdBlockquote}>{line.slice(2)}</blockquote>);
+      elements.push(
+        <blockquote key={i} className={styles.mdBlockquote}>
+          {line.slice(2)}
+        </blockquote>,
+      );
     } else if (line.startsWith("- ") || line.startsWith("* ")) {
       const listItems = [];
       let j = i;
-      while (j < lines.length && (lines[j].startsWith("- ") || lines[j].startsWith("* ") || lines[j].startsWith("  "))) {
+      while (
+        j < lines.length &&
+        (lines[j].startsWith("- ") ||
+          lines[j].startsWith("* ") ||
+          lines[j].startsWith("  "))
+      ) {
         listItems.push(lines[j].replace(/^[-*]\s/, "").replace(/^\s+/, ""));
         j++;
       }
       elements.push(
         <ul key={i} className={styles.mdList}>
-          {listItems.map((item: any, index: any) => <li key={index}>{item}</li>)}
-        </ul>
+          {listItems.map((item: any, index: any) => (
+            <li key={index}>{item}</li>
+          ))}
+        </ul>,
       );
       i = j;
       continue;
     } else if (line.trim() === "") {
       // skip
     } else {
-      elements.push(<p key={i} className={styles.mdParagraph}>{line}</p>);
+      elements.push(
+        <p key={i} className={styles.mdParagraph}>
+          {line}
+        </p>,
+      );
     }
     i++;
   }
@@ -439,7 +571,9 @@ export default function MemberProfileComponent({ username }: any) {
 
   const fetchMember = useCallback(async (name: any) => {
     try {
-      const response = await fetch(`/api/clockcrew/users/${encodeURIComponent(name)}`);
+      const response = await fetch(
+        `/api/clockcrew/users/${encodeURIComponent(name)}`,
+      );
       if (!response.ok) {
         const body = await response.json().catch(() => ({}));
         throw new Error(body.error || `Failed (${response.status})`);
@@ -460,7 +594,9 @@ export default function MemberProfileComponent({ username }: any) {
       setLoading(false);
     });
 
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [username, fetchMember]);
 
   // ── Loading ────────────────────────────────────────────────────
@@ -486,7 +622,9 @@ export default function MemberProfileComponent({ username }: any) {
         <div className={styles.errorCard}>
           <span className={styles.errorIcon}>⚠️</span>
           <p className={styles.errorText}>{error || "Member not found"}</p>
-          <Link href="/clocks" className={styles.backLink}>← Back to Members</Link>
+          <Link href="/clocks" className={styles.backLink}>
+            ← Back to Members
+          </Link>
         </div>
       </div>
     );
@@ -496,7 +634,10 @@ export default function MemberProfileComponent({ username }: any) {
   const ng = member.newgrounds;
   const cc = member.ccForum;
 
-  const initials = (member.username || "?").replace(/clock$/i, "").slice(0, 2).toUpperCase();
+  const initials = (member.username || "?")
+    .replace(/clock$/i, "")
+    .slice(0, 2)
+    .toUpperCase();
   const avatarUrl = cc?.avatarUrl || ng?.avatarUrl || member.avatarUrl;
 
   // Build visible tabs based on available data
@@ -506,7 +647,8 @@ export default function MemberProfileComponent({ username }: any) {
     if (tab.key === "games") return games?.length > 0;
     if (tab.key === "audio") return audio?.length > 0;
     if (tab.key === "art") return art?.length > 0;
-    if (tab.key === "posts") return data.ccPosts?.length > 0 || data.ngPosts?.length > 0;
+    if (tab.key === "posts")
+      return data.ccPosts?.length > 0 || data.ngPosts?.length > 0;
     if (tab.key === "reviews") return reviews?.length > 0;
     return false;
   });
@@ -520,7 +662,11 @@ export default function MemberProfileComponent({ username }: any) {
           <div className={styles.avatarLarge}>
             {avatarUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={avatarUrl} alt={`${member.username} avatar`} className={styles.avatarImg} />
+              <img
+                src={avatarUrl}
+                alt={`${member.username} avatar`}
+                className={styles.avatarImg}
+              />
             ) : (
               <span className={styles.avatarFallback}>{initials}</span>
             )}
@@ -528,19 +674,45 @@ export default function MemberProfileComponent({ username }: any) {
           <div className={styles.identityInfo}>
             <h1 className={styles.username}>{member.username}</h1>
             <div className={styles.badges}>
-              {cc?.customTitle && <span className={styles.customTitle}>{cc.customTitle}</span>}
-              {cc?.group && <span className={styles.groupBadge}>{cc.group}</span>}
-              {cc?.position && <span className={styles.posBadge}>{cc.position}</span>}
-              {ng?.rank && <span className={styles.ngRankBadge}>{ng.rank}</span>}
-              {ng?.level != null && <span className={styles.levelBadge}>Lvl {ng.level}</span>}
-              {ng?.supporter && <span className={styles.supporterBadge}>⭐ Supporter</span>}
+              {cc?.customTitle && (
+                <span className={styles.customTitle}>{cc.customTitle}</span>
+              )}
+              {cc?.group && (
+                <span className={styles.groupBadge}>{cc.group}</span>
+              )}
+              {cc?.position && (
+                <span className={styles.posBadge}>{cc.position}</span>
+              )}
+              {ng?.rank && (
+                <span className={styles.ngRankBadge}>{ng.rank}</span>
+              )}
+              {ng?.level != null && (
+                <span className={styles.levelBadge}>Lvl {ng.level}</span>
+              )}
+              {ng?.supporter && (
+                <span className={styles.supporterBadge}>⭐ Supporter</span>
+              )}
             </div>
             <div className={styles.headerActions}>
               {ng?.profileUrl && (
-                <a href={ng.profileUrl} target="_blank" rel="noopener noreferrer" className={styles.headerBtn}>🌐 Newgrounds</a>
+                <a
+                  href={ng.profileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.headerBtn}
+                >
+                  🌐 Newgrounds
+                </a>
               )}
               {cc?.profileUrl && (
-                <a href={cc.profileUrl} target="_blank" rel="noopener noreferrer" className={styles.headerBtn}>🕰️ Forum</a>
+                <a
+                  href={cc.profileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.headerBtn}
+                >
+                  🕰️ Forum
+                </a>
               )}
             </div>
           </div>
@@ -549,13 +721,31 @@ export default function MemberProfileComponent({ username }: any) {
 
       {/* ── Quick Stats Bar ───────────────────────────────────── */}
       <section className={styles.quickStats}>
-        {cc?.postCount > 0 && <StatCard label="Forum Posts" value={formatNumber(cc.postCount)} icon="💬" />}
-        {ng?.fans > 0 && <StatCard label="NG Fans" value={formatNumber(ng.fans)} icon="♥" />}
-        {movies?.length > 0 && <StatCard label="Movies" value={movies.length} icon="🎬" />}
-        {games?.length > 0 && <StatCard label="Games" value={games.length} icon="🎮" />}
-        {audio?.length > 0 && <StatCard label="Audio" value={audio.length} icon="🎵" />}
-        {art?.length > 0 && <StatCard label="Art" value={art.length} icon="🎨" />}
-        {reviews?.length > 0 && <StatCard label="Reviews" value={reviews.length} icon="📝" />}
+        {cc?.postCount > 0 && (
+          <StatCard
+            label="Forum Posts"
+            value={formatNumber(cc.postCount)}
+            icon="💬"
+          />
+        )}
+        {ng?.fans > 0 && (
+          <StatCard label="NG Fans" value={formatNumber(ng.fans)} icon="♥" />
+        )}
+        {movies?.length > 0 && (
+          <StatCard label="Movies" value={movies.length} icon="🎬" />
+        )}
+        {games?.length > 0 && (
+          <StatCard label="Games" value={games.length} icon="🎮" />
+        )}
+        {audio?.length > 0 && (
+          <StatCard label="Audio" value={audio.length} icon="🎵" />
+        )}
+        {art?.length > 0 && (
+          <StatCard label="Art" value={art.length} icon="🎨" />
+        )}
+        {reviews?.length > 0 && (
+          <StatCard label="Reviews" value={reviews.length} icon="📝" />
+        )}
       </section>
 
       {/* ── Tabs ──────────────────────────────────────────────── */}
@@ -569,11 +759,21 @@ export default function MemberProfileComponent({ username }: any) {
             >
               <span className={styles.tabIcon}>{tab.icon}</span>
               {tab.label}
-              {tab.key === "movies" && movies?.length > 0 && <span className={styles.tabCount}>{movies.length}</span>}
-              {tab.key === "games" && games?.length > 0 && <span className={styles.tabCount}>{games.length}</span>}
-              {tab.key === "audio" && audio?.length > 0 && <span className={styles.tabCount}>{audio.length}</span>}
-              {tab.key === "art" && art?.length > 0 && <span className={styles.tabCount}>{art.length}</span>}
-              {tab.key === "reviews" && reviews?.length > 0 && <span className={styles.tabCount}>{reviews.length}</span>}
+              {tab.key === "movies" && movies?.length > 0 && (
+                <span className={styles.tabCount}>{movies.length}</span>
+              )}
+              {tab.key === "games" && games?.length > 0 && (
+                <span className={styles.tabCount}>{games.length}</span>
+              )}
+              {tab.key === "audio" && audio?.length > 0 && (
+                <span className={styles.tabCount}>{audio.length}</span>
+              )}
+              {tab.key === "art" && art?.length > 0 && (
+                <span className={styles.tabCount}>{art.length}</span>
+              )}
+              {tab.key === "reviews" && reviews?.length > 0 && (
+                <span className={styles.tabCount}>{reviews.length}</span>
+              )}
             </button>
           ))}
         </nav>
@@ -582,10 +782,18 @@ export default function MemberProfileComponent({ username }: any) {
       {/* ── Tab Content ───────────────────────────────────────── */}
       <div className={styles.tabContent}>
         {activeTab === "overview" && <OverviewTab data={data} />}
-        {activeTab === "movies" && <ContentSection items={movies} type="movie" emptyLabel="movies" />}
-        {activeTab === "games" && <ContentSection items={games} type="game" emptyLabel="games" />}
-        {activeTab === "audio" && <ContentSection items={audio} type="audio" emptyLabel="audio" />}
-        {activeTab === "art" && <ContentSection items={art} type="art" emptyLabel="art" />}
+        {activeTab === "movies" && (
+          <ContentSection items={movies} type="movie" emptyLabel="movies" />
+        )}
+        {activeTab === "games" && (
+          <ContentSection items={games} type="game" emptyLabel="games" />
+        )}
+        {activeTab === "audio" && (
+          <ContentSection items={audio} type="audio" emptyLabel="audio" />
+        )}
+        {activeTab === "art" && (
+          <ContentSection items={art} type="art" emptyLabel="art" />
+        )}
         {activeTab === "posts" && (
           <div className={styles.postsTab}>
             {data.ccPosts?.length > 0 && (
@@ -593,10 +801,14 @@ export default function MemberProfileComponent({ username }: any) {
                 <h2 className={styles.sectionTitle}>
                   <span className={styles.sectionIcon}>🕰️</span>
                   ClockCrew Forum Posts
-                  <span className={styles.panelCount}>{data.ccPosts.length}</span>
+                  <span className={styles.panelCount}>
+                    {data.ccPosts.length}
+                  </span>
                 </h2>
                 <div className={styles.postsList}>
-                  {data.ccPosts.map((p: any, i: any) => <PostItem key={p.messageId || i} post={p} />)}
+                  {data.ccPosts.map((p: any, i: any) => (
+                    <PostItem key={p.messageId || i} post={p} />
+                  ))}
                 </div>
               </section>
             )}
@@ -605,10 +817,14 @@ export default function MemberProfileComponent({ username }: any) {
                 <h2 className={styles.sectionTitle}>
                   <span className={styles.sectionIcon}>🟠</span>
                   Newgrounds BBS Posts
-                  <span className={styles.panelCount}>{data.ngPosts.length}</span>
+                  <span className={styles.panelCount}>
+                    {data.ngPosts.length}
+                  </span>
                 </h2>
                 <div className={styles.postsList}>
-                  {data.ngPosts.map((p: any, i: any) => <PostItem key={p.postId || i} post={p} showThread={false} />)}
+                  {data.ngPosts.map((p: any, i: any) => (
+                    <PostItem key={p.postId || i} post={p} showThread={false} />
+                  ))}
                 </div>
               </section>
             )}
@@ -616,7 +832,9 @@ export default function MemberProfileComponent({ username }: any) {
         )}
         {activeTab === "reviews" && (
           <div className={styles.reviewsList}>
-            {reviews?.map((r: any, i: any) => <ReviewItem key={r.reviewId || i} review={r} />)}
+            {reviews?.map((r: any, i: any) => (
+              <ReviewItem key={r.reviewId || i} review={r} />
+            ))}
           </div>
         )}
       </div>

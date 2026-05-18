@@ -29,10 +29,7 @@ export async function POST(request: any) {
 
     // Validate channel against whitelist
     if (!ALLOWED_CHANNELS.has(channelId)) {
-      return Response.json(
-        { error: "Channel not allowed" },
-        { status: 403 },
-      );
+      return Response.json({ error: "Channel not allowed" }, { status: 403 });
     }
 
     const response = await fetch(`${LUPOS_BOT_URL}/guild/react`, {
@@ -45,9 +42,6 @@ export async function POST(request: any) {
     return Response.json(data, { status: response.status });
   } catch (error) {
     console.error("[discord/react] Proxy error:", (error as any).message);
-    return Response.json(
-      { error: "Service unavailable" },
-      { status: 503 },
-    );
+    return Response.json({ error: "Service unavailable" }, { status: 503 });
   }
 }

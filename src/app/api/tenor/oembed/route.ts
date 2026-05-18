@@ -21,9 +21,7 @@ function transformThumbnailToGif(thumbnailUrl: any) {
   if (!thumbnailUrl) return null;
   // Tenor thumbnail pattern: https://media.tenor.com/{hash}AAAAN/{slug}.png
   // GIF variant:              https://media.tenor.com/{hash}AAAAC/{slug}.gif
-  return thumbnailUrl
-    .replace(/AAAAN\//, "AAAAC/")
-    .replace(/\.png$/, ".gif");
+  return thumbnailUrl.replace(/AAAAN\//, "AAAAC/").replace(/\.png$/, ".gif");
 }
 
 export async function GET(request: any) {
@@ -31,7 +29,10 @@ export async function GET(request: any) {
   const tenorUrl = searchParams.get("url");
 
   if (!tenorUrl || !tenorUrl.includes("tenor.com")) {
-    return Response.json({ error: "Missing or invalid Tenor URL" }, { status: 400 });
+    return Response.json(
+      { error: "Missing or invalid Tenor URL" },
+      { status: 400 },
+    );
   }
 
   // Check cache
@@ -44,10 +45,15 @@ export async function GET(request: any) {
 
   try {
     const oembedUrl = `https://tenor.com/oembed?url=${encodeURIComponent(tenorUrl)}`;
-    const response = await fetch(oembedUrl, { next: { revalidate: ONE_DAY_SECONDS } });
+    const response = await fetch(oembedUrl, {
+      next: { revalidate: ONE_DAY_SECONDS },
+    });
 
     if (!response.ok) {
-      return Response.json({ error: "Tenor oEmbed request failed" }, { status: response.status });
+      return Response.json(
+        { error: "Tenor oEmbed request failed" },
+        { status: response.status },
+      );
     }
 
     const oembed = await response.json();
@@ -77,6 +83,9 @@ export async function GET(request: any) {
     });
   } catch (error) {
     console.error("[tenor/oembed] Proxy error:", (error as any).message);
-    return Response.json({ error: "Failed to fetch Tenor data" }, { status: 502 });
+    return Response.json(
+      { error: "Failed to fetch Tenor data" },
+      { status: 502 },
+    );
   }
 }

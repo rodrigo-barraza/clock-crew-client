@@ -16,7 +16,9 @@ import React from "react";
 
 // Mock @rodrigo-barraza/components-library
 vi.mock("@rodrigo-barraza/components-library", () => ({
-  DiscordChatComponent: vi.fn(() => React.createElement("div", { "data-testid": "mock-discord-chat" })),
+  DiscordChatComponent: vi.fn(() =>
+    React.createElement("div", { "data-testid": "mock-discord-chat" }),
+  ),
 }));
 
 // Global window mocks

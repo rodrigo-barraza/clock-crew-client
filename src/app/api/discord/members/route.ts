@@ -42,10 +42,7 @@ export async function GET() {
         continue;
       }
       console.error("[discord/members] Proxy error:", (error as any).message);
-      return Response.json(
-        { error: "Service unavailable" },
-        { status: 503 },
-      );
+      return Response.json({ error: "Service unavailable" }, { status: 503 });
     }
   }
 
@@ -54,4 +51,3 @@ export async function GET() {
     { status: lastStatus },
   );
 }
-

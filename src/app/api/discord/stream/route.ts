@@ -28,7 +28,9 @@ export async function GET(request: any) {
   const channelId = searchParams.get("channelId") || DEFAULT_CHANNEL;
 
   // Validate channel ID against whitelist
-  const safeChannelId = ALLOWED_CHANNELS.has(channelId) ? channelId : DEFAULT_CHANNEL;
+  const safeChannelId = ALLOWED_CHANNELS.has(channelId)
+    ? channelId
+    : DEFAULT_CHANNEL;
 
   const upstreamUrl = `${TOOLS_SERVICE_URL}/discord/messages/stream?guildId=${GUILD_ID}&channelId=${safeChannelId}&limit=${limit}&includeBots=true`;
 
@@ -65,9 +67,6 @@ export async function GET(request: any) {
     }
 
     console.error("[discord/stream] Proxy error:", (error as any).message);
-    return Response.json(
-      { error: "Service unavailable" },
-      { status: 503 },
-    );
+    return Response.json({ error: "Service unavailable" }, { status: 503 });
   }
 }

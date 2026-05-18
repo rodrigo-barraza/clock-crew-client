@@ -31,10 +31,10 @@ export async function GET(request: any) {
     const data = await response.json();
     return Response.json(data);
   } catch (error) {
-    console.error("[newgrounds/portal/clocks] Proxy error:", (error as any).message);
-    return Response.json(
-      { error: "Service unavailable" },
-      { status: 503 },
+    console.error(
+      "[newgrounds/portal/clocks] Proxy error:",
+      (error as any).message,
     );
+    return Response.json({ error: "Service unavailable" }, { status: 503 });
   }
 }

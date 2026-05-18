@@ -2,7 +2,12 @@ import { Inter } from "next/font/google";
 import Image from "next/image";
 import "./globals.css";
 import NavBarComponent from "./components/NavBarComponent/NavBarComponent";
-import { ThemeProvider, ComponentsProvider, SessionTrackerComponent } from "@rodrigo-barraza/components-library";
+import {
+  ThemeProvider,
+  ComponentsProvider,
+  SessionTrackerComponent,
+  generateThemeInitScript,
+} from "@rodrigo-barraza/components-library";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -157,25 +162,43 @@ export const viewport = {
 
 export default function RootLayout({ children }: any) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
+        <template
+          dangerouslySetInnerHTML={{
+            __html: `<script>${generateThemeInitScript("clock:theme")}</script>`,
+          }}
+          suppressHydrationWarning
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
       <body className={inter.variable}>
-        <ThemeProvider>
+        <ThemeProvider storageKey="clock:theme">
           <ComponentsProvider>
-          <SessionTrackerComponent projectId="clock-crew-client" />
-          <NavBarComponent />
-          {children}
-          <footer className="site-footer">
-            <a href="https://rod.dev" className="site-copyright" target="_blank" rel="noopener noreferrer">
-              <Image src="/rod-dev-logo.ico" alt="" className="site-copyright-logo" width={14} height={14} unoptimized />
-              © 2023–2026 Rodrigo Barraza
-            </a>
-          </footer>
+            <SessionTrackerComponent projectId="clock-crew-client" />
+            <NavBarComponent />
+            {children}
+            <footer className="site-footer">
+              <a
+                href="https://rod.dev"
+                className="site-copyright"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  src="/rod-dev-logo.ico"
+                  alt=""
+                  className="site-copyright-logo"
+                  width={14}
+                  height={14}
+                  unoptimized
+                />
+                © 2023–2026 Rodrigo Barraza
+              </a>
+            </footer>
           </ComponentsProvider>
         </ThemeProvider>
       </body>

@@ -31,9 +31,6 @@ export async function GET(request: any) {
     return Response.json(data);
   } catch (error) {
     console.error("[clockcrew/users] Proxy error:", (error as any).message);
-    return Response.json(
-      { error: "Service unavailable" },
-      { status: 503 },
-    );
+    return Response.json({ error: "Service unavailable" }, { status: 503 });
   }
 }

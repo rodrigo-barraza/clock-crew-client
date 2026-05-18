@@ -9,8 +9,7 @@
 // ============================================================
 
 export const IS_PRODUCTION =
-  typeof window !== "undefined" &&
-  window.location.hostname.endsWith(".com");
+  typeof window !== "undefined" && window.location.hostname.endsWith(".com");
 
 export const IS_LOCALHOST = !IS_PRODUCTION;
 
@@ -20,10 +19,12 @@ export const PROJECT_NAME = "clock-crew";
 const IS_BROWSER = typeof window !== "undefined";
 
 const RAW_SERVICE_URL =
-  process.env.NEXT_PUBLIC_CLOCK_CREW_SERVICE_URL || process.env.CLOCK_CREW_SERVICE_URL;
+  process.env.NEXT_PUBLIC_CLOCK_CREW_SERVICE_URL ||
+  process.env.CLOCK_CREW_SERVICE_URL;
 
 const PUBLIC_SERVICE_URL =
-  process.env.NEXT_PUBLIC_CLOCK_CREW_SERVICE_PUBLIC_URL || process.env.CLOCK_CREW_SERVICE_PUBLIC_URL;
+  process.env.NEXT_PUBLIC_CLOCK_CREW_SERVICE_PUBLIC_URL ||
+  process.env.CLOCK_CREW_SERVICE_PUBLIC_URL;
 
 function resolveServiceUrl() {
   if (!IS_BROWSER) return RAW_SERVICE_URL;

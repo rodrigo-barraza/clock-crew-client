@@ -12,7 +12,7 @@
 
 const MINIO_INTERNAL_URL = process.env.MINIO_INTERNAL_URL;
 
-export async function GET(_request: any,  { params }: any) {
+export async function GET(_request: any, { params }: any) {
   const segments = (await params).path;
   const objectPath = segments.join("/");
 
