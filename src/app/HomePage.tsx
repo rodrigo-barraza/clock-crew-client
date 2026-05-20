@@ -18,7 +18,7 @@ const RATE_DECEL = 1.5;
 const RATE_RAMP = 0.3;
 
 export default function HomePage() {
-  const heroRef = useRef(null);
+  const heroRef = useRef<HTMLElement>(null);
   const animRef = useRef({
     angle: 0,
     speed: IDLE_SPEED,
@@ -33,7 +33,7 @@ export default function HomePage() {
     const state = animRef.current;
     state.lastTime = performance.now();
 
-    const tick = (now: any) => {
+    const tick = (now: number) => {
       const dt = Math.min((now - state.lastTime) / 1000, 0.1); // cap at 100ms
       state.lastTime = now;
 
@@ -56,7 +56,7 @@ export default function HomePage() {
 
       // Write to DOM via custom property (no React re-render)
       if (heroRef.current) {
-        (heroRef.current as any).style.setProperty(
+        heroRef.current.style.setProperty(
           "--sunburst-rotation",
           `${state.angle}deg`,
         );
@@ -70,11 +70,11 @@ export default function HomePage() {
   }, []);
 
   // ── Hover handler: toggle speed target + energized class ───────
-  const handleJoinHover = useCallback((hovering: any) => {
+  const handleJoinHover = useCallback((hovering: boolean) => {
     const state = animRef.current;
     state.hovering = hovering;
     if (hovering) state.hoverStart = performance.now();
-    (heroRef.current as any)?.classList.toggle("hero--energized", hovering);
+    heroRef.current?.classList.toggle("hero--energized", hovering);
   }, []);
 
   return (
