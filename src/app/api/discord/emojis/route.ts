@@ -22,7 +22,7 @@ export async function GET() {
 
     return Response.json(await response.json());
   } catch (error) {
-    console.error("[discord/emojis] Proxy error:", (error as any).message);
+    console.error("[discord/emojis] Proxy error:", (error as Error).message);
     return Response.json({ error: "Service unavailable" }, { status: 503 });
   }
 }

@@ -3,10 +3,6 @@ import styles from "./MemberCardComponent.module.css";
 
 /**
  * Compact member card for the /clocks directory grid.
- *
-
- * @param {object} props.user - CC forum user object
- * @param {number} props.index - render index for staggered animation
  */
 export default function MemberCardComponent({ user, index = 0 }: any) {
   const initials = (user.username || "?")

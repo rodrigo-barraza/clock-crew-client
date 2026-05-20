@@ -23,7 +23,7 @@ export async function GET() {
   } catch (error) {
     console.error(
       "[newgrounds/portal/years] Proxy error:",
-      (error as any).message,
+      (error as Error).message,
     );
     return Response.json({ error: "Service unavailable" }, { status: 503 });
   }

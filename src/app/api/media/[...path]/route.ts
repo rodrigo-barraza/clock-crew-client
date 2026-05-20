@@ -12,8 +12,8 @@
 
 const MINIO_INTERNAL_URL = process.env.MINIO_INTERNAL_URL;
 
-export async function GET(_request: any, { params }: any) {
-  const segments = (await params).path;
+export async function GET(_request: Request, { params }: { params: Promise<{ path: string[] }> }) {
+  const segments = (await params).path || [];
   const objectPath = segments.join("/");
 
   const upstream = `${MINIO_INTERNAL_URL}/${objectPath}`;
@@ -34,7 +34,7 @@ export async function GET(_request: any, { params }: any) {
       },
     });
   } catch (error) {
-    console.error("[media] Proxy error:", (error as any).message);
+    console.error("[media] Proxy error:", (error as Error).message);
     return new Response(null, { status: 502 });
   }
 }

@@ -6,7 +6,7 @@
 
 import { CLOCK_CREW_SERVICE_URL } from "@/config";
 
-export async function GET(request: any) {
+export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
   // Forward all supported query params
@@ -33,7 +33,7 @@ export async function GET(request: any) {
   } catch (error) {
     console.error(
       "[newgrounds/portal/clocks] Proxy error:",
-      (error as any).message,
+      (error as Error).message,
     );
     return Response.json({ error: "Service unavailable" }, { status: 503 });
   }

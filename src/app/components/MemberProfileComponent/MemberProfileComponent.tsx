@@ -580,7 +580,7 @@ export default function MemberProfileComponent({ username }: any) {
       }
       return { data: await response.json(), error: null };
     } catch (error) {
-      return { data: null, error: (error as any).message };
+      return { data: null, error: (error as Error).message };
     }
   }, []);
 

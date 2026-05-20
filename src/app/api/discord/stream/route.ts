@@ -22,7 +22,7 @@ const ALLOWED_CHANNELS = new Set([
 
 const DEFAULT_CHANNEL = "671089694397956116";
 
-export async function GET(request: any) {
+export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const limit = Math.min(parseInt(searchParams.get("limit") || "50", 10), 500);
   const channelId = searchParams.get("channelId") || DEFAULT_CHANNEL;
@@ -62,11 +62,11 @@ export async function GET(request: any) {
     });
   } catch (error) {
     // AbortError is expected when the client disconnects — don't log it
-    if ((error as any).name === "AbortError") {
+    if ((error as Error).name === "AbortError") {
       return new Response(null, { status: 499 });
     }
 
-    console.error("[discord/stream] Proxy error:", (error as any).message);
+    console.error("[discord/stream] Proxy error:", (error as Error).message);
     return Response.json({ error: "Service unavailable" }, { status: 503 });
   }
 }

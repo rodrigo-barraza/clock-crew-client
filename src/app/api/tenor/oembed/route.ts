@@ -17,14 +17,14 @@ const cache = new Map();
 const CACHE_TTL = MS_PER_DAY;
 const ONE_DAY_SECONDS = 86_400;
 
-function transformThumbnailToGif(thumbnailUrl: any) {
+function transformThumbnailToGif(thumbnailUrl: string) {
   if (!thumbnailUrl) return null;
   // Tenor thumbnail pattern: https://media.tenor.com/{hash}AAAAN/{slug}.png
   // GIF variant:              https://media.tenor.com/{hash}AAAAC/{slug}.gif
   return thumbnailUrl.replace(/AAAAN\//, "AAAAC/").replace(/\.png$/, ".gif");
 }
 
-export async function GET(request: any) {
+export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const tenorUrl = searchParams.get("url");
 
@@ -82,7 +82,7 @@ export async function GET(request: any) {
       headers: { "Cache-Control": `public, max-age=${ONE_DAY_SECONDS}` },
     });
   } catch (error) {
-    console.error("[tenor/oembed] Proxy error:", (error as any).message);
+    console.error("[tenor/oembed] Proxy error:", (error as Error).message);
     return Response.json(
       { error: "Failed to fetch Tenor data" },
       { status: 502 },

@@ -75,8 +75,8 @@ export async function GET() {
     }
 
     const channels = results
-      .filter((r: any) => r.status === "fulfilled")
-      .map((r: any) => ({
+      .filter((r) => r.status === "fulfilled")
+      .map((r) => ({
         id: r.value.channelId,
         name: r.value.name,
         topic: null,
@@ -94,7 +94,7 @@ export async function GET() {
       channels,
     });
   } catch (error) {
-    console.error("[discord/channels] Fallback error:", (error as any).message);
+    console.error("[discord/channels] Fallback error:", (error as Error).message);
     return Response.json({ error: "Service unavailable" }, { status: 503 });
   }
 }

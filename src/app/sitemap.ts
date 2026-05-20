@@ -8,7 +8,7 @@ import { CLOCK_CREW_SERVICE_URL } from "@/config";
 
 export const revalidate = 86_400; // 1 day — must be a literal for Next.js static analysis
 
-function safeDate(str: any) {
+function safeDate(str: string) {
   if (!str) return new Date();
   const d = new Date(str);
   return isNaN(d.getTime()) ? new Date() : d;
@@ -50,15 +50,15 @@ export default async function sitemap() {
       const data = await response.json();
       const users = data.users || [];
 
-      memberPages = users.map((user: any) => ({
-        url: `${BASE_URL}/clocks/${encodeURIComponent(user.username)}`,
-        lastModified: safeDate(user.dateRegistered),
+      memberPages = users.map((user: Record<string, unknown>) => ({
+        url: `${BASE_URL}/clocks/${encodeURIComponent(user.username as string)}`,
+        lastModified: safeDate(user.dateRegistered as string),
         changeFrequency: "weekly",
         priority: 0.6,
       }));
     }
   } catch (error) {
-    console.error("[sitemap] Failed to fetch members:", (error as any).message);
+    console.error("[sitemap] Failed to fetch members:", (error as Error).message);
     // Return only static pages if service is unavailable
   }
 

@@ -10,9 +10,6 @@ import styles from "./ClockComponent.module.css";
  *
  * Uses rAF for smooth second-hand sweeping and CSS custom properties
  * for GPU-accelerated rotation (no React re-renders).
- *
-
-
  */
 export default function ClockComponent({
   size = 160,

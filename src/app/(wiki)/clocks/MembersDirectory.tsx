@@ -31,7 +31,7 @@ export default function MembersDirectory() {
         const data = await response.json();
         setUsers(data.users || []);
       } catch (error) {
-        console.error("[MembersPage] Fetch error:", (error as any).message);
+        console.error("[MembersPage] Fetch error:", (error as Error).message);
       } finally {
         setLoading(false);
       }
@@ -91,8 +91,8 @@ export default function MembersDirectory() {
     for (const user of filteredUsers) {
       const letter = (user.username || "?")[0].toUpperCase();
       const key = /[A-Z]/.test(letter) ? letter : "#";
-      if (!(groups as any)[key]) (groups as any)[key] = [];
-      (groups as any)[key].push(user);
+      if (!(groups as Record<string, any>)[key]) (groups as Record<string, any>)[key] = [];
+      (groups as Record<string, any>)[key].push(user);
     }
     return groups;
   }, [filteredUsers, sort]);
@@ -147,7 +147,7 @@ export default function MembersDirectory() {
               <div key={letter} id={`letter-${letter}`}>
                 <h2 className={styles.letterHeading}>{letter}</h2>
                 <div className={styles.grid}>
-                  {(members as any).map((user: any, i: any) => (
+                  {(members as any[]).map((user: Record<string, unknown>, i: number) => (
                     <MemberCardComponent
                       key={user.userId || user.username}
                       user={user}
@@ -163,7 +163,7 @@ export default function MembersDirectory() {
       {/* ── Flat grid view ──────────────────────────────────────── */}
       {!loading && !grouped && (
         <div className={styles.grid}>
-          {filteredUsers.map((user: any, i: any) => (
+          {filteredUsers.map((user: Record<string, unknown>, i: number) => (
             <MemberCardComponent
               key={user.userId || user.username}
               user={user}

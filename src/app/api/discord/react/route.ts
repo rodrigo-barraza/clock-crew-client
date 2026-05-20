@@ -15,7 +15,7 @@ const ALLOWED_CHANNELS = new Set([
   "676318241689436170", // #memes
 ]);
 
-export async function POST(request: any) {
+export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { channelId, messageId, emoji } = body;
@@ -41,7 +41,7 @@ export async function POST(request: any) {
     const data = await response.json();
     return Response.json(data, { status: response.status });
   } catch (error) {
-    console.error("[discord/react] Proxy error:", (error as any).message);
+    console.error("[discord/react] Proxy error:", (error as Error).message);
     return Response.json({ error: "Service unavailable" }, { status: 503 });
   }
 }

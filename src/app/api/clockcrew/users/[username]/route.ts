@@ -9,8 +9,8 @@
 
 import { CLOCK_CREW_SERVICE_URL } from "@/config";
 
-export async function GET(_request: any, { params }: any) {
-  const { username } = await params;
+export async function GET(_request: Request, { params }: { params: Promise<{ username: string }> }) {
+  const username = (await params).username;
 
   if (!username) {
     return Response.json({ error: "Username is required" }, { status: 400 });
@@ -39,7 +39,7 @@ export async function GET(_request: any, { params }: any) {
 
     return Response.json(data);
   } catch (error) {
-    console.error("[clockcrew/users/:username] Error:", (error as any).message);
+    console.error("[clockcrew/users/:username] Error:", (error as Error).message);
     return Response.json({ error: "Service unavailable" }, { status: 503 });
   }
 }

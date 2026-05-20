@@ -10,7 +10,7 @@ const SITE_URL = "https://clocktopia.com";
 import { CLOCK_CREW_SERVICE_URL } from "@/config";
 
 // ── Fetch member data at request time for metadata ───────────
-async function fetchMember(username: any) {
+async function fetchMember(username: string) {
   try {
     const response = await fetch(
       `${CLOCK_CREW_SERVICE_URL}/clockcrew/users/${encodeURIComponent(username)}`,
@@ -23,7 +23,7 @@ async function fetchMember(username: any) {
   return null;
 }
 
-export async function generateMetadata({ params }: any) {
+export async function generateMetadata({ params }: { params: Record<string, string> }) {
   const { username } = await params;
   const decodedName = decodeURIComponent(username);
   const member = await fetchMember(decodedName);
@@ -73,7 +73,7 @@ export async function generateMetadata({ params }: any) {
   };
 }
 
-export default async function MemberProfilePage({ params }: any) {
+export default async function MemberProfilePage({ params }: { params: Record<string, string> }) {
   const { username } = await params;
   const decodedName = decodeURIComponent(username);
   const member = await fetchMember(decodedName);
