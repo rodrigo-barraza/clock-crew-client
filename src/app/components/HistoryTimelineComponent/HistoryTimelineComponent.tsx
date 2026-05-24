@@ -109,7 +109,6 @@ export default function HistoryTimelineComponent() {
       <div className={styles.clearfix}>
         <aside className={styles.infoBox}>
           <div className={styles.infoBoxHeader}>{INFO_BOX.title}</div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className={styles.infoBoxImage}
             src={INFO_BOX.imageUrl}
@@ -190,7 +189,6 @@ export default function HistoryTimelineComponent() {
         </h2>
 
         <div className={`${styles.figure} ${styles.figureRight}`}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className={styles.figureImage}
             src="/images/b-movie-screenshot.png"
@@ -373,7 +371,6 @@ export default function HistoryTimelineComponent() {
         </h2>
 
         <div className={`${styles.figure} ${styles.figureRight}`}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className={styles.figureImage}
             src="/images/clock-day-celebration.png"

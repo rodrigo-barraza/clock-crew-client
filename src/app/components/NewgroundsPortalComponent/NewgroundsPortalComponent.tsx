@@ -136,7 +136,6 @@ function TopSubmissionsSection({ title, emoji, items }: TopSubmissionsSectionPro
             className={styles.topSubItem}
           >
             {sub.thumbnailUrl && (
-              // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={sub.thumbnailUrl}
                 alt={sub.title}
@@ -307,7 +306,6 @@ function ContentDetailModal({ item, onClose }: ContentDetailModalProps) {
                 style={{ margin: 0, width: 56, height: 56 }}
               >
                 {profile.avatarUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={profile.avatarUrl}
                     alt={profile.username}
@@ -530,7 +528,6 @@ function ContentDetailModal({ item, onClose }: ContentDetailModalProps) {
                   🕰️ ClockCrew.net Forum
                 </div>
                 <div className={styles.ccRow}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   {ccUser.avatarUrl && (
                     <img
                       src={ccUser.avatarUrl}
@@ -709,7 +706,6 @@ function ProfileDetailModal({ username, onClose }: ProfileDetailModalProps) {
             <div className={styles.profileIdentity}>
               <div className={styles.profileAvatarWrap}>
                 {profile.avatarUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={profile.avatarUrl}
                     alt={profile.username}
@@ -968,7 +964,6 @@ function ProfileDetailModal({ username, onClose }: ProfileDetailModalProps) {
                   🕰️ ClockCrew.net Forum
                 </div>
                 <div className={styles.ccRow}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   {ccUser.avatarUrl && (
                     <img
                       src={ccUser.avatarUrl}
@@ -1111,7 +1106,6 @@ function ClockCard({ profile, style, onClick }: ClockCardProps) {
     >
       <div className={styles.clockAvatarWrap}>
         {showAvatar ? (
-          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={avatarSrc}
             alt={profile.username}
@@ -1273,12 +1267,12 @@ export default function NewgroundsPortalComponent() {
               setItems((prev) => [...prev, ...newItems]);
             } else {
               setItems(newItems);
-              setCounts({
+              setCounts((prev) => ({
                 movies: data.totalMovies || 0,
                 games: data.totalGames || 0,
                 audio: data.totalAudio || 0,
-                clocks: counts.clocks,
-              });
+                clocks: prev.clocks,
+              }));
             }
             skipRef.current = skip + newItems.length;
             const totalFiltered =
@@ -1300,7 +1294,6 @@ export default function NewgroundsPortalComponent() {
         setLoadingMore(false);
         fetchingRef.current = false;
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
     [],
   );
@@ -1474,7 +1467,6 @@ export default function NewgroundsPortalComponent() {
                   >
                     <div className={styles.itemThumbWrap}>
                       {item.thumbnailUrl && (
-                        // eslint-disable-next-line @next/next/no-img-element
                         <img
                           src={item.thumbnailUrl}
                           alt={item.title}

@@ -89,7 +89,6 @@ function ContentCard({ item, type }: ContentCardProps) {
       className={styles.contentCard}
     >
       {item.thumbnailUrl && (
-        // eslint-disable-next-line @next/next/no-img-element
         <img
           src={item.thumbnailUrl}
           alt={item.title}
@@ -315,7 +314,6 @@ function OverviewTab({ data }: OverviewTabProps) {
           </h2>
           <div className={styles.ccIdentity}>
             {cc.avatarUrl && (
-              // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={cc.avatarUrl}
                 alt={cc.username}
@@ -726,7 +724,6 @@ export default function MemberProfileComponent({ username }: MemberProfileCompon
         <div className={styles.identity}>
           <div className={styles.avatarLarge}>
             {avatarUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={avatarUrl}
                 alt={`${member.username} avatar`}
