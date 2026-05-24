@@ -13,10 +13,8 @@ vi.mock(
 describe("HomePage", () => {
   it("renders the homepage correctly with mocked components", () => {
     render(<HomePage />);
-    (expect(screen.getByText("The Clock Crew")) as any).toBeInTheDocument();
-    (
-      expect(screen.getByTestId("mock-discord-chat")) as any
-    ).toBeInTheDocument();
-    (expect(screen.getByTestId("mock-ng-portal")) as any).toBeInTheDocument();
+    expect(screen.getByText("The Clock Crew")).toBeInTheDocument();
+    expect(screen.getByTestId("mock-discord-chat")).toBeInTheDocument();
+    expect(screen.getByTestId("mock-ng-portal")).toBeInTheDocument();
   });
 });

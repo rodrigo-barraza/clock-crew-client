@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, SyntheticEvent } from "react";
 import { Search } from "lucide-react";
 import {
   CloseButtonComponent,
@@ -11,9 +11,85 @@ import {
 } from "@rodrigo-barraza/components-library";
 import { formatNumber } from "@rodrigo-barraza/utilities-library";
 import styles from "./NewgroundsPortalComponent.module.css";
+import {
+  NewgroundsStats,
+  ClockCrewForumStats,
+  MemberContentItem,
+  ForumPost,
+} from "../../../types";
+
+// ── Local interfaces ────────────────────────────────────────────
+
+interface PortalContentItem {
+  contentId?: string;
+  _id?: string;
+  title: string;
+  url: string;
+  thumbnailUrl?: string;
+  score?: number;
+  views?: number;
+  usernameLower: string;
+  contentType: string;
+  publishedDate?: string;
+  description?: string;
+}
+
+interface ClockProfile {
+  _id?: string;
+  username: string;
+  usernameLower: string;
+  avatarUrl?: string;
+  ccAvatarUrl?: string;
+  level?: number;
+  location?: string;
+  joinDate?: string;
+  supporter?: boolean;
+  rank?: string;
+  fans?: { count: number };
+}
+
+interface CardApiResponse {
+  profile?: NewgroundsStats & {
+    username: string;
+    profileUrl: string;
+    expRank?: number;
+    links?: Array<{ url?: string; label?: string; name?: string } | string>;
+  };
+  ccUser?: ClockCrewForumStats;
+  randomPost?: ForumPost;
+  topMovies?: MemberContentItem[];
+  topGames?: MemberContentItem[];
+  topAudio?: MemberContentItem[];
+}
+
+interface PortalApiResponse {
+  items?: PortalContentItem[];
+  totalMovies?: number;
+  totalGames?: number;
+  totalAudio?: number;
+  profiles?: ClockProfile[];
+  totalClocks?: number;
+}
+
+interface AvailableYears {
+  contentYears: number[];
+  profileYears: number[];
+}
+
+interface PortalCounts {
+  movies: number;
+  games: number;
+  audio: number;
+  clocks: number;
+}
 
 // ── Score display helpers ────────────────────────────────────────
-function ScoreDisplay({ score }: any) {
+
+interface ScoreDisplayProps {
+  score?: number | null;
+}
+
+function ScoreDisplay({ score }: ScoreDisplayProps) {
   if (score == null) return null;
   const rounded = Math.round(score * 10) / 10;
   return (
@@ -24,10 +100,10 @@ function ScoreDisplay({ score }: any) {
   );
 }
 
-function formatDate(dateStr: any) {
+function formatDate(dateStr: string | Date | null | undefined): string {
   if (!dateStr) return "—";
   const d = new Date(dateStr);
-  if (isNaN(d as any)) return dateStr; // raw string like "2004-09-22"
+  if (isNaN(d.getTime())) return String(dateStr);
   return d.toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
@@ -36,7 +112,14 @@ function formatDate(dateStr: any) {
 }
 
 // ── Top Submissions Section ──────────────────────────────────
-function TopSubmissionsSection({ title, emoji, items }: any) {
+
+interface TopSubmissionsSectionProps {
+  title: string;
+  emoji: string;
+  items?: MemberContentItem[];
+}
+
+function TopSubmissionsSection({ title, emoji, items }: TopSubmissionsSectionProps) {
   if (!items?.length) return null;
   return (
     <div className={styles.topSubmissions}>
@@ -44,7 +127,7 @@ function TopSubmissionsSection({ title, emoji, items }: any) {
         {emoji} Top {title}
       </div>
       <div className={styles.topSubList}>
-        {items.map((sub: any, i: any) => (
+        {items.map((sub: MemberContentItem, i: number) => (
           <a
             key={sub.contentId || sub._id || i}
             href={sub.url}
@@ -77,7 +160,14 @@ function TopSubmissionsSection({ title, emoji, items }: any) {
 }
 
 // ── Type metadata ────────────────────────────────────────────────
-const TYPE_META = {
+interface TypeMetaEntry {
+  emoji: string;
+  label: string;
+  badgeClass: string;
+  action: string;
+}
+
+const TYPE_META: Record<string, TypeMetaEntry> = {
   movie: {
     emoji: "🎬",
     label: "Movie",
@@ -98,13 +188,19 @@ const TYPE_META = {
   },
 };
 
-function getTypeMeta(contentType: any) {
-  return TYPE_META[contentType as keyof typeof TYPE_META] || TYPE_META.movie;
+function getTypeMeta(contentType: string): TypeMetaEntry {
+  return TYPE_META[contentType] || TYPE_META.movie;
 }
 
 // ── Content Detail Modal ─────────────────────────────────────────
-function ContentDetailModal({ item, onClose }: any) {
-  const [data, setData] = useState<any>(null);
+
+interface ContentDetailModalProps {
+  item: PortalContentItem;
+  onClose: () => void;
+}
+
+function ContentDetailModal({ item, onClose }: ContentDetailModalProps) {
+  const [data, setData] = useState<CardApiResponse | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -113,7 +209,7 @@ function ContentDetailModal({ item, onClose }: any) {
     setLoading(true);
     fetch(`/api/newgrounds/card/${encodeURIComponent(item.usernameLower)}`)
       .then((res) => (res.ok ? res.json() : Promise.reject()))
-      .then((d: any) => {
+      .then((d: CardApiResponse) => {
         if (!cancelled) {
           setData(d);
           setLoading(false);
@@ -128,7 +224,7 @@ function ContentDetailModal({ item, onClose }: any) {
   }, [item?.usernameLower]);
 
   useEffect(() => {
-    const handler = (e: any) => {
+    const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handler);
@@ -144,7 +240,7 @@ function ContentDetailModal({ item, onClose }: any) {
     <div className={styles.modalOverlay} onClick={onClose}>
       <div
         className={styles.modalCard}
-        onClick={(e: any) => e.stopPropagation()}
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >
         <CloseButtonComponent onClick={onClose} />
 
@@ -546,8 +642,14 @@ function ContentDetailModal({ item, onClose }: any) {
 }
 
 // ── Profile Detail Modal (for Clocks tab) ────────────────────
-function ProfileDetailModal({ username, onClose }: any) {
-  const [data, setData] = useState<any>(null);
+
+interface ProfileDetailModalProps {
+  username: string;
+  onClose: () => void;
+}
+
+function ProfileDetailModal({ username, onClose }: ProfileDetailModalProps) {
+  const [data, setData] = useState<CardApiResponse | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -556,7 +658,7 @@ function ProfileDetailModal({ username, onClose }: any) {
     setLoading(true);
     fetch(`/api/newgrounds/card/${encodeURIComponent(username)}`)
       .then((res) => (res.ok ? res.json() : Promise.reject()))
-      .then((d: any) => {
+      .then((d: CardApiResponse) => {
         if (!cancelled) {
           setData(d);
           setLoading(false);
@@ -571,7 +673,7 @@ function ProfileDetailModal({ username, onClose }: any) {
   }, [username]);
 
   useEffect(() => {
-    const handler = (e: any) => {
+    const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handler);
@@ -586,7 +688,7 @@ function ProfileDetailModal({ username, onClose }: any) {
     <div className={styles.modalOverlay} onClick={onClose}>
       <div
         className={styles.modalCard}
-        onClick={(e: any) => e.stopPropagation()}
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >
         <CloseButtonComponent onClick={onClose} />
 
@@ -935,23 +1037,27 @@ function ProfileDetailModal({ username, onClose }: any) {
             )}
 
             {/* ── External Links ──────────────────────────────── */}
-            {profile.links?.length > 0 && (
+            {profile.links && profile.links.length > 0 && (
               <div className={styles.profileLinks}>
                 <div className={styles.topSubTitle}>🔗 Links</div>
                 <div className={styles.profileLinksList}>
-                  {profile.links.map((link: any, i: any) => (
-                    <a
-                      key={i}
-                      href={link.url || link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={styles.profileLinkItem}
-                    >
-                      {link.label ||
-                        link.name ||
-                        new URL(link.url || link).hostname}
-                    </a>
-                  ))}
+                  {profile.links.map((link: string | { url?: string; label?: string; name?: string }, i: number) => {
+                    const url = typeof link === "string" ? link : link.url || "";
+                    const label = typeof link === "string" ? link : link.label || link.name || "";
+                    return (
+                      <a
+                        key={i}
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.profileLinkItem}
+                      >
+                        {label || (() => {
+                          try { return new URL(url).hostname; } catch { return "Link"; }
+                        })()}
+                      </a>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -984,7 +1090,14 @@ function ProfileDetailModal({ username, onClose }: any) {
 }
 
 // ── Clock Profile Card (for Clocks tab) ──────────────────────────
-function ClockCard({ profile, style, onClick }: any) {
+
+interface ClockCardProps {
+  profile: ClockProfile;
+  style?: React.CSSProperties;
+  onClick: () => void;
+}
+
+function ClockCard({ profile, style, onClick }: ClockCardProps) {
   const [imgError, setImgError] = useState(false);
   const fanCount = profile.fans?.count ?? 0;
   const avatarSrc = profile.ccAvatarUrl || profile.avatarUrl;
@@ -1049,27 +1162,27 @@ const TABS = [
 ];
 
 export default function NewgroundsPortalComponent() {
-  const [items, setItems] = useState<any[]>([]);
+  const [items, setItems] = useState<(PortalContentItem | ClockProfile)[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [query, setQuery] = useState("");
   const [type, setType] = useState("all");
   const [year, setYear] = useState("");
-  const [availableYears, setAvailableYears] = useState({
+  const [availableYears, setAvailableYears] = useState<AvailableYears>({
     contentYears: [],
     profileYears: [],
   });
-  const [counts, setCounts] = useState({
+  const [counts, setCounts] = useState<PortalCounts>({
     movies: 0,
     games: 0,
     audio: 0,
     clocks: 0,
   });
-  const [selectedItem, setSelectedItem] = useState<any>(null);
-  const [selectedProfile, setSelectedProfile] = useState<any>(null);
-  const debounceRef = useRef<any>(null);
-  const sentinelRef = useRef(null);
+  const [selectedItem, setSelectedItem] = useState<PortalContentItem | null>(null);
+  const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
   const skipRef = useRef(0);
   const fetchingRef = useRef(false);
 
@@ -1080,7 +1193,7 @@ export default function NewgroundsPortalComponent() {
         ? `${counts.clocks.toLocaleString()} clocks`
         : "";
     }
-    const parts = [];
+    const parts: string[] = [];
     if (counts.movies > 0)
       parts.push(`${counts.movies.toLocaleString()} movies`);
     if (counts.games > 0) parts.push(`${counts.games.toLocaleString()} games`);
@@ -1093,7 +1206,7 @@ export default function NewgroundsPortalComponent() {
     let cancelled = false;
     fetch("/api/newgrounds/portal/years")
       .then((res) => (res.ok ? res.json() : Promise.reject()))
-      .then((data) => {
+      .then((data: AvailableYears) => {
         if (!cancelled) setAvailableYears(data);
       })
       .catch(() => {});
@@ -1137,7 +1250,7 @@ export default function NewgroundsPortalComponent() {
         const response = await fetch(`${endpoint}?${params}`);
 
         if (response.ok) {
-          const data = await response.json();
+          const data: PortalApiResponse = await response.json();
 
           if (isClocks) {
             const profiles = data.profiles || [];
@@ -1180,8 +1293,8 @@ export default function NewgroundsPortalComponent() {
             }
           }
         }
-      } catch (error) {
-        console.error("[NewgroundsPortal] Fetch error:", error as any);
+      } catch (error: unknown) {
+        console.error("[NewgroundsPortal] Fetch error:", error);
       } finally {
         setLoading(false);
         setLoadingMore(false);
@@ -1218,8 +1331,7 @@ export default function NewgroundsPortalComponent() {
 
   // ── Debounced search ───────────────────────────────────────────
   const handleSearchChange = useCallback(
-    (e: any) => {
-      const value = e.target.value;
+    (value: string) => {
       setQuery(value);
       if (debounceRef.current) clearTimeout(debounceRef.current);
       debounceRef.current = setTimeout(() => {
@@ -1231,7 +1343,7 @@ export default function NewgroundsPortalComponent() {
 
   // ── Type tab switch ────────────────────────────────────────────
   const handleTypeChange = useCallback(
-    (newType: any) => {
+    (newType: string) => {
       setType(newType);
       // Reset year when switching between content and clocks tabs
       // since they use different year pools
@@ -1243,8 +1355,7 @@ export default function NewgroundsPortalComponent() {
 
   // ── Year filter change ────────────────────────────────────────
   const handleYearChange = useCallback(
-    (e: any) => {
-      const newYear = e.target.value;
+    (newYear: string) => {
       setYear(newYear);
       fetchPortal(query, type, false, newYear);
     },
@@ -1252,12 +1363,12 @@ export default function NewgroundsPortalComponent() {
   );
 
   // ── Card click → content detail modal ──────────────────────────
-  const handleItemClick = useCallback((item: any) => {
+  const handleItemClick = useCallback((item: PortalContentItem) => {
     setSelectedItem(item);
   }, []);
 
   // ── Clock card click → open profile modal ──────────────────────
-  const handleClockClick = useCallback((profile: any) => {
+  const handleClockClick = useCallback((profile: ClockProfile) => {
     setSelectedProfile(
       profile.usernameLower || profile.username?.toLowerCase(),
     );
@@ -1289,9 +1400,7 @@ export default function NewgroundsPortalComponent() {
           <div className={styles.searchBar}>
             <SearchInputComponent
               value={query}
-              onChange={(value: any) =>
-                handleSearchChange({ target: { value: value } })
-              }
+              onChange={(value: string) => handleSearchChange(value)}
               placeholder={
                 isClocks
                   ? "Search clocks by name…"
@@ -1315,15 +1424,13 @@ export default function NewgroundsPortalComponent() {
               <div className={styles.yearFilter}>
                 <SelectComponent
                   value={year}
-                  onChange={(value: any) =>
-                    handleYearChange({ target: { value: value } })
-                  }
+                  onChange={(value: string) => handleYearChange(value)}
                   options={[
                     { value: "", label: "All Years" },
                     ...(isClocks
                       ? availableYears.profileYears
                       : availableYears.contentYears
-                    ).map((y: any) => ({ value: String(y), label: String(y) })),
+                    ).map((y: number) => ({ value: String(y), label: String(y) })),
                   ]}
                 />
               </div>
@@ -1355,7 +1462,7 @@ export default function NewgroundsPortalComponent() {
             )}
 
             {!isClocks &&
-              items.map((item: any, i: any) => {
+              (items as PortalContentItem[]).map((item: PortalContentItem, i: number) => {
                 const meta = getTypeMeta(item.contentType);
                 return (
                   <div
@@ -1373,8 +1480,8 @@ export default function NewgroundsPortalComponent() {
                           alt={item.title}
                           className={styles.itemThumb}
                           loading="lazy"
-                          onError={(e: any) => {
-                            (e.target as any).style.display = "none";
+                          onError={(e: SyntheticEvent<HTMLImageElement>) => {
+                            e.currentTarget.style.display = "none";
                           }}
                         />
                       )}
@@ -1398,7 +1505,7 @@ export default function NewgroundsPortalComponent() {
               })}
 
             {isClocks &&
-              items.map((profile: any, i: any) => (
+              (items as ClockProfile[]).map((profile: ClockProfile, i: number) => (
                 <ClockCard
                   key={`${profile.usernameLower || profile._id}-${i}`}
                   profile={profile}

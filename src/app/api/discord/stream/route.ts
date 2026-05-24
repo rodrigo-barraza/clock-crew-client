@@ -52,7 +52,7 @@ export async function GET(request: Request) {
 
     // Pipe the upstream SSE stream through URL rewriting so
     // private MinIO addresses never reach the browser.
-    return new Response(rewriteStream(upstream.body as any), {
+    return new Response(rewriteStream(upstream.body as ReadableStream<Uint8Array>), {
       headers: {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",

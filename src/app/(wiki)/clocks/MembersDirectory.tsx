@@ -10,6 +10,15 @@ import {
 import MemberCardComponent from "../../components/MemberCardComponent/MemberCardComponent";
 import styles from "./MembersPage.module.css";
 
+interface TransformedDirectoryUser {
+  userId?: string | number;
+  username?: string;
+  customTitle?: string;
+  postCount?: number;
+  dateRegistered?: string | number;
+  [key: string]: unknown;
+}
+
 const SORT_OPTIONS = [
   { key: "posts", label: "Most Posts" },
   { key: "newest", label: "Newest" },
@@ -18,7 +27,7 @@ const SORT_OPTIONS = [
 ];
 
 export default function MembersDirectory() {
-  const [users, setUsers] = useState<any[]>([]);
+  const [users, setUsers] = useState<TransformedDirectoryUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("posts");
@@ -62,15 +71,15 @@ export default function MembersDirectory() {
       case "newest":
         sorted.sort(
           (a, b) =>
-            (new Date(b.dateRegistered || 0) as any) -
-            (new Date(a.dateRegistered || 0) as any),
+            new Date(b.dateRegistered || 0).getTime() -
+            new Date(a.dateRegistered || 0).getTime(),
         );
         break;
       case "oldest":
         sorted.sort(
           (a, b) =>
-            (new Date(a.dateRegistered || 0) as any) -
-            (new Date(b.dateRegistered || 0) as any),
+            new Date(a.dateRegistered || 0).getTime() -
+            new Date(b.dateRegistered || 0).getTime(),
         );
         break;
       case "alpha":
@@ -84,15 +93,15 @@ export default function MembersDirectory() {
   }, [users, search, sort]);
 
   // ── Group by letter for A–Z anchors ───────────────────────────
-  const grouped = useMemo(() => {
+  const grouped = useMemo<Record<string, TransformedDirectoryUser[]> | null>(() => {
     if (sort !== "alpha") return null;
 
-    const groups = {};
+    const groups: Record<string, TransformedDirectoryUser[]> = {};
     for (const user of filteredUsers) {
       const letter = (user.username || "?")[0].toUpperCase();
       const key = /[A-Z]/.test(letter) ? letter : "#";
-      if (!(groups as Record<string, any>)[key]) (groups as Record<string, any>)[key] = [];
-      (groups as Record<string, any>)[key].push(user);
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(user);
     }
     return groups;
   }, [filteredUsers, sort]);
@@ -147,9 +156,9 @@ export default function MembersDirectory() {
               <div key={letter} id={`letter-${letter}`}>
                 <h2 className={styles.letterHeading}>{letter}</h2>
                 <div className={styles.grid}>
-                  {(members as any[]).map((user: Record<string, unknown>, i: number) => (
+                  {members.map((user, i) => (
                     <MemberCardComponent
-                      key={user.userId || user.username}
+                      key={user.userId as string | number || user.username as string}
                       user={user}
                       index={i}
                     />
@@ -163,9 +172,9 @@ export default function MembersDirectory() {
       {/* ── Flat grid view ──────────────────────────────────────── */}
       {!loading && !grouped && (
         <div className={styles.grid}>
-          {filteredUsers.map((user: Record<string, unknown>, i: number) => (
+          {filteredUsers.map((user, i) => (
             <MemberCardComponent
-              key={user.userId || user.username}
+              key={user.userId as string | number || user.username as string}
               user={user}
               index={i}
             />

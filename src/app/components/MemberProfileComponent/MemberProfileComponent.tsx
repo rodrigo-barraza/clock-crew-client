@@ -1,16 +1,27 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, SyntheticEvent } from "react";
 import Link from "next/link";
 import { formatNumber, stripHtml } from "@rodrigo-barraza/utilities-library";
 import styles from "./MemberProfileComponent.module.css";
+import {
+  TransformedMemberProfileData,
+  MemberProfile,
+  NewgroundsStats,
+  ClockCrewForumStats,
+  AIProfileSummary,
+  MemberContentItem,
+  ForumThread,
+  ForumPost,
+  Review,
+} from "../../../types";
 
 // ── Helpers ──────────────────────────────────────────────────────
 
-function formatDate(dateStr: any) {
+function formatDate(dateStr: string | Date | null | undefined): string {
   if (!dateStr) return "—";
   const d = new Date(dateStr);
-  if (isNaN(d as any)) return dateStr;
+  if (isNaN(d.getTime())) return String(dateStr);
   return d.toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
@@ -18,8 +29,17 @@ function formatDate(dateStr: any) {
   });
 }
 
+const errorMessage = (err: unknown): string =>
+  err instanceof Error ? err.message : String(err);
+
 // ── Tab definitions ──────────────────────────────────────────────
-const TABS = [
+interface TabDefinition {
+  key: string;
+  label: string;
+  icon: string;
+}
+
+const TABS: TabDefinition[] = [
   { key: "overview", label: "Overview", icon: "📋" },
   { key: "movies", label: "Movies", icon: "🎬" },
   { key: "games", label: "Games", icon: "🎮" },
@@ -31,17 +51,28 @@ const TABS = [
 
 // ── Sub-components ───────────────────────────────────────────────
 
-function StatCard({ label, value, icon }: any) {
+interface StatCardProps {
+  label: string;
+  value: string | number | undefined;
+  icon?: string;
+}
+
+function StatCard({ label, value, icon }: StatCardProps) {
   return (
     <div className={styles.statCard}>
       {icon && <span className={styles.statIcon}>{icon}</span>}
-      <span className={styles.statValue}>{value as any}</span>
+      <span className={styles.statValue}>{value}</span>
       <span className={styles.statLabel}>{label}</span>
     </div>
   );
 }
 
-function ContentCard({ item, type }: any) {
+interface ContentCardProps {
+  item: MemberContentItem;
+  type: string;
+}
+
+function ContentCard({ item, type }: ContentCardProps) {
   const emoji =
     type === "movie"
       ? "🎬"
@@ -64,8 +95,8 @@ function ContentCard({ item, type }: any) {
           alt={item.title}
           className={styles.contentThumb}
           loading="lazy"
-          onError={(e: any) => {
-            (e.target as any).style.display = "none";
+          onError={(e: SyntheticEvent<HTMLImageElement>) => {
+            e.currentTarget.style.display = "none";
           }}
         />
       )}
@@ -101,7 +132,12 @@ function ContentCard({ item, type }: any) {
   );
 }
 
-function PostItem({ post, showThread = true }: any) {
+interface PostItemProps {
+  post: ForumPost;
+  showThread?: boolean;
+}
+
+function PostItem({ post, showThread = true }: PostItemProps) {
   const body = stripHtml(post.body || post.content || "");
   return (
     <div className={styles.postItem}>
@@ -122,7 +158,11 @@ function PostItem({ post, showThread = true }: any) {
   );
 }
 
-function ReviewItem({ review }: any) {
+interface ReviewItemProps {
+  review: Review;
+}
+
+function ReviewItem({ review }: ReviewItemProps) {
   const body = stripHtml(review.body || review.text || "");
   return (
     <div className={styles.reviewItem}>
@@ -143,7 +183,13 @@ function ReviewItem({ review }: any) {
   );
 }
 
-function ContentSection({ items, type: any, emptyLabel }: any) {
+interface ContentSectionProps {
+  items?: MemberContentItem[];
+  type: string;
+  emptyLabel: string;
+}
+
+function ContentSection({ items, type, emptyLabel }: ContentSectionProps) {
   if (!items?.length) {
     return (
       <div className={styles.emptyTab}>
@@ -154,11 +200,11 @@ function ContentSection({ items, type: any, emptyLabel }: any) {
   }
   return (
     <div className={styles.contentGrid}>
-      {items.map((item: any, i: any) => (
+      {items.map((item, i) => (
         <ContentCard
           key={item.contentId || item._id || i}
           item={item}
-          type={item.type as any}
+          type={item.type || type}
         />
       ))}
     </div>
@@ -167,7 +213,11 @@ function ContentSection({ items, type: any, emptyLabel }: any) {
 
 // ── Overview Tab ─────────────────────────────────────────────────
 
-function OverviewTab({ data }: any) {
+interface OverviewTabProps {
+  data: TransformedMemberProfileData;
+}
+
+function OverviewTab({ data }: OverviewTabProps) {
   const { member, movies, games, audio, fans, ccPosts, ccThreads } = data;
   const ng = member.newgrounds;
   const cc = member.ccForum;
@@ -355,7 +405,7 @@ function OverviewTab({ data }: any) {
             Top Movies
           </h2>
           <div className={styles.topContentList}>
-            {topMovies.map((m: any, i: any) => (
+            {topMovies.map((m: MemberContentItem, i: number) => (
               <ContentCard key={m.contentId || i} item={m} type="movie" />
             ))}
           </div>
@@ -370,7 +420,7 @@ function OverviewTab({ data }: any) {
             Top Games
           </h2>
           <div className={styles.topContentList}>
-            {topGames.map((g: any, i: any) => (
+            {topGames.map((g: MemberContentItem, i: number) => (
               <ContentCard key={g.contentId || i} item={g} type="game" />
             ))}
           </div>
@@ -385,7 +435,7 @@ function OverviewTab({ data }: any) {
             Top Audio
           </h2>
           <div className={styles.topContentList}>
-            {topAudio.map((a: any, i: any) => (
+            {topAudio.map((a: MemberContentItem, i: number) => (
               <ContentCard key={a.contentId || i} item={a} type="audio" />
             ))}
           </div>
@@ -393,7 +443,7 @@ function OverviewTab({ data }: any) {
       )}
 
       {/* ── Fans ───────────────────────────────────────────────── */}
-      {fans?.length > 0 && (
+      {fans && fans.length > 0 && (
         <section className={styles.panel}>
           <h2 className={styles.sectionTitle}>
             <span className={styles.sectionIcon}>♥</span>
@@ -401,7 +451,7 @@ function OverviewTab({ data }: any) {
             <span className={styles.panelCount}>{fans.length}</span>
           </h2>
           <div className={styles.fansList}>
-            {fans.slice(0, 50).map((fan: any, i: any) => (
+            {fans.slice(0, 50).map((fan: string, i: number) => (
               <span key={i} className={styles.fanTag}>
                 {fan}
               </span>
@@ -414,7 +464,7 @@ function OverviewTab({ data }: any) {
       )}
 
       {/* ── CC Threads Started ─────────────────────────────────── */}
-      {ccThreads?.length > 0 && (
+      {ccThreads && ccThreads.length > 0 && (
         <section className={styles.panel}>
           <h2 className={styles.sectionTitle}>
             <span className={styles.sectionIcon}>📌</span>
@@ -422,7 +472,7 @@ function OverviewTab({ data }: any) {
             <span className={styles.panelCount}>{ccThreads.length}</span>
           </h2>
           <ul className={styles.threadList}>
-            {ccThreads.slice(0, 20).map((t: any, i: any) => (
+            {ccThreads.slice(0, 20).map((t: ForumThread, i: number) => (
               <li key={t.topicId || i} className={styles.threadItem}>
                 <span className={styles.threadTitle}>{t.title}</span>
                 <span className={styles.threadMeta}>
@@ -439,7 +489,7 @@ function OverviewTab({ data }: any) {
       )}
 
       {/* ── Recent CC Posts ─────────────────────────────────────── */}
-      {ccPosts?.length > 0 && (
+      {ccPosts && ccPosts.length > 0 && (
         <section className={styles.panel}>
           <h2 className={styles.sectionTitle}>
             <span className={styles.sectionIcon}>💬</span>
@@ -447,7 +497,7 @@ function OverviewTab({ data }: any) {
             <span className={styles.panelCount}>{ccPosts.length}</span>
           </h2>
           <div className={styles.postsList}>
-            {ccPosts.slice(0, 10).map((p: any, i: any) => (
+            {ccPosts.slice(0, 10).map((p: ForumPost, i: number) => (
               <PostItem key={p.messageId || i} post={p} />
             ))}
           </div>
@@ -455,32 +505,34 @@ function OverviewTab({ data }: any) {
       )}
 
       {/* ── External Links ─────────────────────────────────────── */}
-      {ng?.links?.length > 0 && (
+      {ng?.links && ng.links.length > 0 && (
         <section className={styles.panel}>
           <h2 className={styles.sectionTitle}>
             <span className={styles.sectionIcon}>🔗</span>
             Links
           </h2>
           <div className={styles.linksList}>
-            {ng.links.map((link: any, i: any) => (
-              <a
-                key={i}
-                href={link.url || link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.linkItem}
-              >
-                {link.label ||
-                  link.name ||
-                  (() => {
+            {ng.links.map((link: string | { url?: string; label?: string; name?: string }, i: number) => {
+              const url = typeof link === "string" ? link : link.url || "";
+              const label = typeof link === "string" ? link : link.label || link.name || "";
+              return (
+                <a
+                  key={i}
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.linkItem}
+                >
+                  {label || (() => {
                     try {
-                      return new URL(link.url || link).hostname;
+                      return new URL(url).hostname;
                     } catch {
                       return "Link";
                     }
                   })()}
-              </a>
-            ))}
+                </a>
+              );
+            })}
           </div>
         </section>
       )}
@@ -489,11 +541,15 @@ function OverviewTab({ data }: any) {
 }
 
 // ── Simple markdown renderer ─────────────────────────────────────
-function MarkdownRenderer({ markdown }: any) {
+interface MarkdownRendererProps {
+  markdown?: string;
+}
+
+function MarkdownRenderer({ markdown }: MarkdownRendererProps) {
   if (!markdown) return null;
 
   const lines = markdown.split("\n");
-  const elements = [];
+  const elements: React.ReactNode[] = [];
   let i = 0;
 
   while (i < lines.length) {
@@ -524,7 +580,7 @@ function MarkdownRenderer({ markdown }: any) {
         </blockquote>,
       );
     } else if (line.startsWith("- ") || line.startsWith("* ")) {
-      const listItems = [];
+      const listItems: string[] = [];
       let j = i;
       while (
         j < lines.length &&
@@ -537,7 +593,7 @@ function MarkdownRenderer({ markdown }: any) {
       }
       elements.push(
         <ul key={i} className={styles.mdList}>
-          {listItems.map((item: any, index: any) => (
+          {listItems.map((item, index) => (
             <li key={index}>{item}</li>
           ))}
         </ul>,
@@ -563,13 +619,22 @@ function MarkdownRenderer({ markdown }: any) {
 // Main Component
 // ═════════════════════════════════════════════════════════════════
 
-export default function MemberProfileComponent({ username }: any) {
-  const [data, setData] = useState<any>(null);
+interface MemberProfileComponentProps {
+  username: string;
+}
+
+interface FetchMemberResponse {
+  data: TransformedMemberProfileData | null;
+  error: string | null;
+}
+
+export default function MemberProfileComponent({ username }: MemberProfileComponentProps) {
+  const [data, setData] = useState<TransformedMemberProfileData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
 
-  const fetchMember = useCallback(async (name: any) => {
+  const fetchMember = useCallback(async (name: string): Promise<FetchMemberResponse> => {
     try {
       const response = await fetch(
         `/api/clockcrew/users/${encodeURIComponent(name)}`,
@@ -579,8 +644,8 @@ export default function MemberProfileComponent({ username }: any) {
         throw new Error(body.error || `Failed (${response.status})`);
       }
       return { data: await response.json(), error: null };
-    } catch (error) {
-      return { data: null, error: (error as Error).message };
+    } catch (err: unknown) {
+      return { data: null, error: errorMessage(err) };
     }
   }, []);
 
@@ -641,15 +706,15 @@ export default function MemberProfileComponent({ username }: any) {
   const avatarUrl = cc?.avatarUrl || ng?.avatarUrl || member.avatarUrl;
 
   // Build visible tabs based on available data
-  const visibleTabs = TABS.filter((tab: any) => {
+  const visibleTabs = TABS.filter((tab) => {
     if (tab.key === "overview") return true;
-    if (tab.key === "movies") return movies?.length > 0;
-    if (tab.key === "games") return games?.length > 0;
-    if (tab.key === "audio") return audio?.length > 0;
-    if (tab.key === "art") return art?.length > 0;
+    if (tab.key === "movies") return !!(movies && movies.length > 0);
+    if (tab.key === "games") return !!(games && games.length > 0);
+    if (tab.key === "audio") return !!(audio && audio.length > 0);
+    if (tab.key === "art") return !!(art && art.length > 0);
     if (tab.key === "posts")
-      return data.ccPosts?.length > 0 || data.ngPosts?.length > 0;
-    if (tab.key === "reviews") return reviews?.length > 0;
+      return !!((data.ccPosts && data.ccPosts.length > 0) || (data.ngPosts && data.ngPosts.length > 0));
+    if (tab.key === "reviews") return !!(reviews && reviews.length > 0);
     return false;
   });
 
@@ -721,29 +786,29 @@ export default function MemberProfileComponent({ username }: any) {
 
       {/* ── Quick Stats Bar ───────────────────────────────────── */}
       <section className={styles.quickStats}>
-        {cc?.postCount > 0 && (
+        {cc && cc.postCount > 0 && (
           <StatCard
             label="Forum Posts"
             value={formatNumber(cc.postCount)}
             icon="💬"
           />
         )}
-        {ng?.fans > 0 && (
+        {ng && ng.fans > 0 && (
           <StatCard label="NG Fans" value={formatNumber(ng.fans)} icon="♥" />
         )}
-        {movies?.length > 0 && (
+        {movies && movies.length > 0 && (
           <StatCard label="Movies" value={movies.length} icon="🎬" />
         )}
-        {games?.length > 0 && (
+        {games && games.length > 0 && (
           <StatCard label="Games" value={games.length} icon="🎮" />
         )}
-        {audio?.length > 0 && (
+        {audio && audio.length > 0 && (
           <StatCard label="Audio" value={audio.length} icon="🎵" />
         )}
-        {art?.length > 0 && (
+        {art && art.length > 0 && (
           <StatCard label="Art" value={art.length} icon="🎨" />
         )}
-        {reviews?.length > 0 && (
+        {reviews && reviews.length > 0 && (
           <StatCard label="Reviews" value={reviews.length} icon="📝" />
         )}
       </section>
@@ -751,7 +816,7 @@ export default function MemberProfileComponent({ username }: any) {
       {/* ── Tabs ──────────────────────────────────────────────── */}
       {visibleTabs.length > 1 && (
         <nav className={styles.tabBar}>
-          {visibleTabs.map((tab: any) => (
+          {visibleTabs.map((tab) => (
             <button
               key={tab.key}
               className={`${styles.tab} ${activeTab === tab.key ? styles.tabActive : ""}`}
@@ -759,19 +824,19 @@ export default function MemberProfileComponent({ username }: any) {
             >
               <span className={styles.tabIcon}>{tab.icon}</span>
               {tab.label}
-              {tab.key === "movies" && movies?.length > 0 && (
+              {tab.key === "movies" && movies && movies.length > 0 && (
                 <span className={styles.tabCount}>{movies.length}</span>
               )}
-              {tab.key === "games" && games?.length > 0 && (
+              {tab.key === "games" && games && games.length > 0 && (
                 <span className={styles.tabCount}>{games.length}</span>
               )}
-              {tab.key === "audio" && audio?.length > 0 && (
+              {tab.key === "audio" && audio && audio.length > 0 && (
                 <span className={styles.tabCount}>{audio.length}</span>
               )}
-              {tab.key === "art" && art?.length > 0 && (
+              {tab.key === "art" && art && art.length > 0 && (
                 <span className={styles.tabCount}>{art.length}</span>
               )}
-              {tab.key === "reviews" && reviews?.length > 0 && (
+              {tab.key === "reviews" && reviews && reviews.length > 0 && (
                 <span className={styles.tabCount}>{reviews.length}</span>
               )}
             </button>
@@ -796,7 +861,7 @@ export default function MemberProfileComponent({ username }: any) {
         )}
         {activeTab === "posts" && (
           <div className={styles.postsTab}>
-            {data.ccPosts?.length > 0 && (
+            {data.ccPosts && data.ccPosts.length > 0 && (
               <section className={styles.panel}>
                 <h2 className={styles.sectionTitle}>
                   <span className={styles.sectionIcon}>🕰️</span>
@@ -806,13 +871,13 @@ export default function MemberProfileComponent({ username }: any) {
                   </span>
                 </h2>
                 <div className={styles.postsList}>
-                  {data.ccPosts.map((p: any, i: any) => (
+                  {data.ccPosts.map((p: ForumPost, i: number) => (
                     <PostItem key={p.messageId || i} post={p} />
                   ))}
                 </div>
               </section>
             )}
-            {data.ngPosts?.length > 0 && (
+            {data.ngPosts && data.ngPosts.length > 0 && (
               <section className={styles.panel}>
                 <h2 className={styles.sectionTitle}>
                   <span className={styles.sectionIcon}>🟠</span>
@@ -822,7 +887,7 @@ export default function MemberProfileComponent({ username }: any) {
                   </span>
                 </h2>
                 <div className={styles.postsList}>
-                  {data.ngPosts.map((p: any, i: any) => (
+                  {data.ngPosts.map((p: ForumPost, i: number) => (
                     <PostItem key={p.postId || i} post={p} showThread={false} />
                   ))}
                 </div>
@@ -832,7 +897,7 @@ export default function MemberProfileComponent({ username }: any) {
         )}
         {activeTab === "reviews" && (
           <div className={styles.reviewsList}>
-            {reviews?.map((r: any, i: any) => (
+            {reviews?.map((r: Review, i: number) => (
               <ReviewItem key={r.reviewId || i} review={r} />
             ))}
           </div>

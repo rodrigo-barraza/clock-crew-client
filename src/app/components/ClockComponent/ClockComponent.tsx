@@ -3,6 +3,12 @@
 import { useEffect, useRef } from "react";
 import styles from "./ClockComponent.module.css";
 
+interface ClockComponentProps {
+  size?: number;
+  showSeconds?: boolean;
+  className?: string;
+}
+
 /**
  * Skeuomorphic analog clock with real-time updates.
  * Renders a golden-faced clock with hour/minute/second hands,
@@ -15,11 +21,11 @@ export default function ClockComponent({
   size = 160,
   showSeconds = true,
   className = "",
-}: any) {
-  const clockRef = useRef(null);
+}: ClockComponentProps) {
+  const clockRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    let rafId: any;
+    let rafId: number;
 
     function tick() {
       const now = new Date();
@@ -29,9 +35,9 @@ export default function ClockComponent({
 
       const element = clockRef.current;
       if (element) {
-        (element as any).style.setProperty("--hour-deg", `${h * 30}deg`);
-        (element as any).style.setProperty("--minute-deg", `${m * 6}deg`);
-        (element as any).style.setProperty("--second-deg", `${s * 6}deg`);
+        element.style.setProperty("--hour-deg", `${h * 30}deg`);
+        element.style.setProperty("--minute-deg", `${m * 6}deg`);
+        element.style.setProperty("--second-deg", `${s * 6}deg`);
       }
 
       rafId = requestAnimationFrame(tick);

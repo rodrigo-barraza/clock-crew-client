@@ -1,11 +1,25 @@
 import Link from "next/link";
 import styles from "./MemberCardComponent.module.css";
 
+interface DirectoryUser {
+  username?: string;
+  avatarUrl?: string;
+  customTitle?: string;
+  postCount?: number;
+  dateRegistered?: string | number;
+}
+
+interface MemberCardComponentProps {
+  user: DirectoryUser;
+  index?: number;
+}
+
 /**
  * Compact member card for the /clocks directory grid.
  */
-export default function MemberCardComponent({ user, index = 0 }: any) {
-  const initials = (user.username || "?")
+export default function MemberCardComponent({ user, index = 0 }: MemberCardComponentProps) {
+  const name = user.username || "?";
+  const initials = name
     .replace(/clock$/i, "")
     .slice(0, 2)
     .toUpperCase();
@@ -16,7 +30,7 @@ export default function MemberCardComponent({ user, index = 0 }: any) {
 
   return (
     <Link
-      href={`/clocks/${encodeURIComponent(user.username)}`}
+      href={`/clocks/${encodeURIComponent(name)}`}
       className={styles.card}
       style={{ animationDelay: `${Math.min(index * 30, 600)}ms` }}
     >
@@ -25,7 +39,7 @@ export default function MemberCardComponent({ user, index = 0 }: any) {
         {user.avatarUrl ? (
           <img
             src={user.avatarUrl}
-            alt={`${user.username} avatar`}
+            alt={`${name} avatar`}
             className={styles.avatarImg}
             loading="lazy"
           />
@@ -36,7 +50,7 @@ export default function MemberCardComponent({ user, index = 0 }: any) {
 
       {/* ── Info ────────────────────────────────────────────────── */}
       <div className={styles.info}>
-        <span className={styles.username}>{user.username}</span>
+        <span className={styles.username}>{name}</span>
         {user.customTitle && (
           <span className={styles.customTitle}>{user.customTitle}</span>
         )}

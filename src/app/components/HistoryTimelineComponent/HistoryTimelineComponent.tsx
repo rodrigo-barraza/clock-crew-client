@@ -13,11 +13,20 @@ import {
   ERA_COLORS,
   SEE_ALSO,
 } from "./historyData";
+import {
+  TimelineEvent,
+  TableOfContentsItem,
+  SeeAlsoItem,
+} from "../../../types";
 
 /* ── Helpers ──────────────────────────────────────────────────── */
 
-function Cite({ ids }: any) {
-  return (ids as any).map((id: any) => (
+interface CiteProps {
+  ids: number[];
+}
+
+function Cite({ ids }: CiteProps) {
+  return ids.map((id) => (
     <a
       key={id}
       className={styles.cite}
@@ -29,7 +38,12 @@ function Cite({ ids }: any) {
   ));
 }
 
-function ExtLink({ href, children }: any) {
+interface ExtLinkProps {
+  href: string;
+  children: React.ReactNode;
+}
+
+function ExtLink({ href, children }: ExtLinkProps) {
   return (
     <a href={href} target="_blank" rel="noopener noreferrer">
       {children}
@@ -39,29 +53,32 @@ function ExtLink({ href, children }: any) {
 
 /* ── Component ────────────────────────────────────────────────── */
 
+type EraKey = "origins" | "golden" | "middle" | "modern";
+
 export default function HistoryTimelineComponent() {
-  const timelineRef = useRef(null);
-  const [visibleItems, setVisibleItems] = useState(new Set());
+  const timelineRef = useRef<HTMLDivElement | null>(null);
+  const [visibleItems, setVisibleItems] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry: any) => {
-          if (entry.isIntersecting) {
-            setVisibleItems((prev) => {
-              const next = new Set(prev);
-              next.add(entry.target.dataset.index);
-              return next;
-            });
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.target instanceof HTMLElement) {
+            const index = entry.target.dataset.index;
+            if (index) {
+              setVisibleItems((prev) => {
+                const next = new Set(prev);
+                next.add(index);
+                return next;
+              });
+            }
           }
         });
       },
       { threshold: 0.15, rootMargin: "0px 0px -60px 0px" },
     );
-    const items = (timelineRef.current as any)?.querySelectorAll(
-      "[data-index]",
-    );
-    (items as any)?.forEach((element: any) => observer.observe(element));
+    const items = timelineRef.current?.querySelectorAll("[data-index]");
+    items?.forEach((element) => observer.observe(element));
     return () => observer.disconnect();
   }, []);
 
@@ -119,7 +136,7 @@ export default function HistoryTimelineComponent() {
         <nav className={styles.toc}>
           <div className={styles.tocHeading}>📑 Contents</div>
           <ol className={styles.tocList}>
-            {TABLE_OF_CONTENTS.map((item: any) => (
+            {TABLE_OF_CONTENTS.map((item: TableOfContentsItem) => (
               <li key={item.id} className={styles.tocItem}>
                 <a className={styles.tocLink} href={`#${item.id}`}>
                   {item.label}
@@ -580,7 +597,7 @@ export default function HistoryTimelineComponent() {
         <p className={styles.paragraph}>
           On <strong>December 31, 2020</strong>, Adobe officially ended support
           for Flash Player, threatening to render the entire corpus of Clock
-          Crew animations — and all Flash content across the web — inaccessible
+          Club animations — and all Flash content across the web — inaccessible
           in modern browsers.
           <Cite ids={[10, 11]} />
         </p>
@@ -654,18 +671,19 @@ export default function HistoryTimelineComponent() {
         Timeline
       </h2>
       <div className={styles.legend}>
-        {[
-          { key: "origins", label: "Origins" },
-          { key: "golden", label: "Golden Age" },
-          { key: "middle", label: "Evolution" },
-          { key: "modern", label: "Modern Era" },
-        ].map((era) => (
+        {(
+          [
+            { key: "origins", label: "Origins" },
+            { key: "golden", label: "Golden Age" },
+            { key: "middle", label: "Evolution" },
+            { key: "modern", label: "Modern Era" },
+          ] as const
+        ).map((era) => (
           <span key={era.key} className={styles.legendItem}>
             <span
               className={styles.legendDot}
               style={{
-                background:
-                  ERA_COLORS[(era as any).key as keyof typeof ERA_COLORS],
+                background: ERA_COLORS[era.key],
               }}
             />
             {era.label}
@@ -675,9 +693,10 @@ export default function HistoryTimelineComponent() {
 
       <div className={styles.timeline} ref={timelineRef}>
         <div className={styles.rail} aria-hidden="true" />
-        {TIMELINE_EVENTS.map((event: any, i: any) => {
+        {(TIMELINE_EVENTS as TimelineEvent[]).map((event, i) => {
           const isVisible = visibleItems.has(String(i));
           const side = i % 2 === 0 ? "Left" : "Right";
+          const eraKey = event.era as EraKey;
           return (
             <div
               key={i}
@@ -687,18 +706,16 @@ export default function HistoryTimelineComponent() {
               <div
                 className={styles.node}
                 style={{
-                  borderColor:
-                    ERA_COLORS[(event as any).era as keyof typeof ERA_COLORS],
+                  borderColor: ERA_COLORS[eraKey],
                   boxShadow: isVisible
-                    ? `0 0 12px ${ERA_COLORS[(event as any).era as keyof typeof ERA_COLORS]}40`
+                    ? `0 0 12px ${ERA_COLORS[eraKey]}40`
                     : "none",
                 }}
               >
                 <div
                   className={styles.nodeInner}
                   style={{
-                    background:
-                      ERA_COLORS[(event as any).era as keyof typeof ERA_COLORS],
+                    background: ERA_COLORS[eraKey],
                   }}
                 />
               </div>
@@ -706,8 +723,7 @@ export default function HistoryTimelineComponent() {
                 <span
                   className={styles.cardYear}
                   style={{
-                    color:
-                      ERA_COLORS[(event as any).era as keyof typeof ERA_COLORS],
+                    color: ERA_COLORS[eraKey],
                   }}
                 >
                   {event.year}
@@ -728,7 +744,7 @@ export default function HistoryTimelineComponent() {
         See Also
       </h2>
       <ul className={styles.seeAlsoList}>
-        {SEE_ALSO.map((item: any) => (
+        {SEE_ALSO.map((item: SeeAlsoItem) => (
           <li key={item.label} className={styles.seeAlsoItem}>
             <ExtLink href={item.url}>{item.label}</ExtLink>
           </li>
