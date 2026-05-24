@@ -56,9 +56,9 @@ export default function MembersDirectory() {
     if (search.trim()) {
       const q = search.trim().toLowerCase();
       list = list.filter(
-        (u) =>
-          u.username?.toLowerCase().includes(q) ||
-          u.customTitle?.toLowerCase().includes(q),
+        (user) =>
+          user.username?.toLowerCase().includes(q) ||
+          user.customTitle?.toLowerCase().includes(q),
       );
     }
 

@@ -527,14 +527,14 @@ export default function HistoryTimelineComponent() {
             </tr>
           </thead>
           <tbody>
-            {NOTABLE_MEMBERS.map((m) => (
-              <tr key={m.name}>
+            {NOTABLE_MEMBERS.map((member) => (
+              <tr key={member.name}>
                 <td>
-                  {m.url ? <ExtLink href={m.url}>{m.name}</ExtLink> : m.name}
+                  {member.url ? <ExtLink href={member.url}>{member.name}</ExtLink> : member.name}
                 </td>
-                <td>{m.aka || "—"}</td>
-                <td>{m.role}</td>
-                <td>{m.note}</td>
+                <td>{member.aka || "—"}</td>
+                <td>{member.role}</td>
+                <td>{member.note}</td>
               </tr>
             ))}
           </tbody>

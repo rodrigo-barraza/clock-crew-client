@@ -75,14 +75,14 @@ export async function GET() {
     }
 
     const channels = results
-      .filter((r) => r.status === "fulfilled")
-      .map((r) => ({
-        id: r.value.channelId,
-        name: r.value.name,
+      .filter((result) => result.status === "fulfilled")
+      .map((result) => ({
+        id: result.value.channelId,
+        name: result.value.name,
         topic: null,
         parentId: null,
-        parentName: r.value.parentName,
-        position: CHANNEL_IDS.indexOf(r.value.channelId),
+        parentName: result.value.parentName,
+        position: CHANNEL_IDS.indexOf(result.value.channelId),
       }));
 
     return Response.json({

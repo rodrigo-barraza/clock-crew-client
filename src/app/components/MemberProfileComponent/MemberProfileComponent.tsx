@@ -20,9 +20,9 @@ import {
 
 function formatDate(dateStr: string | Date | null | undefined): string {
   if (!dateStr) return "—";
-  const d = new Date(dateStr);
-  if (isNaN(d.getTime())) return String(dateStr);
-  return d.toLocaleDateString("en-US", {
+  const parsedDate = new Date(dateStr);
+  if (isNaN(parsedDate.getTime())) return String(dateStr);
+  return parsedDate.toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
     day: "numeric",
@@ -94,8 +94,8 @@ function ContentCard({ item, type }: ContentCardProps) {
           alt={item.title}
           className={styles.contentThumb}
           loading="lazy"
-          onError={(e: SyntheticEvent<HTMLImageElement>) => {
-            e.currentTarget.style.display = "none";
+          onError={(event: SyntheticEvent<HTMLImageElement>) => {
+            event.currentTarget.style.display = "none";
           }}
         />
       )}
@@ -218,8 +218,8 @@ interface OverviewTabProps {
 
 function OverviewTab({ data }: OverviewTabProps) {
   const { member, movies, games, audio, fans, ccPosts, ccThreads } = data;
-  const ng = member.newgrounds;
-  const cc = member.ccForum;
+  const newgroundsStats = member.newgrounds;
+  const clockCrewForum = member.ccForum;
   const summary = member.profileSummary;
 
   // Top 3 of each content type for highlights
@@ -248,57 +248,57 @@ function OverviewTab({ data }: OverviewTabProps) {
       )}
 
       {/* ── Newgrounds Stats ───────────────────────────────────── */}
-      {ng && (
+      {newgroundsStats && (
         <section className={styles.panel}>
           <h2 className={styles.sectionTitle}>
             <span className={styles.sectionIcon}>🟠</span>
             Newgrounds Stats
           </h2>
           <div className={styles.miniStatsGrid}>
-            <StatCard label="Fans" value={formatNumber(ng.fans)} icon="♥" />
-            <StatCard label="Level" value={ng.level ?? "—"} icon="⬆" />
-            <StatCard label="Blams" value={formatNumber(ng.blams)} icon="💣" />
-            <StatCard label="Saves" value={formatNumber(ng.saves)} icon="🛡" />
+            <StatCard label="Fans" value={formatNumber(newgroundsStats.fans)} icon="♥" />
+            <StatCard label="Level" value={newgroundsStats.level ?? "—"} icon="⬆" />
+            <StatCard label="Blams" value={formatNumber(newgroundsStats.blams)} icon="💣" />
+            <StatCard label="Saves" value={formatNumber(newgroundsStats.saves)} icon="🛡" />
             <StatCard
               label="Medals"
-              value={formatNumber(ng.medals)}
+              value={formatNumber(newgroundsStats.medals)}
               icon="🏅"
             />
             <StatCard
               label="Trophies"
-              value={formatNumber(ng.trophies)}
+              value={formatNumber(newgroundsStats.trophies)}
               icon="🏆"
             />
-            {ng.expPoints && (
-              <StatCard label="EXP" value={ng.expPoints} icon="✨" />
+            {newgroundsStats.expPoints && (
+              <StatCard label="EXP" value={newgroundsStats.expPoints} icon="✨" />
             )}
-            {ng.votePower && (
-              <StatCard label="Vote Power" value={ng.votePower} icon="⚡" />
+            {newgroundsStats.votePower && (
+              <StatCard label="Vote Power" value={newgroundsStats.votePower} icon="⚡" />
             )}
           </div>
-          {ng.description && <p className={styles.ngBio}>{ng.description}</p>}
+          {newgroundsStats.description && <p className={styles.ngBio}>{newgroundsStats.description}</p>}
           <div className={styles.personalInfo}>
-            {ng.joinDate && (
-              <span className={styles.infoItem}>📅 Joined {ng.joinDate}</span>
+            {newgroundsStats.joinDate && (
+              <span className={styles.infoItem}>📅 Joined {newgroundsStats.joinDate}</span>
             )}
-            {ng.location && (
-              <span className={styles.infoItem}>📍 {ng.location}</span>
+            {newgroundsStats.location && (
+              <span className={styles.infoItem}>📍 {newgroundsStats.location}</span>
             )}
-            {ng.job && <span className={styles.infoItem}>💼 {ng.job}</span>}
-            {ng.age != null && (
-              <span className={styles.infoItem}>🎂 Age {ng.age}</span>
+            {newgroundsStats.job && <span className={styles.infoItem}>💼 {newgroundsStats.job}</span>}
+            {newgroundsStats.age != null && (
+              <span className={styles.infoItem}>🎂 Age {newgroundsStats.age}</span>
             )}
-            {ng.sex && <span className={styles.infoItem}>👤 {ng.sex}</span>}
-            {ng.realName && (
-              <span className={styles.infoItem}>🪪 {ng.realName}</span>
+            {newgroundsStats.sex && <span className={styles.infoItem}>👤 {newgroundsStats.sex}</span>}
+            {newgroundsStats.realName && (
+              <span className={styles.infoItem}>🪪 {newgroundsStats.realName}</span>
             )}
-            {ng.school && (
-              <span className={styles.infoItem}>🎓 {ng.school}</span>
+            {newgroundsStats.school && (
+              <span className={styles.infoItem}>🎓 {newgroundsStats.school}</span>
             )}
-            {ng.rank && <span className={styles.infoItem}>🎖 {ng.rank}</span>}
-            {ng.globalRank != null && (
+            {newgroundsStats.rank && <span className={styles.infoItem}>🎖 {newgroundsStats.rank}</span>}
+            {newgroundsStats.globalRank != null && (
               <span className={styles.infoItem}>
-                🌍 Rank #{formatNumber(ng.globalRank)}
+                🌍 Rank #{formatNumber(newgroundsStats.globalRank)}
               </span>
             )}
           </div>
@@ -306,56 +306,56 @@ function OverviewTab({ data }: OverviewTabProps) {
       )}
 
       {/* ── CC Forum ───────────────────────────────────────────── */}
-      {cc && (
+      {clockCrewForum && (
         <section className={styles.panel}>
           <h2 className={styles.sectionTitle}>
             <span className={styles.sectionIcon}>🕰️</span>
             ClockCrew.net Forum
           </h2>
           <div className={styles.ccIdentity}>
-            {cc.avatarUrl && (
+            {clockCrewForum.avatarUrl && (
               <img
-                src={cc.avatarUrl}
-                alt={cc.username}
+                src={clockCrewForum.avatarUrl}
+                alt={clockCrewForum.username}
                 className={styles.ccAvatar}
               />
             )}
             <div>
-              <span className={styles.ccName}>{cc.username}</span>
-              {cc.customTitle && (
+              <span className={styles.ccName}>{clockCrewForum.username}</span>
+              {clockCrewForum.customTitle && (
                 <span className={styles.ccTitle}>
-                  &ldquo;{cc.customTitle}&rdquo;
+                  &ldquo;{clockCrewForum.customTitle}&rdquo;
                 </span>
               )}
-              {cc.position && (
-                <span className={styles.ccBadge}>{cc.position}</span>
+              {clockCrewForum.position && (
+                <span className={styles.ccBadge}>{clockCrewForum.position}</span>
               )}
             </div>
           </div>
           <div className={styles.miniStatsGrid}>
             <StatCard
               label="Posts"
-              value={formatNumber(cc.postCount)}
+              value={formatNumber(clockCrewForum.postCount)}
               icon="💬"
             />
             <StatCard
               label="Registered"
-              value={formatDate(cc.dateRegistered)}
+              value={formatDate(clockCrewForum.dateRegistered)}
               icon="📅"
             />
-            {cc.location && (
-              <StatCard label="Location" value={cc.location} icon="📍" />
+            {clockCrewForum.location && (
+              <StatCard label="Location" value={clockCrewForum.location} icon="📍" />
             )}
-            {cc.gender && (
-              <StatCard label="Gender" value={cc.gender} icon="👤" />
+            {clockCrewForum.gender && (
+              <StatCard label="Gender" value={clockCrewForum.gender} icon="👤" />
             )}
           </div>
-          {cc.signatureHtml && (
+          {clockCrewForum.signatureHtml && (
             <div className={styles.signatureWrap}>
               <span className={styles.signatureLabel}>Signature</span>
               <div
                 className={styles.signatureContent}
-                dangerouslySetInnerHTML={{ __html: cc.signatureHtml }}
+                dangerouslySetInnerHTML={{ __html: clockCrewForum.signatureHtml }}
               />
             </div>
           )}
@@ -363,33 +363,33 @@ function OverviewTab({ data }: OverviewTabProps) {
       )}
 
       {/* ── Content Counts ─────────────────────────────────────── */}
-      {ng && (
+      {newgroundsStats && (
         <section className={styles.panel}>
           <h2 className={styles.sectionTitle}>
             <span className={styles.sectionIcon}>📊</span>
             Content Overview
           </h2>
           <div className={styles.contentPills}>
-            {ng.movieCount > 0 && (
-              <span className={styles.pill}>🎬 {ng.movieCount} Movies</span>
+            {newgroundsStats.movieCount > 0 && (
+              <span className={styles.pill}>🎬 {newgroundsStats.movieCount} Movies</span>
             )}
-            {ng.gameCount > 0 && (
-              <span className={styles.pill}>🎮 {ng.gameCount} Games</span>
+            {newgroundsStats.gameCount > 0 && (
+              <span className={styles.pill}>🎮 {newgroundsStats.gameCount} Games</span>
             )}
-            {ng.audioCount > 0 && (
-              <span className={styles.pill}>🎵 {ng.audioCount} Audio</span>
+            {newgroundsStats.audioCount > 0 && (
+              <span className={styles.pill}>🎵 {newgroundsStats.audioCount} Audio</span>
             )}
-            {ng.reviewCount > 0 && (
-              <span className={styles.pill}>📝 {ng.reviewCount} Reviews</span>
+            {newgroundsStats.reviewCount > 0 && (
+              <span className={styles.pill}>📝 {newgroundsStats.reviewCount} Reviews</span>
             )}
-            {ng.postCount > 0 && (
-              <span className={styles.pill}>💬 {ng.postCount} Posts</span>
+            {newgroundsStats.postCount > 0 && (
+              <span className={styles.pill}>💬 {newgroundsStats.postCount} Posts</span>
             )}
-            {ng.faveCount > 0 && (
-              <span className={styles.pill}>❤️ {ng.faveCount} Faves</span>
+            {newgroundsStats.faveCount > 0 && (
+              <span className={styles.pill}>❤️ {newgroundsStats.faveCount} Faves</span>
             )}
-            {ng.newsCount > 0 && (
-              <span className={styles.pill}>📰 {ng.newsCount} News</span>
+            {newgroundsStats.newsCount > 0 && (
+              <span className={styles.pill}>📰 {newgroundsStats.newsCount} News</span>
             )}
           </div>
         </section>
@@ -403,8 +403,8 @@ function OverviewTab({ data }: OverviewTabProps) {
             Top Movies
           </h2>
           <div className={styles.topContentList}>
-            {topMovies.map((m: MemberContentItem, i: number) => (
-              <ContentCard key={m.contentId || i} item={m} type="movie" />
+            {topMovies.map((movie: MemberContentItem, i: number) => (
+              <ContentCard key={movie.contentId || i} item={movie} type="movie" />
             ))}
           </div>
         </section>
@@ -418,8 +418,8 @@ function OverviewTab({ data }: OverviewTabProps) {
             Top Games
           </h2>
           <div className={styles.topContentList}>
-            {topGames.map((g: MemberContentItem, i: number) => (
-              <ContentCard key={g.contentId || i} item={g} type="game" />
+            {topGames.map((game: MemberContentItem, i: number) => (
+              <ContentCard key={game.contentId || i} item={game} type="game" />
             ))}
           </div>
         </section>
@@ -433,8 +433,8 @@ function OverviewTab({ data }: OverviewTabProps) {
             Top Audio
           </h2>
           <div className={styles.topContentList}>
-            {topAudio.map((a: MemberContentItem, i: number) => (
-              <ContentCard key={a.contentId || i} item={a} type="audio" />
+            {topAudio.map((audio: MemberContentItem, i: number) => (
+              <ContentCard key={audio.contentId || i} item={audio} type="audio" />
             ))}
           </div>
         </section>
@@ -470,14 +470,14 @@ function OverviewTab({ data }: OverviewTabProps) {
             <span className={styles.panelCount}>{ccThreads.length}</span>
           </h2>
           <ul className={styles.threadList}>
-            {ccThreads.slice(0, 20).map((t: ForumThread, i: number) => (
-              <li key={t.topicId || i} className={styles.threadItem}>
-                <span className={styles.threadTitle}>{t.title}</span>
+            {ccThreads.slice(0, 20).map((forumThread: ForumThread, i: number) => (
+              <li key={forumThread.topicId || i} className={styles.threadItem}>
+                <span className={styles.threadTitle}>{forumThread.title}</span>
                 <span className={styles.threadMeta}>
-                  {t.totalPosts != null && <span>{t.totalPosts} replies</span>}
-                  {t.date && <span>{formatDate(t.date)}</span>}
-                  {t.boardName && (
-                    <span className={styles.threadBoard}>{t.boardName}</span>
+                  {forumThread.totalPosts != null && <span>{forumThread.totalPosts} replies</span>}
+                  {forumThread.date && <span>{formatDate(forumThread.date)}</span>}
+                  {forumThread.boardName && (
+                    <span className={styles.threadBoard}>{forumThread.boardName}</span>
                   )}
                 </span>
               </li>
@@ -495,22 +495,22 @@ function OverviewTab({ data }: OverviewTabProps) {
             <span className={styles.panelCount}>{ccPosts.length}</span>
           </h2>
           <div className={styles.postsList}>
-            {ccPosts.slice(0, 10).map((p: ForumPost, i: number) => (
-              <PostItem key={p.messageId || i} post={p} />
+            {ccPosts.slice(0, 10).map((post: ForumPost, i: number) => (
+              <PostItem key={post.messageId || i} post={post} />
             ))}
           </div>
         </section>
       )}
 
       {/* ── External Links ─────────────────────────────────────── */}
-      {ng?.links && ng.links.length > 0 && (
+      {newgroundsStats?.links && newgroundsStats.links.length > 0 && (
         <section className={styles.panel}>
           <h2 className={styles.sectionTitle}>
             <span className={styles.sectionIcon}>🔗</span>
             Links
           </h2>
           <div className={styles.linksList}>
-            {ng.links.map((link: string | { url?: string; label?: string; name?: string }, i: number) => {
+            {newgroundsStats.links.map((link: string | { url?: string; label?: string; name?: string }, i: number) => {
               const url = typeof link === "string" ? link : link.url || "";
               const label = typeof link === "string" ? link : link.label || link.name || "";
               return (
@@ -650,10 +650,10 @@ export default function MemberProfileComponent({ username }: MemberProfileCompon
   useEffect(() => {
     let cancelled = false;
 
-    fetchMember(username).then(({ data: d, error: e }) => {
+    fetchMember(username).then(({ data: fetchedData, error: fetchedError }) => {
       if (cancelled) return;
-      setData(d);
-      setError(e);
+      setData(fetchedData);
+      setError(fetchedError);
       setLoading(false);
     });
 
@@ -694,14 +694,14 @@ export default function MemberProfileComponent({ username }: MemberProfileCompon
   }
 
   const { member, movies, games, audio, art, reviews } = data;
-  const ng = member.newgrounds;
-  const cc = member.ccForum;
+  const newgroundsStats = member.newgrounds;
+  const clockCrewForum = member.ccForum;
 
   const initials = (member.username || "?")
     .replace(/clock$/i, "")
     .slice(0, 2)
     .toUpperCase();
-  const avatarUrl = cc?.avatarUrl || ng?.avatarUrl || member.avatarUrl;
+  const avatarUrl = clockCrewForum?.avatarUrl || newgroundsStats?.avatarUrl || member.avatarUrl;
 
   // Build visible tabs based on available data
   const visibleTabs = TABS.filter((tab) => {
@@ -736,29 +736,29 @@ export default function MemberProfileComponent({ username }: MemberProfileCompon
           <div className={styles.identityInfo}>
             <h1 className={styles.username}>{member.username}</h1>
             <div className={styles.badges}>
-              {cc?.customTitle && (
-                <span className={styles.customTitle}>{cc.customTitle}</span>
+              {clockCrewForum?.customTitle && (
+                <span className={styles.customTitle}>{clockCrewForum.customTitle}</span>
               )}
-              {cc?.group && (
-                <span className={styles.groupBadge}>{cc.group}</span>
+              {clockCrewForum?.group && (
+                <span className={styles.groupBadge}>{clockCrewForum.group}</span>
               )}
-              {cc?.position && (
-                <span className={styles.posBadge}>{cc.position}</span>
+              {clockCrewForum?.position && (
+                <span className={styles.posBadge}>{clockCrewForum.position}</span>
               )}
-              {ng?.rank && (
-                <span className={styles.ngRankBadge}>{ng.rank}</span>
+              {newgroundsStats?.rank && (
+                <span className={styles.ngRankBadge}>{newgroundsStats.rank}</span>
               )}
-              {ng?.level != null && (
-                <span className={styles.levelBadge}>Lvl {ng.level}</span>
+              {newgroundsStats?.level != null && (
+                <span className={styles.levelBadge}>Lvl {newgroundsStats.level}</span>
               )}
-              {ng?.supporter && (
+              {newgroundsStats?.supporter && (
                 <span className={styles.supporterBadge}>⭐ Supporter</span>
               )}
             </div>
             <div className={styles.headerActions}>
-              {ng?.profileUrl && (
+              {newgroundsStats?.profileUrl && (
                 <a
-                  href={ng.profileUrl}
+                  href={newgroundsStats.profileUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.headerBtn}
@@ -766,9 +766,9 @@ export default function MemberProfileComponent({ username }: MemberProfileCompon
                   🌐 Newgrounds
                 </a>
               )}
-              {cc?.profileUrl && (
+              {clockCrewForum?.profileUrl && (
                 <a
-                  href={cc.profileUrl}
+                  href={clockCrewForum.profileUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.headerBtn}
@@ -783,15 +783,15 @@ export default function MemberProfileComponent({ username }: MemberProfileCompon
 
       {/* ── Quick Stats Bar ───────────────────────────────────── */}
       <section className={styles.quickStats}>
-        {cc && cc.postCount > 0 && (
+        {clockCrewForum && clockCrewForum.postCount > 0 && (
           <StatCard
             label="Forum Posts"
-            value={formatNumber(cc.postCount)}
+            value={formatNumber(clockCrewForum.postCount)}
             icon="💬"
           />
         )}
-        {ng && ng.fans > 0 && (
-          <StatCard label="NG Fans" value={formatNumber(ng.fans)} icon="♥" />
+        {newgroundsStats && newgroundsStats.fans > 0 && (
+          <StatCard label="NG Fans" value={formatNumber(newgroundsStats.fans)} icon="♥" />
         )}
         {movies && movies.length > 0 && (
           <StatCard label="Movies" value={movies.length} icon="🎬" />
@@ -868,8 +868,8 @@ export default function MemberProfileComponent({ username }: MemberProfileCompon
                   </span>
                 </h2>
                 <div className={styles.postsList}>
-                  {data.ccPosts.map((p: ForumPost, i: number) => (
-                    <PostItem key={p.messageId || i} post={p} />
+                  {data.ccPosts.map((post: ForumPost, i: number) => (
+                    <PostItem key={post.messageId || i} post={post} />
                   ))}
                 </div>
               </section>
@@ -884,8 +884,8 @@ export default function MemberProfileComponent({ username }: MemberProfileCompon
                   </span>
                 </h2>
                 <div className={styles.postsList}>
-                  {data.ngPosts.map((p: ForumPost, i: number) => (
-                    <PostItem key={p.postId || i} post={p} showThread={false} />
+                  {data.ngPosts.map((post: ForumPost, i: number) => (
+                    <PostItem key={post.postId || i} post={post} showThread={false} />
                   ))}
                 </div>
               </section>
@@ -894,8 +894,8 @@ export default function MemberProfileComponent({ username }: MemberProfileCompon
         )}
         {activeTab === "reviews" && (
           <div className={styles.reviewsList}>
-            {reviews?.map((r: Review, i: number) => (
-              <ReviewItem key={r.reviewId || i} review={r} />
+            {reviews?.map((review: Review, i: number) => (
+              <ReviewItem key={review.reviewId || i} review={review} />
             ))}
           </div>
         )}

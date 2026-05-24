@@ -208,9 +208,9 @@ function ContentDetailModal({ item, onClose }: ContentDetailModalProps) {
     setLoading(true);
     fetch(`/api/newgrounds/card/${encodeURIComponent(item.usernameLower)}`)
       .then((res) => (res.ok ? res.json() : Promise.reject()))
-      .then((d: CardApiResponse) => {
+      .then((cardData: CardApiResponse) => {
         if (!cancelled) {
-          setData(d);
+          setData(cardData);
           setLoading(false);
         }
       })
@@ -223,8 +223,8 @@ function ContentDetailModal({ item, onClose }: ContentDetailModalProps) {
   }, [item?.usernameLower]);
 
   useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+    const handler = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
@@ -239,7 +239,7 @@ function ContentDetailModal({ item, onClose }: ContentDetailModalProps) {
     <div className={styles.modalOverlay} onClick={onClose}>
       <div
         className={styles.modalCard}
-        onClick={(e: React.MouseEvent) => e.stopPropagation()}
+        onClick={(event: React.MouseEvent) => event.stopPropagation()}
       >
         <CloseButtonComponent onClick={onClose} />
 
@@ -655,9 +655,9 @@ function ProfileDetailModal({ username, onClose }: ProfileDetailModalProps) {
     setLoading(true);
     fetch(`/api/newgrounds/card/${encodeURIComponent(username)}`)
       .then((res) => (res.ok ? res.json() : Promise.reject()))
-      .then((d: CardApiResponse) => {
+      .then((cardData: CardApiResponse) => {
         if (!cancelled) {
-          setData(d);
+          setData(cardData);
           setLoading(false);
         }
       })
@@ -670,8 +670,8 @@ function ProfileDetailModal({ username, onClose }: ProfileDetailModalProps) {
   }, [username]);
 
   useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+    const handler = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
@@ -685,7 +685,7 @@ function ProfileDetailModal({ username, onClose }: ProfileDetailModalProps) {
     <div className={styles.modalOverlay} onClick={onClose}>
       <div
         className={styles.modalCard}
-        onClick={(e: React.MouseEvent) => e.stopPropagation()}
+        onClick={(event: React.MouseEvent) => event.stopPropagation()}
       >
         <CloseButtonComponent onClick={onClose} />
 
@@ -1211,7 +1211,7 @@ export default function NewgroundsPortalComponent() {
 
   // ── Fetch portal data ──────────────────────────────────────────
   const fetchPortal = useCallback(
-    async (q = "", t = "all", append = false, yr = "") => {
+    async (searchQuery = "", contentType = "all", append = false, yearFilter = "") => {
       if (fetchingRef.current) return;
       fetchingRef.current = true;
 
@@ -1225,18 +1225,18 @@ export default function NewgroundsPortalComponent() {
       }
 
       try {
-        const isClocks = t === "clocks";
+        const isClocks = contentType === "clocks";
         const params = new URLSearchParams({
           sort: isClocks ? "fans" : "score",
           limit: String(PAGE_SIZE),
           skip: String(skip),
         });
-        if (q) {
-          params.set("q", q);
-          if (!isClocks) params.set("username", q);
+        if (searchQuery) {
+          params.set("q", searchQuery);
+          if (!isClocks) params.set("username", searchQuery);
         }
-        if (!isClocks) params.set("type", t);
-        if (yr) params.set("year", yr);
+        if (!isClocks) params.set("type", contentType);
+        if (yearFilter) params.set("year", yearFilter);
 
         const endpoint = isClocks
           ? "/api/newgrounds/portal/clocks"
@@ -1472,8 +1472,8 @@ export default function NewgroundsPortalComponent() {
                           alt={item.title}
                           className={styles.itemThumb}
                           loading="lazy"
-                          onError={(e: SyntheticEvent<HTMLImageElement>) => {
-                            e.currentTarget.style.display = "none";
+                          onError={(event: SyntheticEvent<HTMLImageElement>) => {
+                            event.currentTarget.style.display = "none";
                           }}
                         />
                       )}

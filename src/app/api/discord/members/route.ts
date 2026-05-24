@@ -20,7 +20,7 @@ export async function GET() {
       // Retry on 503 — Lupos Discord client isn't ready yet
       if (response.status === 503 && attempt < MAX_RETRIES) {
         const delay = Math.pow(2, attempt) * 1000; // 1s, 2s, 4s
-        await new Promise((r) => setTimeout(r, delay));
+        await new Promise((resolve) => setTimeout(resolve, delay));
         lastStatus = 503;
         continue;
       }
@@ -38,7 +38,7 @@ export async function GET() {
       // Network error — retry if attempts remain
       if (attempt < MAX_RETRIES) {
         const delay = Math.pow(2, attempt) * 1000;
-        await new Promise((r) => setTimeout(r, delay));
+        await new Promise((resolve) => setTimeout(resolve, delay));
         continue;
       }
       console.error("[discord/members] Proxy error:", (error as Error).message);

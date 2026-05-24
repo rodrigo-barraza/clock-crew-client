@@ -58,7 +58,7 @@ export default function WikiSidebarComponent() {
       {/* ── Mobile toggle ──────────────────────────────────────── */}
       <button
         className={styles.mobileToggle}
-        onClick={() => setCollapsed((c) => !c)}
+        onClick={() => setCollapsed((previous) => !previous)}
         aria-label={collapsed ? "Open sidebar" : "Close sidebar"}
       >
         <span className={styles.mobileToggleIcon}>
