@@ -6,7 +6,7 @@
   align-items: center;
   gap: 14px;
   padding: 14px 16px;
-  background: var(--bg-card);
+  background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-sm);
   text-decoration: none;
@@ -45,7 +45,7 @@
   flex-shrink: 0;
   border-radius: var(--border-radius-sm);
   overflow: hidden;
-  background: var(--bg-tertiary);
+  background: var(--bg-elevated);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -116,7 +116,7 @@
   left: 0;
   width: 3px;
   height: 100%;
-  background: var(--accent-color);
+  background: var(--accent-primary);
   opacity: 0;
   transition: opacity var(--transition-fast);
 }

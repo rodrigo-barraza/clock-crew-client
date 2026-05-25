@@ -105,11 +105,11 @@
 }
 
 .linkActive {
-  color: var(--accent-color);
+  color: var(--accent-primary);
 
   &:hover {
-    color: var(--accent-color);
-    background: var(--accent-subtle);
+    color: var(--accent-primary);
+    background: var(--accent-primary-subtle);
   }
 }
 

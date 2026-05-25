@@ -45,7 +45,7 @@
 .sortGroup {
   display: flex;
   gap: 2px;
-  background: var(--bg-secondary);
+  background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-sm);
   padding: 2px;
@@ -68,7 +68,7 @@
 
 .sortBtnActive {
   color: var(--text-primary);
-  background: var(--bg-tertiary);
+  background: var(--bg-elevated);
 }
 
 /* ── Grid ─────────────────────────────────────────────────────── */
@@ -90,7 +90,7 @@
 .letterHeading {
   font-size: var(--font-size-xl);
   font-weight: 700;
-  color: var(--accent-color);
+  color: var(--accent-primary);
   padding-bottom: 8px;
   border-bottom: 1px solid var(--border-color);
   margin-bottom: 8px;
@@ -101,7 +101,7 @@
 
 .skeletonCard {
   height: 70px;
-  background: var(--bg-card);
+  background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-sm);
   animation: pulse 1.5s ease-in-out infinite;

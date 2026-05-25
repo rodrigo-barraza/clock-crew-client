@@ -25,7 +25,7 @@
   padding: 32px 24px 24px;
   border-radius: var(--border-radius-sm);
   overflow: hidden;
-  background: var(--bg-card);
+  background: var(--bg-surface);
   border: 1px solid var(--border-color);
 }
 
@@ -54,7 +54,7 @@
   flex-shrink: 0;
   border-radius: var(--border-radius-sm);
   overflow: hidden;
-  background: var(--bg-tertiary);
+  background: var(--bg-elevated);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -115,28 +115,28 @@
 }
 
 .groupBadge {
-  background: var(--accent-subtle);
-  color: var(--accent-color);
+  background: var(--accent-primary-subtle);
+  color: var(--accent-primary);
 }
 
 .posBadge {
   background: rgba(16, 185, 129, 0.1);
-  color: var(--success);
+  color: var(--color-success);
 }
 
 .ngRankBadge {
   background: rgba(245, 158, 11, 0.15);
-  color: var(--accent-color);
+  color: var(--accent-primary);
 }
 
 .levelBadge {
   background: rgba(59, 130, 246, 0.1);
-  color: var(--info);
+  color: var(--color-info);
 }
 
 .supporterBadge {
   background: rgba(245, 158, 11, 0.15);
-  color: var(--warning);
+  color: var(--color-warning);
 }
 
 .headerActions {
@@ -159,7 +159,7 @@
   &:hover {
     background: rgba(255, 255, 255, 0.1);
     color: var(--text-primary);
-    border-color: var(--accent-color);
+    border-color: var(--accent-primary);
   }
 }
 
@@ -181,12 +181,12 @@
   align-items: center;
   gap: 2px;
   padding: 12px 8px;
-  background: var(--bg-card);
+  background: var(--bg-surface);
   text-align: center;
   transition: background var(--transition-fast);
 
   &:hover {
-    background: var(--bg-tertiary);
+    background: var(--bg-elevated);
   }
 }
 
@@ -218,7 +218,7 @@
   border-radius: var(--border-radius-sm);
   overflow: hidden;
   overflow-x: auto;
-  background: var(--bg-card);
+  background: var(--bg-surface);
 }
 
 .tab {
@@ -248,7 +248,7 @@
 }
 
 .tabActive {
-  color: var(--accent-color);
+  color: var(--accent-primary);
   background: rgba(245, 158, 11, 0.05);
 
   &::after {
@@ -258,7 +258,7 @@
     left: 0;
     right: 0;
     height: 2px;
-    background: var(--accent-color);
+    background: var(--accent-primary);
   }
 }
 
@@ -276,8 +276,8 @@
 }
 
 .tabActive .tabCount {
-  background: var(--accent-subtle);
-  color: var(--accent-color);
+  background: var(--accent-primary-subtle);
+  color: var(--accent-primary);
 }
 
 /* ── Tab Content ─────────────────────────────────────────────── */
@@ -306,18 +306,18 @@
 /* ── Panels ──────────────────────────────────────────────────── */
 
 .panel {
-  background: var(--bg-card);
+  background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-sm);
   padding: 20px;
 }
 
 .summaryPanel {
-  background: var(--bg-card);
+  background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-sm);
   padding: 20px;
-  border-left: 3px solid var(--accent-color);
+  border-left: 3px solid var(--accent-primary);
 }
 
 .sectionTitle {
@@ -430,7 +430,7 @@
   font-weight: 600;
   border-radius: var(--border-radius-sm);
   background: rgba(16, 185, 129, 0.1);
-  color: var(--success);
+  color: var(--color-success);
 }
 
 /* ── Signature ───────────────────────────────────────────────── */
@@ -504,7 +504,7 @@
   align-items: center;
   gap: 14px;
   padding: 12px;
-  background: var(--bg-card);
+  background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-sm);
   text-decoration: none;
@@ -512,8 +512,8 @@
   transition: all var(--transition-fast);
 
   &:hover {
-    background: var(--bg-tertiary);
-    border-color: var(--accent-color);
+    background: var(--bg-elevated);
+    border-color: var(--accent-primary);
     transform: translateY(-1px);
     box-shadow: var(--shadow-sm);
   }
@@ -559,7 +559,7 @@
 }
 
 .contentScore {
-  color: var(--accent-color);
+  color: var(--accent-primary);
   font-weight: 600;
 }
 
@@ -590,7 +590,7 @@
 
 .postItem {
   padding: 12px;
-  background: var(--bg-card);
+  background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-sm);
 }
@@ -635,7 +635,7 @@
 
 .reviewItem {
   padding: 12px;
-  background: var(--bg-card);
+  background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-sm);
 }
@@ -660,8 +660,8 @@
 .reviewScore {
   font-size: var(--font-size-sm);
   font-weight: 700;
-  color: var(--accent-color);
-  background: var(--accent-subtle);
+  color: var(--accent-primary);
+  background: var(--accent-primary-subtle);
   padding: 2px 8px;
   border-radius: var(--border-radius-sm);
   flex-shrink: 0;
@@ -742,7 +742,7 @@
 }
 
 .threadBoard {
-  color: var(--accent-color);
+  color: var(--accent-primary);
   font-weight: 500;
 }
 
@@ -760,13 +760,13 @@
   border-radius: var(--border-radius-sm);
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--border-subtle);
-  color: var(--accent-color);
+  color: var(--accent-primary);
   text-decoration: none;
   transition: all var(--transition-fast);
 
   &:hover {
-    background: var(--accent-subtle);
-    border-color: var(--accent-color);
+    background: var(--accent-primary-subtle);
+    border-color: var(--accent-primary);
   }
 }
 
@@ -822,12 +822,12 @@
 .mdH3 {
   font-size: 0.8125rem;
   font-weight: 600;
-  color: var(--accent-color);
+  color: var(--accent-primary);
   margin: 10px 0 4px;
 }
 
 .mdBlockquote {
-  border-left: 3px solid var(--accent-color);
+  border-left: 3px solid var(--accent-primary);
   padding: 8px 14px;
   margin: 8px 0;
   background: rgba(245, 158, 11, 0.04);
@@ -861,7 +861,7 @@
   align-items: center;
   gap: 8px;
   padding: 48px 24px;
-  background: var(--bg-card);
+  background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-sm);
   text-align: center;
@@ -880,7 +880,7 @@
   align-items: center;
   gap: 20px;
   padding: 32px 24px;
-  background: var(--bg-card);
+  background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-sm);
 }
@@ -889,7 +889,7 @@
   width: 80px;
   height: 80px;
   border-radius: var(--border-radius-sm);
-  background: var(--bg-tertiary);
+  background: var(--bg-elevated);
   animation: skeletonPulse 1.5s ease-in-out infinite;
 }
 
@@ -902,7 +902,7 @@
 
 .skeletonLine {
   height: 14px;
-  background: var(--bg-tertiary);
+  background: var(--bg-elevated);
   border-radius: var(--border-radius-sm);
   animation: skeletonPulse 1.5s ease-in-out infinite;
 }
@@ -925,7 +925,7 @@
   align-items: center;
   gap: 12px;
   padding: 48px 24px;
-  background: var(--bg-card);
+  background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-sm);
   text-align: center;
@@ -942,7 +942,7 @@
 
 .backLink {
   font-size: 0.8125rem;
-  color: var(--accent-color);
+  color: var(--accent-primary);
   text-decoration: none;
 
   &:hover {

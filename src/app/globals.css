@@ -10,10 +10,10 @@
 
 :root {
   /* Amber/gold accent */
-  --accent-color: #f59e0b;
-  --accent-hover: #d97706;
-  --accent-glow: rgba(245, 158, 11, 0.4);
-  --accent-subtle: rgba(245, 158, 11, 0.1);
+  --accent-primary: #f59e0b;
+  --accent-primary-hover: #d97706;
+  --accent-primary-glow: rgba(245, 158, 11, 0.4);
+  --accent-primary-subtle: rgba(245, 158, 11, 0.1);
   --shadow-glow: 0 0 20px rgba(245, 158, 11, 0.15);
 
   /* ── Discord Theme Colors ─────────────────────────────── */
@@ -51,12 +51,12 @@ body {
 /* ── Links ──────────────────────────────────────────────────── */
 
 a {
-  color: var(--accent-color);
+  color: var(--accent-primary);
   text-decoration: none;
   transition: color var(--transition-fast);
 }
 a:hover {
-  color: var(--accent-hover);
+  color: var(--accent-primary-hover);
 }
 
 /* ── Hero ────────────────────────────────────────────────────── */
@@ -263,7 +263,7 @@ a:hover {
   padding: 24px;
   text-align: center;
   border-top: 1px solid var(--border-color);
-  background: var(--bg-primary);
+  background: var(--bg-base);
 }
 
 .site-copyright {
@@ -284,7 +284,7 @@ a:hover {
 }
 
 .site-copyright:hover {
-  color: var(--accent-color);
+  color: var(--accent-primary);
 }
 
 .site-copyright:hover .site-copyright-logo {
