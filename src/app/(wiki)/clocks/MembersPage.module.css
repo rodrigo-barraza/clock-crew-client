@@ -46,7 +46,7 @@
   display: flex;
   gap: 2px;
   background: var(--bg-surface);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--calculated-border-color);
   border-radius: var(--border-radius-sm);
   padding: 2px;
 }
@@ -92,7 +92,7 @@
   font-weight: 700;
   color: var(--accent-primary);
   padding-bottom: 8px;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--calculated-border-color);
   margin-bottom: 8px;
   scroll-margin-top: 72px;
 }
@@ -102,7 +102,7 @@
 .skeletonCard {
   height: 70px;
   background: var(--bg-surface);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--calculated-border-color);
   border-radius: var(--border-radius-sm);
   animation: pulse 1.5s ease-in-out infinite;
 }

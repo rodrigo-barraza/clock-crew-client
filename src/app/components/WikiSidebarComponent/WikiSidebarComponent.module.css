@@ -56,11 +56,11 @@
 
 .sectionLinkActive {
   color: var(--accent-primary);
-  background: var(--accent-primary-subtle);
+  background: var(--calculated-accent-primary-subtle);
 
   &:hover {
     color: var(--accent-primary);
-    background: var(--accent-primary-subtle);
+    background: var(--calculated-accent-primary-subtle);
   }
 }
 
@@ -101,7 +101,7 @@
 
   &:hover {
     color: var(--accent-primary);
-    background: var(--accent-primary-subtle);
+    background: var(--calculated-accent-primary-subtle);
   }
 }
 
@@ -120,9 +120,9 @@
   font-weight: 600;
   color: var(--text-primary);
   background: var(--bg-surface);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--calculated-border-color);
   border-radius: var(--border-radius-sm);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--calculated-shadow-lg);
   cursor: pointer;
 }
 
@@ -161,7 +161,7 @@
 
   &:hover {
     color: var(--accent-primary);
-    background: var(--accent-primary-subtle);
+    background: var(--calculated-accent-primary-subtle);
   }
 }
 
@@ -181,7 +181,7 @@
     max-height: unset;
     z-index: 110;
     background: var(--bg-surface);
-    border-right: 1px solid var(--border-color);
+    border-right: 1px solid var(--calculated-border-color);
     padding: 16px 0;
     transform: translateX(0);
     transition: transform var(--transition-normal);
