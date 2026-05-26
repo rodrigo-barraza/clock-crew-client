@@ -17,11 +17,11 @@
 
 /* ── Home (transparent over hero) ────────────────────────────── */
 
-.navHome {
+.navigationHome {
   background: transparent;
 }
 
-.navHome.navScrolled {
+.navigationHome.navigationScrolled {
   background: rgba(10, 10, 15, 0.82);
   backdrop-filter: blur(16px) saturate(1.4);
   -webkit-backdrop-filter: blur(16px) saturate(1.4);
@@ -30,7 +30,7 @@
 
 /* ── Inner pages (always solid) ──────────────────────────────── */
 
-.navInner {
+.navigationInner {
   background: rgba(10, 10, 15, 0.92);
   backdrop-filter: blur(16px) saturate(1.4);
   -webkit-backdrop-filter: blur(16px) saturate(1.4);
@@ -39,7 +39,7 @@
 
 /* ── Inner wrap ──────────────────────────────────────────────── */
 
-.navInnerWrap {
+.navigationInnerWrapper {
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
@@ -120,7 +120,7 @@
     display: none;
   }
 
-  .navInnerWrap {
+  .navigationInnerWrapper {
     padding: 0 16px;
   }
 

@@ -27,11 +27,11 @@ export default function NavBarComponent() {
 
   return (
     <nav
-      className={`${styles.nav} ${scrolled ? styles.navScrolled : ""} ${isHome ? styles.navHome : styles.navInner}`}
+      className={`${styles.nav} ${scrolled ? styles.navigationScrolled : ""} ${isHome ? styles.navigationHome : styles.navigationInner}`}
       role="navigation"
       aria-label="Main navigation"
     >
-      <div className={styles.navInnerWrap}>
+      <div className={styles.navigationInnerWrapper}>
         {/* ── Logo / Home ──────────────────────────────────────── */}
         <Link href="/" className={styles.logoLink}>
           <Image

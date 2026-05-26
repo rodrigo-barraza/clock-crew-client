@@ -45,13 +45,13 @@
 .sortGroup {
   display: flex;
   gap: 2px;
-  background: var(--bg-surface);
+  background: var(--background-surface);
   border: 1px solid var(--calculated-border-color);
   border-radius: var(--border-radius-sm);
   padding: 2px;
 }
 
-.sortBtn {
+.sortButton {
   padding: 6px 12px;
   font-size: var(--font-size-sm);
   font-weight: 500;
@@ -68,7 +68,7 @@
 
 .sortBtnActive {
   color: var(--text-primary);
-  background: var(--bg-elevated);
+  background: var(--background-elevated);
 }
 
 /* ── Grid ─────────────────────────────────────────────────────── */
@@ -101,7 +101,7 @@
 
 .skeletonCard {
   height: 70px;
-  background: var(--bg-surface);
+  background: var(--background-surface);
   border: 1px solid var(--calculated-border-color);
   border-radius: var(--border-radius-sm);
   animation: pulse 1.5s ease-in-out infinite;

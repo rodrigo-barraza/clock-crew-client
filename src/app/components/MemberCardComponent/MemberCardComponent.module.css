@@ -6,7 +6,7 @@
   align-items: center;
   gap: 14px;
   padding: 14px 16px;
-  background: var(--bg-surface);
+  background: var(--background-surface);
   border: 1px solid var(--calculated-border-color);
   border-radius: var(--border-radius-sm);
   text-decoration: none;
@@ -45,7 +45,7 @@
   flex-shrink: 0;
   border-radius: var(--border-radius-sm);
   overflow: hidden;
-  background: var(--bg-elevated);
+  background: var(--background-elevated);
   display: flex;
   align-items: center;
   justify-content: center;

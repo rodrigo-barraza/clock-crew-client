@@ -119,7 +119,7 @@
   font-size: 0.8125rem;
   font-weight: 600;
   color: var(--text-primary);
-  background: var(--bg-surface);
+  background: var(--background-surface);
   border: 1px solid var(--calculated-border-color);
   border-radius: var(--border-radius-sm);
   box-shadow: var(--calculated-shadow-lg);
@@ -180,7 +180,7 @@
     width: 260px;
     max-height: unset;
     z-index: 110;
-    background: var(--bg-surface);
+    background: var(--background-surface);
     border-right: 1px solid var(--calculated-border-color);
     padding: 16px 0;
     transform: translateX(0);

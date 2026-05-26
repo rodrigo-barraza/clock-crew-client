@@ -293,7 +293,7 @@ function ContentDetailModal({ item, onClose }: ContentDetailModalProps) {
         </div>
 
         {loading ? (
-          <div className={styles.loading} style={{ minHeight: 120 }}>
+          <div className={styles.isLoadingState} style={{ minHeight: 120 }}>
             <LoadingIndicatorComponent size={32} />
           </div>
         ) : !profile ? (
@@ -695,7 +695,7 @@ function ProfileDetailModal({ username, onClose }: ProfileDetailModalProps) {
         </div>
 
         {loading ? (
-          <div className={styles.loading} style={{ minHeight: 200 }}>
+          <div className={styles.isLoadingState} style={{ minHeight: 200 }}>
             <LoadingIndicatorComponent size={32} />
           </div>
         ) : !profile ? (
@@ -1433,7 +1433,7 @@ export default function NewgroundsPortalComponent() {
           {/* ── Item Grid ─────────────────────────────────────── */}
           <div className={styles.itemGrid}>
             {loading && (
-              <div className={styles.loading} style={{ gridColumn: "1 / -1" }}>
+              <div className={styles.isLoadingState} style={{ gridColumn: "1 / -1" }}>
                 <LoadingIndicatorComponent size={32} />
                 <span>Loading {isClocks ? "clocks" : "portal"}…</span>
               </div>

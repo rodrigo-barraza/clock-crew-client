@@ -130,7 +130,7 @@ export default function MembersDirectory() {
           {SORT_OPTIONS.map((opt) => (
             <button
               key={opt.key}
-              className={`${styles.sortBtn} ${sort === opt.key ? styles.sortBtnActive : ""}`}
+              className={`${styles.sortButton} ${sort === opt.key ? styles.sortBtnActive : ""}`}
               onClick={() => setSort(opt.key)}
             >
               {opt.label}

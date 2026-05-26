@@ -761,7 +761,7 @@ export default function MemberProfileComponent({ username }: MemberProfileCompon
                   href={newgroundsStats.profileUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={styles.headerBtn}
+                  className={styles.headerButton}
                 >
                   🌐 Newgrounds
                 </a>
@@ -771,7 +771,7 @@ export default function MemberProfileComponent({ username }: MemberProfileCompon
                   href={clockCrewForum.profileUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={styles.headerBtn}
+                  className={styles.headerButton}
                 >
                   🕰️ Forum
                 </a>

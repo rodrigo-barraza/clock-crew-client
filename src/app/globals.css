@@ -17,11 +17,11 @@
   --calculated-shadow-glow: 0 0 20px rgba(245, 158, 11, 0.15);
 
   /* ── Discord Theme Colors ─────────────────────────────── */
-  --discord-bg-dark: #1e1f22;
-  --discord-bg-mid: #2b2d31;
-  --discord-bg-chat: #313338;
-  --discord-bg-deep: #1a1b1e;
-  --discord-bg-input: #383a40;
+  --discord-background-dark: #1e1f22;
+  --discord-background-mid: #2b2d31;
+  --discord-background-chat: #313338;
+  --discord-background-deep: #1a1b1e;
+  --discord-background-input: #383a40;
   --discord-text-primary: #f2f3f5;
   --discord-text-normal: #dbdee1;
   --discord-text-secondary: #b5bac1;
@@ -263,7 +263,7 @@ a:hover {
   padding: 24px;
   text-align: center;
   border-top: 1px solid var(--calculated-border-color);
-  background: var(--bg-base);
+  background: var(--background-base);
 }
 
 .site-copyright {
