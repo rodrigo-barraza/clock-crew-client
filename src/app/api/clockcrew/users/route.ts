@@ -12,9 +12,9 @@ export async function GET(request: Request) {
 
   const params = new URLSearchParams();
   const limit = searchParams.get("limit");
-  const q = searchParams.get("q");
+  const searchQuery = searchParams.get("q");
   if (limit) params.set("limit", limit);
-  if (q) params.set("q", q);
+  if (searchQuery) params.set("q", searchQuery);
 
   try {
     const url = `${CLOCK_CREW_SERVICE_URL}/clockcrew/users?${params}`;

@@ -29,15 +29,15 @@ export default function ClockComponent({
 
     function tick() {
       const now = new Date();
-      const s = now.getSeconds() + now.getMilliseconds() / 1000;
-      const m = now.getMinutes() + s / 60;
-      const h = (now.getHours() % 12) + m / 60;
+      const seconds = now.getSeconds() + now.getMilliseconds() / 1000;
+      const minutes = now.getMinutes() + seconds / 60;
+      const hours = (now.getHours() % 12) + minutes / 60;
 
       const element = clockRef.current;
       if (element) {
-        element.style.setProperty("--hour-deg", `${h * 30}deg`);
-        element.style.setProperty("--minute-deg", `${m * 6}deg`);
-        element.style.setProperty("--second-deg", `${s * 6}deg`);
+        element.style.setProperty("--hour-deg", `${hours * 30}deg`);
+        element.style.setProperty("--minute-deg", `${minutes * 6}deg`);
+        element.style.setProperty("--second-deg", `${seconds * 6}deg`);
       }
 
       rafId = requestAnimationFrame(tick);

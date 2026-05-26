@@ -10,8 +10,8 @@ export const revalidate = 86_400; // 1 day — must be a literal for Next.js sta
 
 function safeDate(str: string) {
   if (!str) return new Date();
-  const d = new Date(str);
-  return isNaN(d.getTime()) ? new Date() : d;
+  const parsedDate = new Date(str);
+  return isNaN(parsedDate.getTime()) ? new Date() : parsedDate;
 }
 
 export default async function sitemap() {

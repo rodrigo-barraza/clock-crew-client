@@ -54,11 +54,11 @@ export default function MembersDirectory() {
 
     // Search filter
     if (search.trim()) {
-      const q = search.trim().toLowerCase();
+      const normalizedSearch = search.trim().toLowerCase();
       list = list.filter(
         (user) =>
-          user.username?.toLowerCase().includes(q) ||
-          user.customTitle?.toLowerCase().includes(q),
+          user.username?.toLowerCase().includes(normalizedSearch) ||
+          user.customTitle?.toLowerCase().includes(normalizedSearch),
       );
     }
 

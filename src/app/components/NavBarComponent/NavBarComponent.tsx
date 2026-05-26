@@ -27,7 +27,7 @@ export default function NavBarComponent() {
 
   return (
     <nav
-      className={`${styles.nav} ${scrolled ? styles.navigationScrolled : ""} ${isHome ? styles.navigationHome : styles.navigationInner}`}
+      className={`${styles.navigationBar} ${scrolled ? styles.navigationScrolled : ""} ${isHome ? styles.navigationHome : styles.navigationInner}`}
       role="navigation"
       aria-label="Main navigation"
     >

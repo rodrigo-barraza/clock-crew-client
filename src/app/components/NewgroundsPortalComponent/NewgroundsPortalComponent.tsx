@@ -102,9 +102,9 @@ function ScoreDisplay({ score }: ScoreDisplayProps) {
 
 function formatDate(dateStr: string | Date | null | undefined): string {
   if (!dateStr) return "—";
-  const d = new Date(dateStr);
-  if (isNaN(d.getTime())) return String(dateStr);
-  return d.toLocaleDateString("en-US", {
+  const parsedDate = new Date(dateStr);
+  if (isNaN(parsedDate.getTime())) return String(dateStr);
+  return parsedDate.toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
     day: "numeric",
