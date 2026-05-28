@@ -34,7 +34,7 @@ export default function HomePage() {
     state.lastTime = performance.now();
 
     const tick = (now: number) => {
-      const dt = Math.min((now - state.lastTime) / 1000, 0.1); // cap at 100ms
+      const deltaTime = Math.min((now - state.lastTime) / 1000, 0.1); // cap at 100ms
       state.lastTime = now;
 
       if (state.hovering) {
@@ -44,15 +44,15 @@ export default function HomePage() {
         const targetSpeed =
           IDLE_SPEED +
           (MAX_SPEED - IDLE_SPEED) * (1 - Math.exp(-elapsed * RATE_RAMP));
-        state.speed += (targetSpeed - state.speed) * (1 - Math.exp(-dt * 6));
+        state.speed += (targetSpeed - state.speed) * (1 - Math.exp(-deltaTime * 6));
       } else {
         // Decelerate smoothly back to idle
         state.speed +=
-          (IDLE_SPEED - state.speed) * (1 - Math.exp(-dt * RATE_DECEL));
+          (IDLE_SPEED - state.speed) * (1 - Math.exp(-deltaTime * RATE_DECEL));
       }
 
       // Accumulate angle
-      state.angle = (state.angle + state.speed * dt) % 360;
+      state.angle = (state.angle + state.speed * deltaTime) % 360;
 
       // Write to DOM via custom property (no React re-render)
       if (heroRef.current) {
