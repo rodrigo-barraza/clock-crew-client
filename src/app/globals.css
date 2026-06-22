@@ -12,9 +12,9 @@
   /* Amber/gold accent */
   --accent-primary: #f59e0b;
   --calculated-accent-primary-hover: #d97706;
-  --calculated-accent-primary-glow: rgba(245, 158, 11, 0.4);
-  --calculated-accent-primary-subtle: rgba(245, 158, 11, 0.1);
-  --calculated-shadow-glow: 0 0 20px rgba(245, 158, 11, 0.15);
+  --calculated-accent-primary-glow: oklch(0.774 0.1784 79.8 / 0.4);
+  --calculated-accent-primary-subtle: oklch(0.774 0.1784 79.8 / 0.1);
+  --calculated-shadow-glow: 0 0 20px oklch(0.774 0.1784 79.8 / 0.15);
 
   /* ── Discord Theme Colors ─────────────────────────────── */
   --discord-background-dark: #1e1f22;
@@ -155,8 +155,8 @@ a:hover {
   background: radial-gradient(
     ellipse at center,
     transparent 0%,
-    rgba(10, 10, 15, 0.4) 50%,
-    rgba(10, 10, 15, 0.85) 100%
+    oklch(0.147 0.0132 294.4 / 0.4) 50%,
+    oklch(0.147 0.0132 294.4 / 0.85) 100%
   );
   z-index: 1;
   pointer-events: none;
@@ -173,7 +173,7 @@ a:hover {
   z-index: 2;
 }
 
-.hero-title-row {
+.hero-title-layout-row {
   display: flex;
   align-items: center;
   gap: 16px;

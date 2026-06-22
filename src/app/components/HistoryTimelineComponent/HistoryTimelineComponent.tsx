@@ -107,22 +107,22 @@ export default function HistoryTimelineComponent() {
 
       {/* ── Info Box ──────────────────────────────────────────── */}
       <div className={styles.clearfix}>
-        <aside className={styles.infoBox}>
-          <div className={styles.infoBoxHeader}>{INFO_BOX.title}</div>
+        <aside className={styles['info-box']}>
+          <div className={styles['info-box-header']}>{INFO_BOX.title}</div>
           <img
-            className={styles.infoBoxImage}
+            className={styles['info-box-image']}
             src={INFO_BOX.imageUrl}
             alt={INFO_BOX.imageAlt}
             loading="lazy"
           />
-          <div className={styles.infoBoxCaption}>{INFO_BOX.caption}</div>
-          <table className={styles.infoBoxTable}>
+          <div className={styles['info-box-caption']}>{INFO_BOX.caption}</div>
+          <table className={styles['info-box-table']}>
             <tbody>
               {INFO_BOX.rows.map((row) => (
                 <tr key={row.label}>
-                  <td className={styles.infoBoxLabel}>{row.label}</td>
+                  <td className={styles['info-box-label']}>{row.label}</td>
                   <td
-                    className={styles.infoBoxValue}
+                    className={styles['info-box-value']}
                     dangerouslySetInnerHTML={{ __html: row.value }}
                   />
                 </tr>
@@ -133,11 +133,11 @@ export default function HistoryTimelineComponent() {
 
         {/* ── Table of Contents ──────────────────────────────── */}
         <nav className={styles.toc}>
-          <div className={styles.tocHeading}>📑 Contents</div>
-          <ol className={styles.tocList}>
+          <div className={styles['toc-heading']}>📑 Contents</div>
+          <ol className={styles['toc-list']}>
             {TABLE_OF_CONTENTS.map((item: TableOfContentsItem) => (
-              <li key={item.id} className={styles.tocItem}>
-                <a className={styles.tocLink} href={`#${item.id}`}>
+              <li key={item.id} className={styles['toc-item']}>
+                <a className={styles['toc-link']} href={`#${item.id}`}>
                   {item.label}
                 </a>
               </li>
@@ -148,7 +148,7 @@ export default function HistoryTimelineComponent() {
         {/* ── Origins ────────────────────────────────────────── */}
         <h2
           id="origins"
-          className={`${styles.sectionHeading} ${styles.sectionAnchor}`}
+          className={`${styles['section-heading']} ${styles['section-anchor']}`}
         >
           Origins
         </h2>
@@ -183,19 +183,19 @@ export default function HistoryTimelineComponent() {
         {/* ── The Movie "B" ──────────────────────────────────── */}
         <h2
           id="the-movie-b"
-          className={`${styles.sectionHeading} ${styles.sectionAnchor}`}
+          className={`${styles['section-heading']} ${styles['section-anchor']}`}
         >
           The Movie &quot;B&quot;
         </h2>
 
-        <div className={`${styles.figure} ${styles.figureRight}`}>
+        <div className={`${styles.figure} ${styles['figure-right']}`}>
           <img
-            className={styles.figureImage}
+            className={styles['figure-image']}
             src="/images/b-movie-screenshot.png"
             alt="Screenshot of B on the Newgrounds portal"
             loading="lazy"
           />
-          <div className={styles.figureCaption}>
+          <div className={styles['figure-caption']}>
             &quot;B&quot; as it appears on the{" "}
             <ExtLink href="https://www.newgrounds.com/portal/view/11521">
               Newgrounds portal
@@ -231,7 +231,7 @@ export default function HistoryTimelineComponent() {
           even the most minimal, deliberately absurd content could pass through
           the democratic judgment system — and in doing so, it challenged every
           assumption the Newgrounds community held about quality standards.
-          <div className={styles.blockquoteAttribution}>
+          <div className={styles['blockquote-attribution']}>
             — Clock Crew Wiki
             <Cite ids={[4]} />
           </div>
@@ -246,7 +246,7 @@ export default function HistoryTimelineComponent() {
         {/* ── Formation ──────────────────────────────────────── */}
         <h2
           id="formation"
-          className={`${styles.sectionHeading} ${styles.sectionAnchor}`}
+          className={`${styles['section-heading']} ${styles['section-anchor']}`}
         >
           Formation of the Crew
         </h2>
@@ -281,7 +281,7 @@ export default function HistoryTimelineComponent() {
         {/* ── Style & Identity ───────────────────────────────── */}
         <h2
           id="identity"
-          className={`${styles.sectionHeading} ${styles.sectionAnchor}`}
+          className={`${styles['section-heading']} ${styles['section-anchor']}`}
         >
           Style &amp; Identity
         </h2>
@@ -331,7 +331,7 @@ export default function HistoryTimelineComponent() {
         {/* ── Golden Age ─────────────────────────────────────── */}
         <h2
           id="golden-age"
-          className={`${styles.sectionHeading} ${styles.sectionAnchor}`}
+          className={`${styles['section-heading']} ${styles['section-anchor']}`}
         >
           The Golden Age (2002–2005)
         </h2>
@@ -365,19 +365,19 @@ export default function HistoryTimelineComponent() {
         {/* ── Clock Day ──────────────────────────────────────── */}
         <h2
           id="clock-day"
-          className={`${styles.sectionHeading} ${styles.sectionAnchor}`}
+          className={`${styles['section-heading']} ${styles['section-anchor']}`}
         >
           Clock Day
         </h2>
 
-        <div className={`${styles.figure} ${styles.figureRight}`}>
+        <div className={`${styles.figure} ${styles['figure-right']}`}>
           <img
-            className={styles.figureImage}
+            className={styles['figure-image']}
             src="/images/clock-day-celebration.png"
             alt="Clock Day celebration"
             loading="lazy"
           />
-          <div className={styles.figureCaption}>
+          <div className={styles['figure-caption']}>
             Every August 15, Clock Crew members celebrate Clock Day — the
             anniversary of &quot;B&quot; — with collaborative animations on the{" "}
             <ExtLink href="https://www.newgrounds.com">
@@ -417,7 +417,7 @@ export default function HistoryTimelineComponent() {
         {/* ── Rivalries ──────────────────────────────────────── */}
         <h2
           id="rivalries"
-          className={`${styles.sectionHeading} ${styles.sectionAnchor}`}
+          className={`${styles['section-heading']} ${styles['section-anchor']}`}
         >
           Rivalries &amp; Offshoots
         </h2>
@@ -428,7 +428,7 @@ export default function HistoryTimelineComponent() {
           <Cite ids={[3, 5]} />
         </p>
 
-        <table className={styles.dataTable}>
+        <table className={styles['data-table']}>
           <thead>
             <tr>
               <th>Crew</th>
@@ -475,12 +475,12 @@ export default function HistoryTimelineComponent() {
         {/* ── Notable Works ──────────────────────────────────── */}
         <h2
           id="notable-works"
-          className={`${styles.sectionHeading} ${styles.sectionAnchor}`}
+          className={`${styles['section-heading']} ${styles['section-anchor']}`}
         >
           Notable Works
         </h2>
 
-        <table className={styles.dataTable}>
+        <table className={styles['data-table']}>
           <thead>
             <tr>
               <th>Title</th>
@@ -506,7 +506,7 @@ export default function HistoryTimelineComponent() {
         {/* ── Notable Members ────────────────────────────────── */}
         <h2
           id="notable-members"
-          className={`${styles.sectionHeading} ${styles.sectionAnchor}`}
+          className={`${styles['section-heading']} ${styles['section-anchor']}`}
         >
           Notable Members
         </h2>
@@ -517,7 +517,7 @@ export default function HistoryTimelineComponent() {
           <Cite ids={[3]} />
         </p>
 
-        <table className={styles.dataTable}>
+        <table className={styles['data-table']}>
           <thead>
             <tr>
               <th>Name</th>
@@ -555,7 +555,7 @@ export default function HistoryTimelineComponent() {
         {/* ── Evolution ──────────────────────────────────────── */}
         <h2
           id="evolution"
-          className={`${styles.sectionHeading} ${styles.sectionAnchor}`}
+          className={`${styles['section-heading']} ${styles['section-anchor']}`}
         >
           Evolution &amp; Diaspora
         </h2>
@@ -587,7 +587,7 @@ export default function HistoryTimelineComponent() {
         {/* ── Flash Preservation ─────────────────────────────── */}
         <h2
           id="preservation"
-          className={`${styles.sectionHeading} ${styles.sectionAnchor}`}
+          className={`${styles['section-heading']} ${styles['section-anchor']}`}
         >
           Flash Preservation
         </h2>
@@ -624,7 +624,7 @@ export default function HistoryTimelineComponent() {
         {/* ── Cultural Impact ────────────────────────────────── */}
         <h2
           id="cultural-impact"
-          className={`${styles.sectionHeading} ${styles.sectionAnchor}`}
+          className={`${styles['section-heading']} ${styles['section-anchor']}`}
         >
           Cultural Impact
         </h2>
@@ -663,7 +663,7 @@ export default function HistoryTimelineComponent() {
       {/* ── Timeline Section ─────────────────────────────────── */}
       <h2
         id="timeline"
-        className={`${styles.sectionHeading} ${styles.sectionAnchor}`}
+        className={`${styles['section-heading']} ${styles['section-anchor']}`}
       >
         Timeline
       </h2>
@@ -676,9 +676,9 @@ export default function HistoryTimelineComponent() {
             { key: "modern", label: "Modern Era" },
           ] as const
         ).map((era) => (
-          <span key={era.key} className={styles.legendItem}>
+          <span key={era.key} className={styles['legend-item']}>
             <span
-              className={styles.legendDot}
+              className={styles['legend-dot']}
               style={{
                 background: ERA_COLORS[era.key],
               }}
@@ -697,7 +697,7 @@ export default function HistoryTimelineComponent() {
           return (
             <div
               key={i}
-              className={`${styles.item} ${styles[`item${side}`]} ${isVisible ? styles.itemVisible : ""}`}
+              className={`${styles.item} ${styles[`item${side}`]} ${isVisible ? styles['item-visible'] : ""}`}
               data-index={i}
             >
               <div
@@ -710,7 +710,7 @@ export default function HistoryTimelineComponent() {
                 }}
               >
                 <div
-                  className={styles.nodeInner}
+                  className={styles['node-inner']}
                   style={{
                     background: ERA_COLORS[eraKey],
                   }}
@@ -718,15 +718,15 @@ export default function HistoryTimelineComponent() {
               </div>
               <div className={styles.card}>
                 <span
-                  className={styles.cardYear}
+                  className={styles['card-year']}
                   style={{
                     color: ERA_COLORS[eraKey],
                   }}
                 >
                   {event.year}
                 </span>
-                <h3 className={styles.cardTitle}>{event.title}</h3>
-                <p className={styles.cardContent}>{event.content}</p>
+                <h3 className={styles['card-title']}>{event.title}</h3>
+                <p className={styles['card-content']}>{event.content}</p>
               </div>
             </div>
           );
@@ -736,13 +736,13 @@ export default function HistoryTimelineComponent() {
       {/* ── See Also ─────────────────────────────────────────── */}
       <h2
         id="see-also"
-        className={`${styles.sectionHeading} ${styles.sectionAnchor}`}
+        className={`${styles['section-heading']} ${styles['section-anchor']}`}
       >
         See Also
       </h2>
-      <ul className={styles.seeAlsoList}>
+      <ul className={styles['see-also-list']}>
         {SEE_ALSO.map((item: SeeAlsoItem) => (
-          <li key={item.label} className={styles.seeAlsoItem}>
+          <li key={item.label} className={styles['see-also-item']}>
             <ExtLink href={item.url}>{item.label}</ExtLink>
           </li>
         ))}
@@ -751,14 +751,14 @@ export default function HistoryTimelineComponent() {
       {/* ── References ───────────────────────────────────────── */}
       <h2
         id="references"
-        className={`${styles.sectionHeading} ${styles.sectionAnchor}`}
+        className={`${styles['section-heading']} ${styles['section-anchor']}`}
       >
         References
       </h2>
       <div className={styles.references}>
-        <ol className={styles.refList}>
+        <ol className={styles['ref-list']}>
           {REFERENCES.map((ref) => (
-            <li key={ref.id} id={`ref-${ref.id}`} className={styles.refItem}>
+            <li key={ref.id} id={`ref-${ref.id}`} className={styles['ref-item']}>
               {ref.text}. <ExtLink href={ref.url}>{ref.url}</ExtLink>
             </li>
           ))}

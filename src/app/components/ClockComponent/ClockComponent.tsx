@@ -81,7 +81,7 @@ export default function ClockComponent({
           >
             {/* Hour hand — thick, short, arrow-shaped */}
             <g
-              className={styles.hourHand}
+              className={styles['hour-hand']}
               style={{ transform: "rotate(var(--hour-deg))" }}
             >
               <polygon
@@ -95,7 +95,7 @@ export default function ClockComponent({
 
             {/* Minute hand — thinner, longer, arrow-shaped */}
             <g
-              className={styles.minuteHand}
+              className={styles['minute-hand']}
               style={{ transform: "rotate(var(--minute-deg))" }}
             >
               <polygon
@@ -110,7 +110,7 @@ export default function ClockComponent({
             {/* Second hand — hairline, optional */}
             {showSeconds && (
               <g
-                className={styles.secondHand}
+                className={styles['second-hand']}
                 style={{ transform: "rotate(var(--second-deg))" }}
               >
                 <line

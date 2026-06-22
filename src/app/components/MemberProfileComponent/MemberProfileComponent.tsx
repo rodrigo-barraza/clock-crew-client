@@ -59,10 +59,10 @@ interface StatCardProps {
 
 function StatCard({ label, value, icon }: StatCardProps) {
   return (
-    <div className={styles.statCard}>
-      {icon && <span className={styles.statIcon}>{icon}</span>}
-      <span className={styles.statValue}>{value}</span>
-      <span className={styles.statLabel}>{label}</span>
+    <div className={styles['stat-card']}>
+      {icon && <span className={styles['stat-icon']}>{icon}</span>}
+      <span className={styles['stat-value']}>{value}</span>
+      <span className={styles['stat-label']}>{label}</span>
     </div>
   );
 }
@@ -86,41 +86,41 @@ function ContentCard({ item, type }: ContentCardProps) {
       href={item.url}
       target="_blank"
       rel="noopener noreferrer"
-      className={styles.contentCard}
+      className={styles['content-card']}
     >
       {item.thumbnailUrl && (
         <img
           src={item.thumbnailUrl}
           alt={item.title}
-          className={styles.contentThumb}
+          className={styles['content-thumb']}
           loading="lazy"
           onError={(event: SyntheticEvent<HTMLImageElement>) => {
             event.currentTarget.style.display = "none";
           }}
         />
       )}
-      <div className={styles.contentInfo}>
-        <span className={styles.contentTitle}>{item.title}</span>
-        <div className={styles.contentMeta}>
-          <span className={styles.contentType}>{emoji}</span>
+      <div className={styles['content-info']}>
+        <span className={styles['content-title']}>{item.title}</span>
+        <div className={styles['content-meta']}>
+          <span className={styles['content-type']}>{emoji}</span>
           {item.score != null && (
-            <span className={styles.contentScore}>
+            <span className={styles['content-score']}>
               ★ {(Math.round(item.score * 10) / 10).toFixed(1)}
             </span>
           )}
           {item.views != null && (
-            <span className={styles.contentViews}>
+            <span className={styles['content-views']}>
               {formatNumber(item.views)} views
             </span>
           )}
           {item.publishedDate && (
-            <span className={styles.contentDate}>
+            <span className={styles['content-date']}>
               {formatDate(item.publishedDate)}
             </span>
           )}
         </div>
         {item.description && (
-          <p className={styles.contentDesc}>
+          <p className={styles['content-desc']}>
             {item.description.length > 120
               ? item.description.slice(0, 120) + "…"
               : item.description}
@@ -139,17 +139,17 @@ interface PostItemProps {
 function PostItem({ post, showThread = true }: PostItemProps) {
   const body = stripHtml(post.body || post.content || "");
   return (
-    <div className={styles.postItem}>
-      <div className={styles.postHeader}>
+    <div className={styles['post-item']}>
+      <div className={styles['post-header']}>
         {showThread && post.threadTitle && (
-          <span className={styles.postThread}>{post.threadTitle}</span>
+          <span className={styles['post-thread']}>{post.threadTitle}</span>
         )}
         {post.date && (
-          <time className={styles.postDate}>{formatDate(post.date)}</time>
+          <time className={styles['post-date']}>{formatDate(post.date)}</time>
         )}
       </div>
       {body && (
-        <p className={styles.postBody}>
+        <p className={styles['post-body']}>
           {body.length > 300 ? body.slice(0, 300) + "…" : body}
         </p>
       )}
@@ -164,17 +164,17 @@ interface ReviewItemProps {
 function ReviewItem({ review }: ReviewItemProps) {
   const body = stripHtml(review.body || review.text || "");
   return (
-    <div className={styles.reviewItem}>
-      <div className={styles.reviewHeader}>
-        <span className={styles.reviewTarget}>
+    <div className={styles['review-item']}>
+      <div className={styles['review-header']}>
+        <span className={styles['review-target']}>
           {review.contentTitle || review.contentUrl || "Unknown"}
         </span>
         {review.score != null && (
-          <span className={styles.reviewScore}>{review.score}/10</span>
+          <span className={styles['review-score']}>{review.score}/10</span>
         )}
       </div>
       {body && (
-        <p className={styles.reviewBody}>
+        <p className={styles['review-body']}>
           {body.length > 250 ? body.slice(0, 250) + "…" : body}
         </p>
       )}
@@ -191,14 +191,14 @@ interface ContentSectionProps {
 function ContentSection({ items, type, emptyLabel }: ContentSectionProps) {
   if (!items?.length) {
     return (
-      <div className={styles.emptyTab}>
-        <span className={styles.emptyTabIcon}>📭</span>
+      <div className={styles['empty-tab']}>
+        <span className={styles['empty-tab-icon']}>📭</span>
         <span>No {emptyLabel} found</span>
       </div>
     );
   }
   return (
-    <div className={styles.contentGrid}>
+    <div className={styles['content-grid']}>
       {items.map((item, i) => (
         <ContentCard
           key={item.contentId || item._id || i}
@@ -228,20 +228,20 @@ function OverviewTab({ data }: OverviewTabProps) {
   const topAudio = audio?.slice(0, 3) || [];
 
   return (
-    <div className={styles.overviewGrid}>
+    <div className={styles['overview-grid']}>
       {/* ── AI Profile Summary ─────────────────────────────────── */}
       {summary?.markdown && summary.status === "complete" && (
-        <section className={styles.summaryPanel}>
-          <h2 className={styles.sectionTitle}>
-            <span className={styles.sectionIcon}>🤖</span>
+        <section className={styles['summary-panel']}>
+          <h2 className={styles['section-title']}>
+            <span className={styles['section-icon']}>🤖</span>
             AI-Generated Profile
-            <span className={styles.summaryMeta}>
+            <span className={styles['summary-meta']}>
               {summary.model && (
-                <span className={styles.summaryModel}>{summary.model}</span>
+                <span className={styles['summary-model']}>{summary.model}</span>
               )}
             </span>
           </h2>
-          <div className={styles.summaryContent}>
+          <div className={styles['summary-content']}>
             <MarkdownRenderer markdown={summary.markdown} />
           </div>
         </section>
@@ -250,11 +250,11 @@ function OverviewTab({ data }: OverviewTabProps) {
       {/* ── Newgrounds Stats ───────────────────────────────────── */}
       {newgroundsStats && (
         <section className={styles.panel}>
-          <h2 className={styles.sectionTitle}>
-            <span className={styles.sectionIcon}>🟠</span>
+          <h2 className={styles['section-title']}>
+            <span className={styles['section-icon']}>🟠</span>
             Newgrounds Stats
           </h2>
-          <div className={styles.miniStatsGrid}>
+          <div className={styles['mini-stats-grid']}>
             <StatCard label="Fans" value={formatNumber(newgroundsStats.fans)} icon="♥" />
             <StatCard label="Level" value={newgroundsStats.level ?? "—"} icon="⬆" />
             <StatCard label="Blams" value={formatNumber(newgroundsStats.blams)} icon="💣" />
@@ -276,28 +276,28 @@ function OverviewTab({ data }: OverviewTabProps) {
               <StatCard label="Vote Power" value={newgroundsStats.votePower} icon="⚡" />
             )}
           </div>
-          {newgroundsStats.description && <p className={styles.ngBio}>{newgroundsStats.description}</p>}
-          <div className={styles.personalInfo}>
+          {newgroundsStats.description && <p className={styles['ng-bio']}>{newgroundsStats.description}</p>}
+          <div className={styles['personal-info']}>
             {newgroundsStats.joinDate && (
-              <span className={styles.infoItem}>📅 Joined {newgroundsStats.joinDate}</span>
+              <span className={styles['info-item']}>📅 Joined {newgroundsStats.joinDate}</span>
             )}
             {newgroundsStats.location && (
-              <span className={styles.infoItem}>📍 {newgroundsStats.location}</span>
+              <span className={styles['info-item']}>📍 {newgroundsStats.location}</span>
             )}
-            {newgroundsStats.job && <span className={styles.infoItem}>💼 {newgroundsStats.job}</span>}
+            {newgroundsStats.job && <span className={styles['info-item']}>💼 {newgroundsStats.job}</span>}
             {newgroundsStats.age != null && (
-              <span className={styles.infoItem}>🎂 Age {newgroundsStats.age}</span>
+              <span className={styles['info-item']}>🎂 Age {newgroundsStats.age}</span>
             )}
-            {newgroundsStats.sex && <span className={styles.infoItem}>👤 {newgroundsStats.sex}</span>}
+            {newgroundsStats.sex && <span className={styles['info-item']}>👤 {newgroundsStats.sex}</span>}
             {newgroundsStats.realName && (
-              <span className={styles.infoItem}>🪪 {newgroundsStats.realName}</span>
+              <span className={styles['info-item']}>🪪 {newgroundsStats.realName}</span>
             )}
             {newgroundsStats.school && (
-              <span className={styles.infoItem}>🎓 {newgroundsStats.school}</span>
+              <span className={styles['info-item']}>🎓 {newgroundsStats.school}</span>
             )}
-            {newgroundsStats.rank && <span className={styles.infoItem}>🎖 {newgroundsStats.rank}</span>}
+            {newgroundsStats.rank && <span className={styles['info-item']}>🎖 {newgroundsStats.rank}</span>}
             {newgroundsStats.globalRank != null && (
-              <span className={styles.infoItem}>
+              <span className={styles['info-item']}>
                 🌍 Rank #{formatNumber(newgroundsStats.globalRank)}
               </span>
             )}
@@ -308,31 +308,31 @@ function OverviewTab({ data }: OverviewTabProps) {
       {/* ── CC Forum ───────────────────────────────────────────── */}
       {clockCrewForum && (
         <section className={styles.panel}>
-          <h2 className={styles.sectionTitle}>
-            <span className={styles.sectionIcon}>🕰️</span>
+          <h2 className={styles['section-title']}>
+            <span className={styles['section-icon']}>🕰️</span>
             ClockCrew.net Forum
           </h2>
-          <div className={styles.ccIdentity}>
+          <div className={styles['cc-identity']}>
             {clockCrewForum.avatarUrl && (
               <img
                 src={clockCrewForum.avatarUrl}
                 alt={clockCrewForum.username}
-                className={styles.ccAvatar}
+                className={styles['cc-avatar']}
               />
             )}
             <div>
-              <span className={styles.ccName}>{clockCrewForum.username}</span>
+              <span className={styles['cc-name']}>{clockCrewForum.username}</span>
               {clockCrewForum.customTitle && (
-                <span className={styles.ccTitle}>
+                <span className={styles['cc-title']}>
                   &ldquo;{clockCrewForum.customTitle}&rdquo;
                 </span>
               )}
               {clockCrewForum.position && (
-                <span className={styles.ccBadge}>{clockCrewForum.position}</span>
+                <span className={styles['cc-badge']}>{clockCrewForum.position}</span>
               )}
             </div>
           </div>
-          <div className={styles.miniStatsGrid}>
+          <div className={styles['mini-stats-grid']}>
             <StatCard
               label="Posts"
               value={formatNumber(clockCrewForum.postCount)}
@@ -351,10 +351,10 @@ function OverviewTab({ data }: OverviewTabProps) {
             )}
           </div>
           {clockCrewForum.signatureHtml && (
-            <div className={styles.signatureWrap}>
-              <span className={styles.signatureLabel}>Signature</span>
+            <div className={styles['signature-wrap']}>
+              <span className={styles['signature-label']}>Signature</span>
               <div
-                className={styles.signatureContent}
+                className={styles['signature-content']}
                 dangerouslySetInnerHTML={{ __html: clockCrewForum.signatureHtml }}
               />
             </div>
@@ -365,11 +365,11 @@ function OverviewTab({ data }: OverviewTabProps) {
       {/* ── Content Counts ─────────────────────────────────────── */}
       {newgroundsStats && (
         <section className={styles.panel}>
-          <h2 className={styles.sectionTitle}>
-            <span className={styles.sectionIcon}>📊</span>
+          <h2 className={styles['section-title']}>
+            <span className={styles['section-icon']}>📊</span>
             Content Overview
           </h2>
-          <div className={styles.contentPills}>
+          <div className={styles['content-pills']}>
             {newgroundsStats.movieCount > 0 && (
               <span className={styles.pill}>🎬 {newgroundsStats.movieCount} Movies</span>
             )}
@@ -398,11 +398,11 @@ function OverviewTab({ data }: OverviewTabProps) {
       {/* ── Top Movies ─────────────────────────────────────────── */}
       {topMovies.length > 0 && (
         <section className={styles.panel}>
-          <h2 className={styles.sectionTitle}>
-            <span className={styles.sectionIcon}>🎬</span>
+          <h2 className={styles['section-title']}>
+            <span className={styles['section-icon']}>🎬</span>
             Top Movies
           </h2>
-          <div className={styles.topContentList}>
+          <div className={styles['top-content-list']}>
             {topMovies.map((movie: MemberContentItem, i: number) => (
               <ContentCard key={movie.contentId || i} item={movie} type="movie" />
             ))}
@@ -413,11 +413,11 @@ function OverviewTab({ data }: OverviewTabProps) {
       {/* ── Top Games ──────────────────────────────────────────── */}
       {topGames.length > 0 && (
         <section className={styles.panel}>
-          <h2 className={styles.sectionTitle}>
-            <span className={styles.sectionIcon}>🎮</span>
+          <h2 className={styles['section-title']}>
+            <span className={styles['section-icon']}>🎮</span>
             Top Games
           </h2>
-          <div className={styles.topContentList}>
+          <div className={styles['top-content-list']}>
             {topGames.map((game: MemberContentItem, i: number) => (
               <ContentCard key={game.contentId || i} item={game} type="game" />
             ))}
@@ -428,11 +428,11 @@ function OverviewTab({ data }: OverviewTabProps) {
       {/* ── Top Audio ──────────────────────────────────────────── */}
       {topAudio.length > 0 && (
         <section className={styles.panel}>
-          <h2 className={styles.sectionTitle}>
-            <span className={styles.sectionIcon}>🎵</span>
+          <h2 className={styles['section-title']}>
+            <span className={styles['section-icon']}>🎵</span>
             Top Audio
           </h2>
-          <div className={styles.topContentList}>
+          <div className={styles['top-content-list']}>
             {topAudio.map((audio: MemberContentItem, i: number) => (
               <ContentCard key={audio.contentId || i} item={audio} type="audio" />
             ))}
@@ -443,19 +443,19 @@ function OverviewTab({ data }: OverviewTabProps) {
       {/* ── Fans ───────────────────────────────────────────────── */}
       {fans && fans.length > 0 && (
         <section className={styles.panel}>
-          <h2 className={styles.sectionTitle}>
-            <span className={styles.sectionIcon}>♥</span>
+          <h2 className={styles['section-title']}>
+            <span className={styles['section-icon']}>♥</span>
             Fans
-            <span className={styles.panelCount}>{fans.length}</span>
+            <span className={styles['panel-count']}>{fans.length}</span>
           </h2>
-          <div className={styles.fansList}>
+          <div className={styles['fans-list']}>
             {fans.slice(0, 50).map((fan: string, i: number) => (
-              <span key={i} className={styles.fanTag}>
+              <span key={i} className={styles['fan-tag']}>
                 {fan}
               </span>
             ))}
             {fans.length > 50 && (
-              <span className={styles.fanMore}>+{fans.length - 50} more</span>
+              <span className={styles['fan-more']}>+{fans.length - 50} more</span>
             )}
           </div>
         </section>
@@ -464,20 +464,20 @@ function OverviewTab({ data }: OverviewTabProps) {
       {/* ── CC Threads Started ─────────────────────────────────── */}
       {ccThreads && ccThreads.length > 0 && (
         <section className={styles.panel}>
-          <h2 className={styles.sectionTitle}>
-            <span className={styles.sectionIcon}>📌</span>
+          <h2 className={styles['section-title']}>
+            <span className={styles['section-icon']}>📌</span>
             Forum Threads Started
-            <span className={styles.panelCount}>{ccThreads.length}</span>
+            <span className={styles['panel-count']}>{ccThreads.length}</span>
           </h2>
-          <ul className={styles.threadList}>
+          <ul className={styles['thread-list']}>
             {ccThreads.slice(0, 20).map((forumThread: ForumThread, i: number) => (
-              <li key={forumThread.topicId || i} className={styles.threadItem}>
-                <span className={styles.threadTitle}>{forumThread.title}</span>
-                <span className={styles.threadMeta}>
+              <li key={forumThread.topicId || i} className={styles['thread-item']}>
+                <span className={styles['thread-title']}>{forumThread.title}</span>
+                <span className={styles['thread-meta']}>
                   {forumThread.totalPosts != null && <span>{forumThread.totalPosts} replies</span>}
                   {forumThread.date && <span>{formatDate(forumThread.date)}</span>}
                   {forumThread.boardName && (
-                    <span className={styles.threadBoard}>{forumThread.boardName}</span>
+                    <span className={styles['thread-board']}>{forumThread.boardName}</span>
                   )}
                 </span>
               </li>
@@ -489,12 +489,12 @@ function OverviewTab({ data }: OverviewTabProps) {
       {/* ── Recent CC Posts ─────────────────────────────────────── */}
       {ccPosts && ccPosts.length > 0 && (
         <section className={styles.panel}>
-          <h2 className={styles.sectionTitle}>
-            <span className={styles.sectionIcon}>💬</span>
+          <h2 className={styles['section-title']}>
+            <span className={styles['section-icon']}>💬</span>
             Recent Forum Posts
-            <span className={styles.panelCount}>{ccPosts.length}</span>
+            <span className={styles['panel-count']}>{ccPosts.length}</span>
           </h2>
-          <div className={styles.postsList}>
+          <div className={styles['posts-list']}>
             {ccPosts.slice(0, 10).map((post: ForumPost, i: number) => (
               <PostItem key={post.messageId || i} post={post} />
             ))}
@@ -505,11 +505,11 @@ function OverviewTab({ data }: OverviewTabProps) {
       {/* ── External Links ─────────────────────────────────────── */}
       {newgroundsStats?.links && newgroundsStats.links.length > 0 && (
         <section className={styles.panel}>
-          <h2 className={styles.sectionTitle}>
-            <span className={styles.sectionIcon}>🔗</span>
+          <h2 className={styles['section-title']}>
+            <span className={styles['section-icon']}>🔗</span>
             Links
           </h2>
-          <div className={styles.linksList}>
+          <div className={styles['links-list']}>
             {newgroundsStats.links.map((link: string | { url?: string; label?: string; name?: string }, i: number) => {
               const url = typeof link === "string" ? link : link.url || "";
               const label = typeof link === "string" ? link : link.label || link.name || "";
@@ -519,7 +519,7 @@ function OverviewTab({ data }: OverviewTabProps) {
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={styles.linkItem}
+                  className={styles['link-item']}
                 >
                   {label || (() => {
                     try {
@@ -555,25 +555,25 @@ function MarkdownRenderer({ markdown }: MarkdownRendererProps) {
 
     if (line.startsWith("# ")) {
       elements.push(
-        <h1 key={i} className={styles.mdH1}>
+        <h1 key={i} className={styles['md-h1']}>
           {line.slice(2)}
         </h1>,
       );
     } else if (line.startsWith("## ")) {
       elements.push(
-        <h2 key={i} className={styles.mdH2}>
+        <h2 key={i} className={styles['md-h2']}>
           {line.slice(3)}
         </h2>,
       );
     } else if (line.startsWith("### ")) {
       elements.push(
-        <h3 key={i} className={styles.mdH3}>
+        <h3 key={i} className={styles['md-h3']}>
           {line.slice(4)}
         </h3>,
       );
     } else if (line.startsWith("> ")) {
       elements.push(
-        <blockquote key={i} className={styles.mdBlockquote}>
+        <blockquote key={i} className={styles['md-blockquote']}>
           {line.slice(2)}
         </blockquote>,
       );
@@ -590,7 +590,7 @@ function MarkdownRenderer({ markdown }: MarkdownRendererProps) {
         j++;
       }
       elements.push(
-        <ul key={i} className={styles.mdList}>
+        <ul key={i} className={styles['md-list']}>
           {listItems.map((item, index) => (
             <li key={index}>{item}</li>
           ))}
@@ -602,7 +602,7 @@ function MarkdownRenderer({ markdown }: MarkdownRendererProps) {
       // skip
     } else {
       elements.push(
-        <p key={i} className={styles.mdParagraph}>
+        <p key={i} className={styles['md-paragraph']}>
           {line}
         </p>,
       );
@@ -610,7 +610,7 @@ function MarkdownRenderer({ markdown }: MarkdownRendererProps) {
     i++;
   }
 
-  return <div className={styles.mdWrap}>{elements}</div>;
+  return <div className={styles['md-wrap']}>{elements}</div>;
 }
 
 // ═════════════════════════════════════════════════════════════════
@@ -665,13 +665,13 @@ export default function MemberProfileComponent({ username }: MemberProfileCompon
   // ── Loading ────────────────────────────────────────────────────
   if (loading) {
     return (
-      <div className={styles.profileWrap}>
+      <div className={styles['profile-wrap']}>
         <div className={styles.skeleton}>
-          <div className={styles.skeletonAvatar} />
-          <div className={styles.skeletonLines}>
-            <div className={styles.skeletonLine} style={{ width: "40%" }} />
-            <div className={styles.skeletonLine} style={{ width: "60%" }} />
-            <div className={styles.skeletonLine} style={{ width: "30%" }} />
+          <div className={styles['skeleton-avatar']} />
+          <div className={styles['skeleton-lines']}>
+            <div className={styles['skeleton-line']} style={{ width: "40%" }} />
+            <div className={styles['skeleton-line']} style={{ width: "60%" }} />
+            <div className={styles['skeleton-line']} style={{ width: "30%" }} />
           </div>
         </div>
       </div>
@@ -681,11 +681,11 @@ export default function MemberProfileComponent({ username }: MemberProfileCompon
   // ── Error ──────────────────────────────────────────────────────
   if (error || !data?.member) {
     return (
-      <div className={styles.profileWrap}>
-        <div className={styles.errorCard}>
-          <span className={styles.errorIcon}>⚠️</span>
-          <p className={styles.errorText}>{error || "Member not found"}</p>
-          <Link href="/clocks" className={styles.backLink}>
+      <div className={styles['profile-wrap']}>
+        <div className={styles['error-card']}>
+          <span className={styles['error-icon']}>⚠️</span>
+          <p className={styles['error-text']}>{error || "Member not found"}</p>
+          <Link href="/clocks" className={styles['back-link']}>
             ← Back to Members
           </Link>
         </div>
@@ -717,51 +717,51 @@ export default function MemberProfileComponent({ username }: MemberProfileCompon
   });
 
   return (
-    <div className={styles.profileWrap}>
+    <div className={styles['profile-wrap']}>
       {/* ── Header ────────────────────────────────────────────── */}
       <header className={styles.header}>
-        <div className={styles.headerBg} aria-hidden="true" />
+        <div className={styles['header-bg']} aria-hidden="true" />
         <div className={styles.identity}>
-          <div className={styles.avatarLarge}>
+          <div className={styles['avatar-large']}>
             {avatarUrl ? (
               <img
                 src={avatarUrl}
                 alt={`${member.username} avatar`}
-                className={styles.avatarImg}
+                className={styles['avatar-img']}
               />
             ) : (
-              <span className={styles.avatarFallback}>{initials}</span>
+              <span className={styles['avatar-fallback']}>{initials}</span>
             )}
           </div>
-          <div className={styles.identityInfo}>
+          <div className={styles['identity-info']}>
             <h1 className={styles.username}>{member.username}</h1>
             <div className={styles.badges}>
               {clockCrewForum?.customTitle && (
-                <span className={styles.customTitle}>{clockCrewForum.customTitle}</span>
+                <span className={styles['custom-title']}>{clockCrewForum.customTitle}</span>
               )}
               {clockCrewForum?.group && (
-                <span className={styles.groupBadge}>{clockCrewForum.group}</span>
+                <span className={styles['group-badge']}>{clockCrewForum.group}</span>
               )}
               {clockCrewForum?.position && (
-                <span className={styles.posBadge}>{clockCrewForum.position}</span>
+                <span className={styles['pos-badge']}>{clockCrewForum.position}</span>
               )}
               {newgroundsStats?.rank && (
-                <span className={styles.ngRankBadge}>{newgroundsStats.rank}</span>
+                <span className={styles['ng-rank-badge']}>{newgroundsStats.rank}</span>
               )}
               {newgroundsStats?.level != null && (
-                <span className={styles.levelBadge}>Lvl {newgroundsStats.level}</span>
+                <span className={styles['level-badge']}>Lvl {newgroundsStats.level}</span>
               )}
               {newgroundsStats?.supporter && (
-                <span className={styles.supporterBadge}>⭐ Supporter</span>
+                <span className={styles['supporter-badge']}>⭐ Supporter</span>
               )}
             </div>
-            <div className={styles.headerActions}>
+            <div className={styles['header-actions']}>
               {newgroundsStats?.profileUrl && (
                 <a
                   href={newgroundsStats.profileUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={styles.headerButton}
+                  className={styles['header-button']}
                 >
                   🌐 Newgrounds
                 </a>
@@ -771,7 +771,7 @@ export default function MemberProfileComponent({ username }: MemberProfileCompon
                   href={clockCrewForum.profileUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={styles.headerButton}
+                  className={styles['header-button']}
                 >
                   🕰️ Forum
                 </a>
@@ -782,7 +782,7 @@ export default function MemberProfileComponent({ username }: MemberProfileCompon
       </header>
 
       {/* ── Quick Stats Bar ───────────────────────────────────── */}
-      <section className={styles.quickStats}>
+      <section className={styles['quick-stats']}>
         {clockCrewForum && clockCrewForum.postCount > 0 && (
           <StatCard
             label="Forum Posts"
@@ -812,29 +812,29 @@ export default function MemberProfileComponent({ username }: MemberProfileCompon
 
       {/* ── Tabs ──────────────────────────────────────────────── */}
       {visibleTabs.length > 1 && (
-        <nav className={styles.tabBar}>
+        <nav className={styles['tab-bar']}>
           {visibleTabs.map((tab) => (
             <button
               key={tab.key}
-              className={`${styles.tab} ${activeTab === tab.key ? styles.tabActive : ""}`}
+              className={`${styles.tab} ${activeTab === tab.key ? styles['tab-active'] : ""}`}
               onClick={() => setActiveTab(tab.key)}
             >
-              <span className={styles.tabIcon}>{tab.icon}</span>
+              <span className={styles['tab-icon']}>{tab.icon}</span>
               {tab.label}
               {tab.key === "movies" && movies && movies.length > 0 && (
-                <span className={styles.tabCount}>{movies.length}</span>
+                <span className={styles['tab-count']}>{movies.length}</span>
               )}
               {tab.key === "games" && games && games.length > 0 && (
-                <span className={styles.tabCount}>{games.length}</span>
+                <span className={styles['tab-count']}>{games.length}</span>
               )}
               {tab.key === "audio" && audio && audio.length > 0 && (
-                <span className={styles.tabCount}>{audio.length}</span>
+                <span className={styles['tab-count']}>{audio.length}</span>
               )}
               {tab.key === "art" && art && art.length > 0 && (
-                <span className={styles.tabCount}>{art.length}</span>
+                <span className={styles['tab-count']}>{art.length}</span>
               )}
               {tab.key === "reviews" && reviews && reviews.length > 0 && (
-                <span className={styles.tabCount}>{reviews.length}</span>
+                <span className={styles['tab-count']}>{reviews.length}</span>
               )}
             </button>
           ))}
@@ -842,7 +842,7 @@ export default function MemberProfileComponent({ username }: MemberProfileCompon
       )}
 
       {/* ── Tab Content ───────────────────────────────────────── */}
-      <div className={styles.tabContent}>
+      <div className={styles['tab-content']}>
         {activeTab === "overview" && <OverviewTab data={data} />}
         {activeTab === "movies" && (
           <ContentSection items={movies} type="movie" emptyLabel="movies" />
@@ -857,17 +857,17 @@ export default function MemberProfileComponent({ username }: MemberProfileCompon
           <ContentSection items={art} type="art" emptyLabel="art" />
         )}
         {activeTab === "posts" && (
-          <div className={styles.postsTab}>
+          <div className={styles['posts-tab']}>
             {data.ccPosts && data.ccPosts.length > 0 && (
               <section className={styles.panel}>
-                <h2 className={styles.sectionTitle}>
-                  <span className={styles.sectionIcon}>🕰️</span>
+                <h2 className={styles['section-title']}>
+                  <span className={styles['section-icon']}>🕰️</span>
                   ClockCrew Forum Posts
-                  <span className={styles.panelCount}>
+                  <span className={styles['panel-count']}>
                     {data.ccPosts.length}
                   </span>
                 </h2>
-                <div className={styles.postsList}>
+                <div className={styles['posts-list']}>
                   {data.ccPosts.map((post: ForumPost, i: number) => (
                     <PostItem key={post.messageId || i} post={post} />
                   ))}
@@ -876,14 +876,14 @@ export default function MemberProfileComponent({ username }: MemberProfileCompon
             )}
             {data.ngPosts && data.ngPosts.length > 0 && (
               <section className={styles.panel}>
-                <h2 className={styles.sectionTitle}>
-                  <span className={styles.sectionIcon}>🟠</span>
+                <h2 className={styles['section-title']}>
+                  <span className={styles['section-icon']}>🟠</span>
                   Newgrounds BBS Posts
-                  <span className={styles.panelCount}>
+                  <span className={styles['panel-count']}>
                     {data.ngPosts.length}
                   </span>
                 </h2>
-                <div className={styles.postsList}>
+                <div className={styles['posts-list']}>
                   {data.ngPosts.map((post: ForumPost, i: number) => (
                     <PostItem key={post.postId || i} post={post} showThread={false} />
                   ))}
@@ -893,7 +893,7 @@ export default function MemberProfileComponent({ username }: MemberProfileCompon
           </div>
         )}
         {activeTab === "reviews" && (
-          <div className={styles.reviewsList}>
+          <div className={styles['reviews-list']}>
             {reviews?.map((review: Review, i: number) => (
               <ReviewItem key={review.reviewId || i} review={review} />
             ))}

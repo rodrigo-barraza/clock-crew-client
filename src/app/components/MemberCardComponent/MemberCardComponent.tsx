@@ -35,16 +35,16 @@ export default function MemberCardComponent({ user, index = 0 }: MemberCardCompo
       style={{ animationDelay: `${Math.min(index * 30, 600)}ms` }}
     >
       {/* ── Avatar ──────────────────────────────────────────────── */}
-      <div className={styles.avatarWrap}>
+      <div className={styles['avatar-wrap']}>
         {user.avatarUrl ? (
           <img
             src={user.avatarUrl}
             alt={`${name} avatar`}
-            className={styles.avatarImg}
+            className={styles['avatar-img']}
             loading="lazy"
           />
         ) : (
-          <span className={styles.avatarFallback}>{initials}</span>
+          <span className={styles['avatar-fallback']}>{initials}</span>
         )}
       </div>
 
@@ -52,25 +52,25 @@ export default function MemberCardComponent({ user, index = 0 }: MemberCardCompo
       <div className={styles.info}>
         <span className={styles.username}>{name}</span>
         {user.customTitle && (
-          <span className={styles.customTitle}>{user.customTitle}</span>
+          <span className={styles['custom-title']}>{user.customTitle}</span>
         )}
         <div className={styles.meta}>
           {user.postCount != null && (
-            <span className={styles.metaItem}>
-              <span className={styles.metaValue}>
+            <span className={styles['meta-item']}>
+              <span className={styles['meta-value']}>
                 {user.postCount.toLocaleString()}
               </span>{" "}
               posts
             </span>
           )}
           {joinYear && (
-            <span className={styles.metaItem}>Joined {joinYear}</span>
+            <span className={styles['meta-item']}>Joined {joinYear}</span>
           )}
         </div>
       </div>
 
       {/* ── Hover glow ──────────────────────────────────────────── */}
-      <div className={styles.glowEdge} aria-hidden="true" />
+      <div className={styles['glow-edge']} aria-hidden="true" />
     </Link>
   );
 }

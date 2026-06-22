@@ -1,6 +1,6 @@
 /* ── NavBarComponent ──────────────────────────────────────────── */
 
-.navigationBar {
+.navigation-bar {
   position: fixed;
   top: 0;
   left: 0;
@@ -17,29 +17,29 @@
 
 /* ── Home (transparent over hero) ────────────────────────────── */
 
-.navigationHome {
+.navigation-home {
   background: transparent;
 }
 
-.navigationHome.navigationScrolled {
-  background: rgba(10, 10, 15, 0.82);
+.navigation-home.navigation-scrolled {
+  background: oklch(0.147 0.0132 294.4 / 0.82);
   backdrop-filter: blur(16px) saturate(1.4);
   -webkit-backdrop-filter: blur(16px) saturate(1.4);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04);
+  box-shadow: 0 1px 0 oklch(1 0 0 / 0.04);
 }
 
 /* ── Inner pages (always solid) ──────────────────────────────── */
 
-.navigationInner {
-  background: rgba(10, 10, 15, 0.92);
+.navigation-inner {
+  background: oklch(0.147 0.0132 294.4 / 0.92);
   backdrop-filter: blur(16px) saturate(1.4);
   -webkit-backdrop-filter: blur(16px) saturate(1.4);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04);
+  box-shadow: 0 1px 0 oklch(1 0 0 / 0.04);
 }
 
 /* ── Inner wrap ──────────────────────────────────────────────── */
 
-.navigationInnerWrapper {
+.navigation-inner-wrapper {
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
@@ -52,7 +52,7 @@
 
 /* ── Logo ─────────────────────────────────────────────────────── */
 
-.logoLink {
+.logo-link {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -60,13 +60,13 @@
   flex-shrink: 0;
 }
 
-.logoGif {
+.logo-gif {
   height: 28px;
   width: auto;
   object-fit: contain;
 }
 
-.logoText {
+.logo-text {
   font-size: 0.9375rem;
   font-weight: 600;
   color: var(--text-primary);
@@ -76,7 +76,7 @@
 
 /* ── Links ────────────────────────────────────────────────────── */
 
-.linkList {
+.link-list {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -100,11 +100,11 @@
 
   &:hover {
     color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.05);
+    background: oklch(1 0 0 / 0.05);
   }
 }
 
-.linkActive {
+.link-active {
   color: var(--accent-primary);
 
   &:hover {
@@ -116,11 +116,11 @@
 /* ── Responsive ──────────────────────────────────────────────── */
 
 @media (max-width: 600px) {
-  .logoText {
+  .logo-text {
     display: none;
   }
 
-  .navigationInnerWrapper {
+  .navigation-inner-wrapper {
     padding: 0 16px;
   }
 

@@ -126,11 +126,11 @@ export default function MembersDirectory() {
           placeholder="Search members…"
           leadingIcon={<Search size={14} />}
         />
-        <div className={styles.sortGroup}>
+        <div className={styles['sort-group']}>
           {SORT_OPTIONS.map((opt) => (
             <button
               key={opt.key}
-              className={`${styles.sortButton} ${sort === opt.key ? styles.sortBtnActive : ""}`}
+              className={`${styles['sort-button']} ${sort === opt.key ? styles['sort-btn-active'] : ""}`}
               onClick={() => setSort(opt.key)}
             >
               {opt.label}
@@ -149,12 +149,12 @@ export default function MembersDirectory() {
 
       {/* ── Alphabetical grouped view ───────────────────────────── */}
       {!loading && grouped && (
-        <div className={styles.groupedList}>
+        <div className={styles['grouped-list']}>
           {Object.entries(grouped)
             .sort(([a], [b]) => a.localeCompare(b))
             .map(([letter, members]) => (
               <div key={letter} id={`letter-${letter}`}>
-                <h2 className={styles.letterHeading}>{letter}</h2>
+                <h2 className={styles['letter-heading']}>{letter}</h2>
                 <div className={styles.grid}>
                   {members.map((user, i) => (
                     <MemberCardComponent

@@ -93,8 +93,8 @@ function ScoreDisplay({ score }: ScoreDisplayProps) {
   if (score == null) return null;
   const rounded = Math.round(score * 10) / 10;
   return (
-    <span className={styles.itemScore}>
-      <span className={styles.scoreStar}>★</span>
+    <span className={styles['item-score']}>
+      <span className={styles['score-star']}>★</span>
       {rounded.toFixed(1)}
     </span>
   );
@@ -122,32 +122,32 @@ interface TopSubmissionsSectionProps {
 function TopSubmissionsSection({ title, emoji, items }: TopSubmissionsSectionProps) {
   if (!items?.length) return null;
   return (
-    <div className={styles.topSubmissions}>
-      <div className={styles.topSubTitle}>
+    <div className={styles['top-submissions']}>
+      <div className={styles['top-sub-title']}>
         {emoji} Top {title}
       </div>
-      <div className={styles.topSubList}>
+      <div className={styles['top-sub-list']}>
         {items.map((sub: MemberContentItem, i: number) => (
           <a
             key={sub.contentId || sub._id || i}
             href={sub.url}
             target="_blank"
             rel="noopener noreferrer"
-            className={styles.topSubItem}
+            className={styles['top-sub-item']}
           >
             {sub.thumbnailUrl && (
               <img
                 src={sub.thumbnailUrl}
                 alt={sub.title}
-                className={styles.topSubThumb}
+                className={styles['top-sub-thumb']}
                 loading="lazy"
               />
             )}
-            <div className={styles.topSubInfo}>
-              <span className={styles.topSubName}>{sub.title}</span>
+            <div className={styles['top-sub-info']}>
+              <span className={styles['top-sub-name']}>{sub.title}</span>
             </div>
             {sub.score != null && (
-              <span className={styles.topSubScore}>
+              <span className={styles['top-sub-score']}>
                 ★ {(Math.round(sub.score * 10) / 10).toFixed(1)}
               </span>
             )}
@@ -236,42 +236,42 @@ function ContentDetailModal({ item, onClose }: ContentDetailModalProps) {
   const meta = getTypeMeta(item?.contentType);
 
   return (
-    <div className={styles.modalOverlay} onClick={onClose}>
+    <div className={styles['modal-overlay']} onClick={onClose}>
       <div
-        className={styles.modalCard}
+        className={styles['modal-card']}
         onClick={(event: React.MouseEvent) => event.stopPropagation()}
       >
         <CloseButtonComponent onClick={onClose} />
 
         {/* ══ CONTENT HERO — the clicked content ══════════ */}
         <div
-          className={styles.contentHero}
+          className={styles['content-hero']}
           style={
             item?.thumbnailUrl
               ? { backgroundImage: `url(${item.thumbnailUrl})` }
               : undefined
           }
         >
-          <div className={styles.contentHeroOverlay} />
-          <div className={styles.contentHeroBody}>
-            <span className={`${styles.heroBadge} ${styles[meta.badgeClass]}`}>
+          <div className={styles['content-hero-overlay']} />
+          <div className={styles['content-hero-body']}>
+            <span className={`${styles['hero-badge']} ${styles[meta.badgeClass]}`}>
               {meta.emoji} {meta.label}
             </span>
-            <h2 className={styles.contentHeroTitle}>{item?.title}</h2>
-            <div className={styles.contentHeroMeta}>
-              <span className={styles.contentHeroAuthor}>
+            <h2 className={styles['content-hero-title']}>{item?.title}</h2>
+            <div className={styles['content-hero-meta']}>
+              <span className={styles['content-hero-author']}>
                 by {item?.usernameLower}
               </span>
               {item?.score != null && (
-                <span className={styles.contentHeroScore}>
+                <span className={styles['content-hero-score']}>
                   ★ {item.score.toFixed(1)} / 5.0
                 </span>
               )}
             </div>
             {item?.score != null && (
-              <div className={styles.scoreBar}>
+              <div className={styles['score-bar']}>
                 <div
-                  className={styles.scoreBarFill}
+                  className={styles['score-bar-fill']}
                   style={{ width: `${(item.score / 5) * 100}%` }}
                 />
               </div>
@@ -280,7 +280,7 @@ function ContentDetailModal({ item, onClose }: ContentDetailModalProps) {
               href={item?.url}
               target="_blank"
               rel="noopener noreferrer"
-              className={`${styles.actionButton} ${styles.actionHero}`}
+              className={`${styles['action-button']} ${styles['action-hero']}`}
             >
               {meta.action}
             </a>
@@ -288,62 +288,62 @@ function ContentDetailModal({ item, onClose }: ContentDetailModalProps) {
         </div>
 
         {/* ══ CREATOR PROFILE ════════════════════════════════ */}
-        <div className={styles.creatorDivider}>
-          <span className={styles.creatorDividerText}>Created by</span>
+        <div className={styles['creator-divider']}>
+          <span className={styles['creator-divider-text']}>Created by</span>
         </div>
 
         {loading ? (
-          <div className={styles.isLoadingState} style={{ minHeight: 120 }}>
+          <div className={styles['is-loading-state']} style={{ minHeight: 120 }}>
             <LoadingIndicatorComponent size={32} />
           </div>
         ) : !profile ? (
           <EmptyStateComponent subtitle="Profile not found" />
         ) : (
           <>
-            <div className={styles.creatorHeader}>
+            <div className={styles['creator-header']}>
               <div
-                className={styles.cardAvatarWrap}
+                className={styles['card-avatar-wrap']}
                 style={{ margin: 0, width: 56, height: 56 }}
               >
                 {profile.avatarUrl ? (
                   <img
                     src={profile.avatarUrl}
                     alt={profile.username}
-                    className={styles.cardAvatar}
+                    className={styles['card-avatar']}
                   />
                 ) : (
-                  <div className={styles.cardAvatarFallback}>
+                  <div className={styles['card-avatar-fallback']}>
                     {(profile.username || "?")[0].toUpperCase()}
                   </div>
                 )}
               </div>
               <div>
-                <span className={styles.cardUsername}>{profile.username}</span>
-                <div className={styles.cardRankRow}>
+                <span className={styles['card-username']}>{profile.username}</span>
+                <div className={styles['card-rank-row']}>
                   {profile.rank && (
                     <span
-                      className={`${styles.cardRankBadge} ${styles.ngBadge}`}
+                      className={`${styles['card-rank-badge']} ${styles['ng-badge']}`}
                     >
                       {profile.rank}
                     </span>
                   )}
                   {profile.level != null && (
                     <span
-                      className={`${styles.cardRankBadge} ${styles.levelBadge}`}
+                      className={`${styles['card-rank-badge']} ${styles['level-badge']}`}
                     >
                       Lvl {profile.level}
                     </span>
                   )}
                   {profile.supporter && (
                     <span
-                      className={`${styles.cardRankBadge} ${styles.supporterBadge}`}
+                      className={`${styles['card-rank-badge']} ${styles['supporter-badge']}`}
                     >
                       ⭐ Supporter
                     </span>
                   )}
                   {ccUser?.position && (
                     <span
-                      className={`${styles.cardRankBadge} ${styles.ccBadge}`}
+                      className={`${styles['card-rank-badge']} ${styles['cc-badge']}`}
                     >
                       {ccUser.position}
                     </span>
@@ -353,140 +353,140 @@ function ContentDetailModal({ item, onClose }: ContentDetailModalProps) {
             </div>
 
             {profile.description && (
-              <p className={styles.cardDescription}>{profile.description}</p>
+              <p className={styles['card-description']}>{profile.description}</p>
             )}
 
-            <div className={styles.cardPersonalInfo}>
+            <div className={styles['card-personal-info']}>
               {profile.joinDate && (
-                <span className={styles.personalInfoItem}>
-                  <span className={styles.personalInfoIcon}>📅</span> Joined{" "}
-                  <span className={styles.personalInfoValue}>
+                <span className={styles['personal-info-item']}>
+                  <span className={styles['personal-info-icon']}>📅</span> Joined{" "}
+                  <span className={styles['personal-info-value']}>
                     {profile.joinDate}
                   </span>
                 </span>
               )}
               {profile.location && (
-                <span className={styles.personalInfoItem}>
-                  <span className={styles.personalInfoIcon}>📍</span>{" "}
-                  <span className={styles.personalInfoValue}>
+                <span className={styles['personal-info-item']}>
+                  <span className={styles['personal-info-icon']}>📍</span>{" "}
+                  <span className={styles['personal-info-value']}>
                     {profile.location}
                   </span>
                 </span>
               )}
               {profile.age != null && (
-                <span className={styles.personalInfoItem}>
-                  <span className={styles.personalInfoIcon}>🎂</span>{" "}
-                  <span className={styles.personalInfoValue}>
+                <span className={styles['personal-info-item']}>
+                  <span className={styles['personal-info-icon']}>🎂</span>{" "}
+                  <span className={styles['personal-info-value']}>
                     Age {profile.age}
                   </span>
                 </span>
               )}
               {profile.sex && (
-                <span className={styles.personalInfoItem}>
-                  <span className={styles.personalInfoIcon}>👤</span>{" "}
-                  <span className={styles.personalInfoValue}>
+                <span className={styles['personal-info-item']}>
+                  <span className={styles['personal-info-icon']}>👤</span>{" "}
+                  <span className={styles['personal-info-value']}>
                     {profile.sex}
                   </span>
                 </span>
               )}
               {profile.job && (
-                <span className={styles.personalInfoItem}>
-                  <span className={styles.personalInfoIcon}>💼</span>{" "}
-                  <span className={styles.personalInfoValue}>
+                <span className={styles['personal-info-item']}>
+                  <span className={styles['personal-info-icon']}>💼</span>{" "}
+                  <span className={styles['personal-info-value']}>
                     {profile.job}
                   </span>
                 </span>
               )}
               {profile.globalRank != null && (
-                <span className={styles.personalInfoItem}>
-                  <span className={styles.personalInfoIcon}>🌍</span> Rank #
-                  <span className={styles.personalInfoValue}>
+                <span className={styles['personal-info-item']}>
+                  <span className={styles['personal-info-icon']}>🌍</span> Rank #
+                  <span className={styles['personal-info-value']}>
                     {formatNumber(profile.globalRank)}
                   </span>
                 </span>
               )}
               {profile.expPoints && (
-                <span className={styles.personalInfoItem}>
-                  <span className={styles.personalInfoIcon}>✨</span> EXP{" "}
-                  <span className={styles.personalInfoValue}>
+                <span className={styles['personal-info-item']}>
+                  <span className={styles['personal-info-icon']}>✨</span> EXP{" "}
+                  <span className={styles['personal-info-value']}>
                     {profile.expPoints}
                   </span>
                 </span>
               )}
               {profile.votePower && (
-                <span className={styles.personalInfoItem}>
-                  <span className={styles.personalInfoIcon}>⚡</span>{" "}
-                  <span className={styles.personalInfoValue}>
+                <span className={styles['personal-info-item']}>
+                  <span className={styles['personal-info-icon']}>⚡</span>{" "}
+                  <span className={styles['personal-info-value']}>
                     {profile.votePower}
                   </span>
                 </span>
               )}
             </div>
 
-            <div className={styles.statsGrid}>
-              <div className={styles.statItem}>
-                <span className={styles.statValue}>
+            <div className={styles['stats-grid']}>
+              <div className={styles['stat-item']}>
+                <span className={styles['stat-value']}>
                   {formatNumber(profile.fans)}
                 </span>
-                <span className={styles.statLabel}>Fans</span>
+                <span className={styles['stat-label']}>Fans</span>
               </div>
-              <div className={styles.statItem}>
-                <span className={styles.statValue}>
+              <div className={styles['stat-item']}>
+                <span className={styles['stat-value']}>
                   {formatNumber(profile.blams)}
                 </span>
-                <span className={styles.statLabel}>Blams</span>
+                <span className={styles['stat-label']}>Blams</span>
               </div>
-              <div className={styles.statItem}>
-                <span className={styles.statValue}>
+              <div className={styles['stat-item']}>
+                <span className={styles['stat-value']}>
                   {formatNumber(profile.saves)}
                 </span>
-                <span className={styles.statLabel}>Saves</span>
+                <span className={styles['stat-label']}>Saves</span>
               </div>
-              <div className={styles.statItem}>
-                <span className={styles.statValue}>
+              <div className={styles['stat-item']}>
+                <span className={styles['stat-value']}>
                   {formatNumber(profile.medals)}
                 </span>
-                <span className={styles.statLabel}>Medals</span>
+                <span className={styles['stat-label']}>Medals</span>
               </div>
-              <div className={styles.statItem}>
-                <span className={styles.statValue}>
+              <div className={styles['stat-item']}>
+                <span className={styles['stat-value']}>
                   {formatNumber(profile.trophies)}
                 </span>
-                <span className={styles.statLabel}>Trophies</span>
+                <span className={styles['stat-label']}>Trophies</span>
               </div>
               {profile.expRank != null && (
-                <div className={styles.statItem}>
-                  <span className={styles.statValue}>
+                <div className={styles['stat-item']}>
+                  <span className={styles['stat-value']}>
                     #{formatNumber(profile.expRank)}
                   </span>
-                  <span className={styles.statLabel}>EXP Rank</span>
+                  <span className={styles['stat-label']}>EXP Rank</span>
                 </div>
               )}
             </div>
 
-            <div className={styles.contentCounts}>
+            <div className={styles['content-counts']}>
               {profile.movieCount > 0 && (
-                <span className={styles.contentPill}>
-                  <span className={styles.contentPillIcon}>🎬</span>
-                  <span className={styles.contentPillCount}>
+                <span className={styles['content-pill']}>
+                  <span className={styles['content-pill-icon']}>🎬</span>
+                  <span className={styles['content-pill-count']}>
                     {profile.movieCount}
                   </span>{" "}
                   Movies
                 </span>
               )}
               {profile.gameCount > 0 && (
-                <span className={styles.contentPill}>
-                  <span className={styles.contentPillIcon}>🎮</span>
-                  <span className={styles.contentPillCount}>
+                <span className={styles['content-pill']}>
+                  <span className={styles['content-pill-icon']}>🎮</span>
+                  <span className={styles['content-pill-count']}>
                     {profile.gameCount}
                   </span>{" "}
                   Games
                 </span>
               )}
               {profile.audioCount > 0 && (
-                <span className={styles.contentPill}>
-                  <span className={styles.contentPillIcon}>🎵</span>
-                  <span className={styles.contentPillCount}>
+                <span className={styles['content-pill']}>
+                  <span className={styles['content-pill-icon']}>🎵</span>
+                  <span className={styles['content-pill-count']}>
                     {profile.audioCount}
                   </span>{" "}
                   Audio
@@ -494,27 +494,27 @@ function ContentDetailModal({ item, onClose }: ContentDetailModalProps) {
               )}
 
               {profile.reviewCount > 0 && (
-                <span className={styles.contentPill}>
-                  <span className={styles.contentPillIcon}>📝</span>
-                  <span className={styles.contentPillCount}>
+                <span className={styles['content-pill']}>
+                  <span className={styles['content-pill-icon']}>📝</span>
+                  <span className={styles['content-pill-count']}>
                     {profile.reviewCount}
                   </span>{" "}
                   Reviews
                 </span>
               )}
               {profile.postCount > 0 && (
-                <span className={styles.contentPill}>
-                  <span className={styles.contentPillIcon}>💬</span>
-                  <span className={styles.contentPillCount}>
+                <span className={styles['content-pill']}>
+                  <span className={styles['content-pill-icon']}>💬</span>
+                  <span className={styles['content-pill-count']}>
                     {profile.postCount}
                   </span>{" "}
                   Posts
                 </span>
               )}
               {profile.faveCount > 0 && (
-                <span className={styles.contentPill}>
-                  <span className={styles.contentPillIcon}>❤️</span>
-                  <span className={styles.contentPillCount}>
+                <span className={styles['content-pill']}>
+                  <span className={styles['content-pill-icon']}>❤️</span>
+                  <span className={styles['content-pill-count']}>
                     {profile.faveCount}
                   </span>{" "}
                   Faves
@@ -523,40 +523,40 @@ function ContentDetailModal({ item, onClose }: ContentDetailModalProps) {
             </div>
 
             {ccUser && (
-              <div className={styles.ccSection}>
-                <div className={styles.ccSectionTitle}>
+              <div className={styles['cc-section']}>
+                <div className={styles['cc-section-title']}>
                   🕰️ ClockCrew.net Forum
                 </div>
-                <div className={styles.ccRow}>
+                <div className={styles['cc-row']}>
                   {ccUser.avatarUrl && (
                     <img
                       src={ccUser.avatarUrl}
                       alt={ccUser.username}
-                      className={styles.ccAvatar}
+                      className={styles['cc-avatar']}
                     />
                   )}
-                  <div className={styles.ccInfo}>
-                    <span className={styles.ccUsername}>{ccUser.username}</span>
+                  <div className={styles['cc-info']}>
+                    <span className={styles['cc-username']}>{ccUser.username}</span>
                     {ccUser.customTitle && (
-                      <div className={styles.ccCustomTitle}>
+                      <div className={styles['cc-custom-title']}>
                         &ldquo;{ccUser.customTitle}&rdquo;
                       </div>
                     )}
                   </div>
                 </div>
-                <div className={styles.ccStats}>
+                <div className={styles['cc-stats']}>
                   {ccUser.postCount != null && (
-                    <span className={styles.ccStatItem}>
+                    <span className={styles['cc-stat-item']}>
                       Forum Posts:{" "}
-                      <span className={styles.ccStatValue}>
+                      <span className={styles['cc-stat-value']}>
                         {formatNumber(ccUser.postCount)}
                       </span>
                     </span>
                   )}
                   {ccUser.dateRegistered && (
-                    <span className={styles.ccStatItem}>
+                    <span className={styles['cc-stat-item']}>
                       Registered:{" "}
-                      <span className={styles.ccStatValue}>
+                      <span className={styles['cc-stat-value']}>
                         {formatDate(ccUser.dateRegistered)}
                       </span>
                     </span>
@@ -564,8 +564,8 @@ function ContentDetailModal({ item, onClose }: ContentDetailModalProps) {
                 </div>
 
                 {randomPost?.body && (
-                  <blockquote className={styles.ccForumQuote}>
-                    <p className={styles.ccQuoteBody}>
+                  <blockquote className={styles['cc-forum-quote']}>
+                    <p className={styles['cc-quote-body']}>
                       &ldquo;
                       {(() => {
                         const stripped = randomPost.body
@@ -577,15 +577,15 @@ function ContentDetailModal({ item, onClose }: ContentDetailModalProps) {
                       })()}
                       &rdquo;
                     </p>
-                    <footer className={styles.ccQuoteFooter}>
+                    <footer className={styles['cc-quote-footer']}>
                       {randomPost.threadTitle && (
-                        <span className={styles.ccQuoteThread}>
-                          <span className={styles.ccQuoteThreadIcon}>💬</span>
+                        <span className={styles['cc-quote-thread']}>
+                          <span className={styles['cc-quote-thread-icon']}>💬</span>
                           {randomPost.threadTitle}
                         </span>
                       )}
                       {randomPost.date && (
-                        <span className={styles.ccQuoteDate}>
+                        <span className={styles['cc-quote-date']}>
                           {formatDate(randomPost.date)}
                         </span>
                       )}
@@ -611,12 +611,12 @@ function ContentDetailModal({ item, onClose }: ContentDetailModalProps) {
               items={data?.topAudio}
             />
 
-            <div className={styles.cardActions}>
+            <div className={styles['card-actions']}>
               <a
                 href={profile.profileUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`${styles.actionButton} ${styles.actionSecondary}`}
+                className={`${styles['action-button']} ${styles['action-secondary']}`}
               >
                 🌐 NG Profile
               </a>
@@ -625,7 +625,7 @@ function ContentDetailModal({ item, onClose }: ContentDetailModalProps) {
                   href={ccUser.profileUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`${styles.actionButton} ${styles.actionSecondary}`}
+                  className={`${styles['action-button']} ${styles['action-secondary']}`}
                 >
                   🕰️ Forum Profile
                 </a>
@@ -682,20 +682,20 @@ function ProfileDetailModal({ username, onClose }: ProfileDetailModalProps) {
   const randomPost = data?.randomPost;
 
   return (
-    <div className={styles.modalOverlay} onClick={onClose}>
+    <div className={styles['modal-overlay']} onClick={onClose}>
       <div
-        className={styles.modalCard}
+        className={styles['modal-card']}
         onClick={(event: React.MouseEvent) => event.stopPropagation()}
       >
         <CloseButtonComponent onClick={onClose} />
 
         {/* ══ PROFILE BANNER ════════════════════════════════ */}
-        <div className={styles.profileBanner}>
-          <div className={styles.profileBannerGradient} />
+        <div className={styles['profile-banner']}>
+          <div className={styles['profile-banner-gradient']} />
         </div>
 
         {loading ? (
-          <div className={styles.isLoadingState} style={{ minHeight: 200 }}>
+          <div className={styles['is-loading-state']} style={{ minHeight: 200 }}>
             <LoadingIndicatorComponent size={32} />
           </div>
         ) : !profile ? (
@@ -703,49 +703,49 @@ function ProfileDetailModal({ username, onClose }: ProfileDetailModalProps) {
         ) : (
           <>
             {/* ── Avatar + Identity ─────────────────────────── */}
-            <div className={styles.profileIdentity}>
-              <div className={styles.profileAvatarWrap}>
+            <div className={styles['profile-identity']}>
+              <div className={styles['profile-avatar-wrap']}>
                 {profile.avatarUrl ? (
                   <img
                     src={profile.avatarUrl}
                     alt={profile.username}
-                    className={styles.cardAvatar}
+                    className={styles['card-avatar']}
                   />
                 ) : (
-                  <div className={styles.cardAvatarFallback}>
+                  <div className={styles['card-avatar-fallback']}>
                     {(profile.username || "?")[0].toUpperCase()}
                   </div>
                 )}
               </div>
-              <div className={styles.profileNameBlock}>
-                <span className={styles.profileDisplayName}>
+              <div className={styles['profile-name-block']}>
+                <span className={styles['profile-display-name']}>
                   {profile.username}
                 </span>
-                <div className={styles.cardRankRow}>
+                <div className={styles['card-rank-row']}>
                   {profile.rank && (
                     <span
-                      className={`${styles.cardRankBadge} ${styles.ngBadge}`}
+                      className={`${styles['card-rank-badge']} ${styles['ng-badge']}`}
                     >
                       {profile.rank}
                     </span>
                   )}
                   {profile.level != null && (
                     <span
-                      className={`${styles.cardRankBadge} ${styles.levelBadge}`}
+                      className={`${styles['card-rank-badge']} ${styles['level-badge']}`}
                     >
                       Lvl {profile.level}
                     </span>
                   )}
                   {profile.supporter && (
                     <span
-                      className={`${styles.cardRankBadge} ${styles.supporterBadge}`}
+                      className={`${styles['card-rank-badge']} ${styles['supporter-badge']}`}
                     >
                       ⭐ Supporter
                     </span>
                   )}
                   {ccUser?.position && (
                     <span
-                      className={`${styles.cardRankBadge} ${styles.ccBadge}`}
+                      className={`${styles['card-rank-badge']} ${styles['cc-badge']}`}
                     >
                       {ccUser.position}
                     </span>
@@ -755,156 +755,156 @@ function ProfileDetailModal({ username, onClose }: ProfileDetailModalProps) {
             </div>
 
             {profile.description && (
-              <p className={styles.cardDescription}>{profile.description}</p>
+              <p className={styles['card-description']}>{profile.description}</p>
             )}
 
-            <div className={styles.cardPersonalInfo}>
+            <div className={styles['card-personal-info']}>
               {profile.joinDate && (
-                <span className={styles.personalInfoItem}>
-                  <span className={styles.personalInfoIcon}>📅</span> Joined{" "}
-                  <span className={styles.personalInfoValue}>
+                <span className={styles['personal-info-item']}>
+                  <span className={styles['personal-info-icon']}>📅</span> Joined{" "}
+                  <span className={styles['personal-info-value']}>
                     {profile.joinDate}
                   </span>
                 </span>
               )}
               {profile.location && (
-                <span className={styles.personalInfoItem}>
-                  <span className={styles.personalInfoIcon}>📍</span>{" "}
-                  <span className={styles.personalInfoValue}>
+                <span className={styles['personal-info-item']}>
+                  <span className={styles['personal-info-icon']}>📍</span>{" "}
+                  <span className={styles['personal-info-value']}>
                     {profile.location}
                   </span>
                 </span>
               )}
               {profile.age != null && (
-                <span className={styles.personalInfoItem}>
-                  <span className={styles.personalInfoIcon}>🎂</span>{" "}
-                  <span className={styles.personalInfoValue}>
+                <span className={styles['personal-info-item']}>
+                  <span className={styles['personal-info-icon']}>🎂</span>{" "}
+                  <span className={styles['personal-info-value']}>
                     Age {profile.age}
                   </span>
                 </span>
               )}
               {profile.sex && (
-                <span className={styles.personalInfoItem}>
-                  <span className={styles.personalInfoIcon}>👤</span>{" "}
-                  <span className={styles.personalInfoValue}>
+                <span className={styles['personal-info-item']}>
+                  <span className={styles['personal-info-icon']}>👤</span>{" "}
+                  <span className={styles['personal-info-value']}>
                     {profile.sex}
                   </span>
                 </span>
               )}
               {profile.job && (
-                <span className={styles.personalInfoItem}>
-                  <span className={styles.personalInfoIcon}>💼</span>{" "}
-                  <span className={styles.personalInfoValue}>
+                <span className={styles['personal-info-item']}>
+                  <span className={styles['personal-info-icon']}>💼</span>{" "}
+                  <span className={styles['personal-info-value']}>
                     {profile.job}
                   </span>
                 </span>
               )}
               {profile.realName && (
-                <span className={styles.personalInfoItem}>
-                  <span className={styles.personalInfoIcon}>🪪</span>{" "}
-                  <span className={styles.personalInfoValue}>
+                <span className={styles['personal-info-item']}>
+                  <span className={styles['personal-info-icon']}>🪪</span>{" "}
+                  <span className={styles['personal-info-value']}>
                     {profile.realName}
                   </span>
                 </span>
               )}
               {profile.school && (
-                <span className={styles.personalInfoItem}>
-                  <span className={styles.personalInfoIcon}>🎓</span>{" "}
-                  <span className={styles.personalInfoValue}>
+                <span className={styles['personal-info-item']}>
+                  <span className={styles['personal-info-icon']}>🎓</span>{" "}
+                  <span className={styles['personal-info-value']}>
                     {profile.school}
                   </span>
                 </span>
               )}
               {profile.globalRank != null && (
-                <span className={styles.personalInfoItem}>
-                  <span className={styles.personalInfoIcon}>🌍</span> Rank #
-                  <span className={styles.personalInfoValue}>
+                <span className={styles['personal-info-item']}>
+                  <span className={styles['personal-info-icon']}>🌍</span> Rank #
+                  <span className={styles['personal-info-value']}>
                     {formatNumber(profile.globalRank)}
                   </span>
                 </span>
               )}
               {profile.expPoints && (
-                <span className={styles.personalInfoItem}>
-                  <span className={styles.personalInfoIcon}>✨</span> EXP{" "}
-                  <span className={styles.personalInfoValue}>
+                <span className={styles['personal-info-item']}>
+                  <span className={styles['personal-info-icon']}>✨</span> EXP{" "}
+                  <span className={styles['personal-info-value']}>
                     {profile.expPoints}
                   </span>
                 </span>
               )}
               {profile.votePower && (
-                <span className={styles.personalInfoItem}>
-                  <span className={styles.personalInfoIcon}>⚡</span>{" "}
-                  <span className={styles.personalInfoValue}>
+                <span className={styles['personal-info-item']}>
+                  <span className={styles['personal-info-icon']}>⚡</span>{" "}
+                  <span className={styles['personal-info-value']}>
                     {profile.votePower}
                   </span>
                 </span>
               )}
             </div>
 
-            <div className={styles.statsGrid}>
-              <div className={styles.statItem}>
-                <span className={styles.statValue}>
+            <div className={styles['stats-grid']}>
+              <div className={styles['stat-item']}>
+                <span className={styles['stat-value']}>
                   {formatNumber(profile.fans)}
                 </span>
-                <span className={styles.statLabel}>Fans</span>
+                <span className={styles['stat-label']}>Fans</span>
               </div>
-              <div className={styles.statItem}>
-                <span className={styles.statValue}>
+              <div className={styles['stat-item']}>
+                <span className={styles['stat-value']}>
                   {formatNumber(profile.blams)}
                 </span>
-                <span className={styles.statLabel}>Blams</span>
+                <span className={styles['stat-label']}>Blams</span>
               </div>
-              <div className={styles.statItem}>
-                <span className={styles.statValue}>
+              <div className={styles['stat-item']}>
+                <span className={styles['stat-value']}>
                   {formatNumber(profile.saves)}
                 </span>
-                <span className={styles.statLabel}>Saves</span>
+                <span className={styles['stat-label']}>Saves</span>
               </div>
-              <div className={styles.statItem}>
-                <span className={styles.statValue}>
+              <div className={styles['stat-item']}>
+                <span className={styles['stat-value']}>
                   {formatNumber(profile.medals)}
                 </span>
-                <span className={styles.statLabel}>Medals</span>
+                <span className={styles['stat-label']}>Medals</span>
               </div>
-              <div className={styles.statItem}>
-                <span className={styles.statValue}>
+              <div className={styles['stat-item']}>
+                <span className={styles['stat-value']}>
                   {formatNumber(profile.trophies)}
                 </span>
-                <span className={styles.statLabel}>Trophies</span>
+                <span className={styles['stat-label']}>Trophies</span>
               </div>
               {profile.expRank != null && (
-                <div className={styles.statItem}>
-                  <span className={styles.statValue}>
+                <div className={styles['stat-item']}>
+                  <span className={styles['stat-value']}>
                     #{formatNumber(profile.expRank)}
                   </span>
-                  <span className={styles.statLabel}>EXP Rank</span>
+                  <span className={styles['stat-label']}>EXP Rank</span>
                 </div>
               )}
             </div>
 
-            <div className={styles.contentCounts}>
+            <div className={styles['content-counts']}>
               {profile.movieCount > 0 && (
-                <span className={styles.contentPill}>
-                  <span className={styles.contentPillIcon}>🎬</span>
-                  <span className={styles.contentPillCount}>
+                <span className={styles['content-pill']}>
+                  <span className={styles['content-pill-icon']}>🎬</span>
+                  <span className={styles['content-pill-count']}>
                     {profile.movieCount}
                   </span>{" "}
                   Movies
                 </span>
               )}
               {profile.gameCount > 0 && (
-                <span className={styles.contentPill}>
-                  <span className={styles.contentPillIcon}>🎮</span>
-                  <span className={styles.contentPillCount}>
+                <span className={styles['content-pill']}>
+                  <span className={styles['content-pill-icon']}>🎮</span>
+                  <span className={styles['content-pill-count']}>
                     {profile.gameCount}
                   </span>{" "}
                   Games
                 </span>
               )}
               {profile.audioCount > 0 && (
-                <span className={styles.contentPill}>
-                  <span className={styles.contentPillIcon}>🎵</span>
-                  <span className={styles.contentPillCount}>
+                <span className={styles['content-pill']}>
+                  <span className={styles['content-pill-icon']}>🎵</span>
+                  <span className={styles['content-pill-count']}>
                     {profile.audioCount}
                   </span>{" "}
                   Audio
@@ -912,27 +912,27 @@ function ProfileDetailModal({ username, onClose }: ProfileDetailModalProps) {
               )}
 
               {profile.reviewCount > 0 && (
-                <span className={styles.contentPill}>
-                  <span className={styles.contentPillIcon}>📝</span>
-                  <span className={styles.contentPillCount}>
+                <span className={styles['content-pill']}>
+                  <span className={styles['content-pill-icon']}>📝</span>
+                  <span className={styles['content-pill-count']}>
                     {profile.reviewCount}
                   </span>{" "}
                   Reviews
                 </span>
               )}
               {profile.postCount > 0 && (
-                <span className={styles.contentPill}>
-                  <span className={styles.contentPillIcon}>💬</span>
-                  <span className={styles.contentPillCount}>
+                <span className={styles['content-pill']}>
+                  <span className={styles['content-pill-icon']}>💬</span>
+                  <span className={styles['content-pill-count']}>
                     {profile.postCount}
                   </span>{" "}
                   Posts
                 </span>
               )}
               {profile.faveCount > 0 && (
-                <span className={styles.contentPill}>
-                  <span className={styles.contentPillIcon}>❤️</span>
-                  <span className={styles.contentPillCount}>
+                <span className={styles['content-pill']}>
+                  <span className={styles['content-pill-icon']}>❤️</span>
+                  <span className={styles['content-pill-count']}>
                     {profile.faveCount}
                   </span>{" "}
                   Faves
@@ -959,40 +959,40 @@ function ProfileDetailModal({ username, onClose }: ProfileDetailModalProps) {
 
             {/* ── CC Forum ─────────────────────────────────────── */}
             {ccUser && (
-              <div className={styles.ccSection}>
-                <div className={styles.ccSectionTitle}>
+              <div className={styles['cc-section']}>
+                <div className={styles['cc-section-title']}>
                   🕰️ ClockCrew.net Forum
                 </div>
-                <div className={styles.ccRow}>
+                <div className={styles['cc-row']}>
                   {ccUser.avatarUrl && (
                     <img
                       src={ccUser.avatarUrl}
                       alt={ccUser.username}
-                      className={styles.ccAvatar}
+                      className={styles['cc-avatar']}
                     />
                   )}
-                  <div className={styles.ccInfo}>
-                    <span className={styles.ccUsername}>{ccUser.username}</span>
+                  <div className={styles['cc-info']}>
+                    <span className={styles['cc-username']}>{ccUser.username}</span>
                     {ccUser.customTitle && (
-                      <div className={styles.ccCustomTitle}>
+                      <div className={styles['cc-custom-title']}>
                         &ldquo;{ccUser.customTitle}&rdquo;
                       </div>
                     )}
                   </div>
                 </div>
-                <div className={styles.ccStats}>
+                <div className={styles['cc-stats']}>
                   {ccUser.postCount != null && (
-                    <span className={styles.ccStatItem}>
+                    <span className={styles['cc-stat-item']}>
                       Forum Posts:{" "}
-                      <span className={styles.ccStatValue}>
+                      <span className={styles['cc-stat-value']}>
                         {formatNumber(ccUser.postCount)}
                       </span>
                     </span>
                   )}
                   {ccUser.dateRegistered && (
-                    <span className={styles.ccStatItem}>
+                    <span className={styles['cc-stat-item']}>
                       Registered:{" "}
-                      <span className={styles.ccStatValue}>
+                      <span className={styles['cc-stat-value']}>
                         {formatDate(ccUser.dateRegistered)}
                       </span>
                     </span>
@@ -1000,8 +1000,8 @@ function ProfileDetailModal({ username, onClose }: ProfileDetailModalProps) {
                 </div>
 
                 {randomPost?.body && (
-                  <blockquote className={styles.ccForumQuote}>
-                    <p className={styles.ccQuoteBody}>
+                  <blockquote className={styles['cc-forum-quote']}>
+                    <p className={styles['cc-quote-body']}>
                       &ldquo;
                       {(() => {
                         const stripped = randomPost.body
@@ -1013,15 +1013,15 @@ function ProfileDetailModal({ username, onClose }: ProfileDetailModalProps) {
                       })()}
                       &rdquo;
                     </p>
-                    <footer className={styles.ccQuoteFooter}>
+                    <footer className={styles['cc-quote-footer']}>
                       {randomPost.threadTitle && (
-                        <span className={styles.ccQuoteThread}>
-                          <span className={styles.ccQuoteThreadIcon}>💬</span>
+                        <span className={styles['cc-quote-thread']}>
+                          <span className={styles['cc-quote-thread-icon']}>💬</span>
                           {randomPost.threadTitle}
                         </span>
                       )}
                       {randomPost.date && (
-                        <span className={styles.ccQuoteDate}>
+                        <span className={styles['cc-quote-date']}>
                           {formatDate(randomPost.date)}
                         </span>
                       )}
@@ -1033,9 +1033,9 @@ function ProfileDetailModal({ username, onClose }: ProfileDetailModalProps) {
 
             {/* ── External Links ──────────────────────────────── */}
             {profile.links && profile.links.length > 0 && (
-              <div className={styles.profileLinks}>
-                <div className={styles.topSubTitle}>🔗 Links</div>
-                <div className={styles.profileLinksList}>
+              <div className={styles['profile-links']}>
+                <div className={styles['top-sub-title']}>🔗 Links</div>
+                <div className={styles['profile-links-list']}>
                   {profile.links.map((link: string | { url?: string; label?: string; name?: string }, i: number) => {
                     const url = typeof link === "string" ? link : link.url || "";
                     const label = typeof link === "string" ? link : link.label || link.name || "";
@@ -1045,7 +1045,7 @@ function ProfileDetailModal({ username, onClose }: ProfileDetailModalProps) {
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={styles.profileLinkItem}
+                        className={styles['profile-link-item']}
                       >
                         {label || (() => {
                           try { return new URL(url).hostname; } catch { return "Link"; }
@@ -1057,12 +1057,12 @@ function ProfileDetailModal({ username, onClose }: ProfileDetailModalProps) {
               </div>
             )}
 
-            <div className={styles.cardActions}>
+            <div className={styles['card-actions']}>
               <a
                 href={profile.profileUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`${styles.actionButton} ${styles.actionPrimary}`}
+                className={`${styles['action-button']} ${styles['action-primary']}`}
               >
                 🌐 NG Profile
               </a>
@@ -1071,7 +1071,7 @@ function ProfileDetailModal({ username, onClose }: ProfileDetailModalProps) {
                   href={ccUser.profileUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`${styles.actionButton} ${styles.actionSecondary}`}
+                  className={`${styles['action-button']} ${styles['action-secondary']}`}
                 >
                   🕰️ Forum Profile
                 </a>
@@ -1099,38 +1099,38 @@ function ClockCard({ profile, style, onClick }: ClockCardProps) {
   const showAvatar = avatarSrc && !imgError;
   return (
     <div
-      className={styles.itemCard}
+      className={styles['item-card']}
       onClick={onClick}
       style={style}
       title={`${profile.username} — Lvl ${profile.level ?? "?"}`}
     >
-      <div className={styles.clockAvatarWrap}>
+      <div className={styles['clock-avatar-wrap']}>
         {showAvatar ? (
           <img
             src={avatarSrc}
             alt={profile.username}
-            className={styles.clockAvatarImg}
+            className={styles['clock-avatar-img']}
             loading="lazy"
             onError={() => setImgError(true)}
           />
         ) : (
-          <div className={styles.clockAvatarFallbackInitial}>
+          <div className={styles['clock-avatar-fallback-initial']}>
             {(profile.username || "?")[0].toUpperCase()}
           </div>
         )}
         {profile.level != null && (
-          <span className={styles.clockLevelBadge}>Lvl {profile.level}</span>
+          <span className={styles['clock-level-badge']}>Lvl {profile.level}</span>
         )}
       </div>
-      <div className={styles.itemInfo}>
-        <span className={styles.itemTitle}>{profile.username}</span>
-        <div className={styles.itemMeta}>
-          <span className={styles.itemAuthor}>
+      <div className={styles['item-info']}>
+        <span className={styles['item-title']}>{profile.username}</span>
+        <div className={styles['item-meta']}>
+          <span className={styles['item-author']}>
             {profile.location || profile.joinDate || ""}
           </span>
           {fanCount > 0 && (
-            <span className={styles.clockFanCount}>
-              <span className={styles.scoreStar}>♥</span>
+            <span className={styles['clock-fan-count']}>
+              <span className={styles['score-star']}>♥</span>
               {formatNumber(fanCount)}
             </span>
           )}
@@ -1373,24 +1373,24 @@ export default function NewgroundsPortalComponent() {
     <>
       <div className={styles.container} id="newgrounds-portal">
         {/* ── Title Bar ─────────────────────────────────────── */}
-        <div className={styles.titleBar}>
-          <div className={styles.trafficLights}>
-            <span className={styles.trafficDot} />
-            <span className={styles.trafficDot} />
-            <span className={styles.trafficDot} />
+        <div className={styles['title-bar']}>
+          <div className={styles['traffic-lights']}>
+            <span className={styles['traffic-dot']} />
+            <span className={styles['traffic-dot']} />
+            <span className={styles['traffic-dot']} />
           </div>
-          <span className={styles.titleBarCenter}>
-            <span className={styles.titleText}>
+          <span className={styles['title-bar-center']}>
+            <span className={styles['title-text']}>
               {isClocks ? "Clock Crew" : "Flash Portal"}
             </span>
           </span>
-          <span className={styles.titleCount}>{titleSummary}</span>
+          <span className={styles['title-count']}>{titleSummary}</span>
         </div>
 
         {/* ── Content ───────────────────────────────────────── */}
-        <div className={styles.contentArea}>
+        <div className={styles['content-area']}>
           {/* ── Search + Filters ──────────────────────────────── */}
-          <div className={styles.searchBar}>
+          <div className={styles['search-bar']}>
             <SearchInputComponent
               value={query}
               onChange={(value: string) => handleSearchChange(value)}
@@ -1400,21 +1400,21 @@ export default function NewgroundsPortalComponent() {
                   : "Search movies, games, audio, or usernames…"
               }
               leadingIcon={<Search size={14} />}
-              className={styles.searchInputWrap}
+              className={styles['search-input-wrap']}
             />
-            <div className={styles.filterRow}>
-              <div className={styles.typeTabs}>
+            <div className={styles['filter-row']}>
+              <div className={styles['type-tabs']}>
                 {TABS.map(({ key, label }) => (
                   <button
                     key={key}
-                    className={`${styles.typeTab} ${type === key ? styles.typeTabActive : ""}`}
+                    className={`${styles['type-tab']} ${type === key ? styles['type-tab-active'] : ""}`}
                     onClick={() => handleTypeChange(key)}
                   >
                     {label}
                   </button>
                 ))}
               </div>
-              <div className={styles.yearFilter}>
+              <div className={styles['year-filter']}>
                 <SelectComponent
                   value={year}
                   onChange={(value: string) => handleYearChange(value)}
@@ -1431,9 +1431,9 @@ export default function NewgroundsPortalComponent() {
           </div>
 
           {/* ── Item Grid ─────────────────────────────────────── */}
-          <div className={styles.itemGrid}>
+          <div className={styles['item-grid']}>
             {loading && (
-              <div className={styles.isLoadingState} style={{ gridColumn: "1 / -1" }}>
+              <div className={styles['is-loading-state']} style={{ gridColumn: "1 / -1" }}>
                 <LoadingIndicatorComponent size={32} />
                 <span>Loading {isClocks ? "clocks" : "portal"}…</span>
               </div>
@@ -1460,17 +1460,17 @@ export default function NewgroundsPortalComponent() {
                 return (
                   <div
                     key={`${item.contentId || item._id}-${i}`}
-                    className={styles.itemCard}
+                    className={styles['item-card']}
                     onClick={() => handleItemClick(item)}
                     style={{ animationDelay: `${Math.min(i * 30, 600)}ms` }}
                     title={`${item.title} by ${item.usernameLower}`}
                   >
-                    <div className={styles.itemThumbWrap}>
+                    <div className={styles['item-thumb-wrap']}>
                       {item.thumbnailUrl && (
                         <img
                           src={item.thumbnailUrl}
                           alt={item.title}
-                          className={styles.itemThumb}
+                          className={styles['item-thumb']}
                           loading="lazy"
                           onError={(event: SyntheticEvent<HTMLImageElement>) => {
                             event.currentTarget.style.display = "none";
@@ -1478,15 +1478,15 @@ export default function NewgroundsPortalComponent() {
                         />
                       )}
                       <span
-                        className={`${styles.typeBadge} ${styles[meta.badgeClass]}`}
+                        className={`${styles['type-badge']} ${styles[meta.badgeClass]}`}
                       >
                         {meta.emoji}
                       </span>
                     </div>
-                    <div className={styles.itemInfo}>
-                      <span className={styles.itemTitle}>{item.title}</span>
-                      <div className={styles.itemMeta}>
-                        <span className={styles.itemAuthor}>
+                    <div className={styles['item-info']}>
+                      <span className={styles['item-title']}>{item.title}</span>
+                      <div className={styles['item-meta']}>
+                        <span className={styles['item-author']}>
                           {item.usernameLower}
                         </span>
                         <ScoreDisplay score={item.score} />
@@ -1510,13 +1510,13 @@ export default function NewgroundsPortalComponent() {
             <div ref={sentinelRef} className={styles.sentinel} />
 
             {loadingMore && (
-              <div className={styles.loadingMore}>
+              <div className={styles['loading-more']}>
                 <LoadingIndicatorComponent size={24} />
               </div>
             )}
 
             {!loading && !hasMore && items.length > 0 && (
-              <div className={styles.endOfList}>
+              <div className={styles['end-of-list']}>
                 All {items.length.toLocaleString()}{" "}
                 {isClocks ? "clocks" : "submissions"} loaded
               </div>

@@ -80,7 +80,7 @@ export default function HomePage() {
   return (
     <main className="hero" ref={heroRef}>
       <div className="hero-content">
-        <div className="hero-title-row">
+        <div className="hero-title-layout-row">
           <ClockComponent size={72} showSeconds={false} />
           <h1 className="hero-title">The Clock Crew</h1>
         </div>

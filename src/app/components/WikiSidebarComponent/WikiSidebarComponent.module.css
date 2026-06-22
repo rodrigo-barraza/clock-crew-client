@@ -10,7 +10,7 @@
   padding: 0 0 24px;
 }
 
-.sidebarInner {
+.sidebar-inner {
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -18,13 +18,13 @@
 
 /* ── Section Nav ─────────────────────────────────────────────── */
 
-.sectionNav {
+.section-nav {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.sectionLabel {
+.section-label {
   display: block;
   font-size: 0.625rem;
   font-weight: 600;
@@ -34,7 +34,7 @@
   padding: 0 12px 8px;
 }
 
-.sectionLink {
+.section-link {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -50,11 +50,11 @@
 
   &:hover {
     color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.04);
+    background: oklch(1 0 0 / 0.04);
   }
 }
 
-.sectionLinkActive {
+.section-link-active {
   color: var(--accent-primary);
   background: var(--calculated-accent-primary-subtle);
 
@@ -64,27 +64,27 @@
   }
 }
 
-.sectionIcon {
+.section-icon {
   font-size: var(--font-size-base);
   flex-shrink: 0;
 }
 
 /* ── Alphabet Quick Jump ─────────────────────────────────────── */
 
-.alphaNav {
+.alpha-nav {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.alphaGrid {
+.alpha-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 2px;
   padding: 0 8px;
 }
 
-.alphaLink {
+.alpha-link {
   width: 26px;
   height: 26px;
   display: inline-flex;
@@ -107,7 +107,7 @@
 
 /* ── Mobile Toggle ───────────────────────────────────────────── */
 
-.mobileToggle {
+.mobile-toggle {
   display: none;
   position: fixed;
   bottom: 20px;
@@ -126,11 +126,11 @@
   cursor: pointer;
 }
 
-.mobileToggleIcon {
+.mobile-toggle-icon {
   font-size: var(--font-size-md);
 }
 
-.mobileToggleLabel {
+.mobile-toggle-label {
   font-size: var(--font-size-sm);
 }
 
@@ -140,14 +140,14 @@
 
 /* ── Article Section Quick Jump (History page) ───────────────── */
 
-.articleSections {
+.article-sections {
   display: flex;
   flex-direction: column;
   gap: 1px;
   padding: 0 4px;
 }
 
-.articleSectionLink {
+.article-section-link {
   display: block;
   padding: 4px 8px;
   font-size: var(--font-size-sm);
@@ -168,7 +168,7 @@
 /* ── Responsive ──────────────────────────────────────────────── */
 
 @media (max-width: 900px) {
-  .mobileToggle {
+  .mobile-toggle {
     display: flex;
   }
 
@@ -187,7 +187,7 @@
     transition: transform var(--transition-normal);
   }
 
-  .sidebarCollapsed {
+  .sidebar-collapsed {
     transform: translateX(-100%);
   }
 
@@ -196,6 +196,6 @@
     position: fixed;
     inset: 0;
     z-index: 105;
-    background: rgba(0, 0, 0, 0.5);
+    background: oklch(0 0 0 / 0.5);
   }
 }

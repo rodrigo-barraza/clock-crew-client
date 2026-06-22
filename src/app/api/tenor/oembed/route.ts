@@ -10,11 +10,11 @@
 // → { gifUrl, width, height, title }
 // ============================================================
 
-import { MS_PER_DAY } from "@rodrigo-barraza/utilities-library";
+import { MILLISECONDS_PER_DAY } from "@rodrigo-barraza/utilities-library";
 
 // In-memory cache to avoid repeated oEmbed fetches for the same URL
 const cache = new Map();
-const CACHE_TTL = MS_PER_DAY;
+const CACHE_TTL = MILLISECONDS_PER_DAY;
 const ONE_DAY_SECONDS = 86_400;
 
 function transformThumbnailToGif(thumbnailUrl: string) {

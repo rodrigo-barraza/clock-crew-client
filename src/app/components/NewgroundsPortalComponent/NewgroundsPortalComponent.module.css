@@ -9,18 +9,18 @@
   border-radius: 12px;
   overflow: hidden;
   background: var(--discord-background-mid);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid oklch(1 0 0 / 0.06);
   box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(0, 0, 0, 0.2);
+    0 8px 32px oklch(0 0 0 / 0.5),
+    0 0 0 1px oklch(0 0 0 / 0.2);
   display: flex;
   flex-direction: column;
   text-align: left;
-  animation: portalSlideUp 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: portal-slide-up 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: 400ms;
 }
 
-@keyframes portalSlideUp {
+@keyframes portal-slide-up {
   from {
     opacity: 0;
     transform: translateY(24px) scale(0.98);
@@ -33,41 +33,41 @@
 
 /* ── Title Bar ─────────────────────────────────────────────────── */
 
-.titleBar {
+.title-bar {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 12px 16px;
   background: var(--discord-background-dark);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  border-bottom: 1px solid oklch(0 0 0 / 0.4);
   user-select: none;
   flex-shrink: 0;
   position: relative;
 }
 
-.trafficLights {
+.traffic-lights {
   display: flex;
   gap: 8px;
   padding-right: 4px;
 }
 
-.trafficDot {
+.traffic-dot {
   width: 12px;
   height: 12px;
   border-radius: 50%;
 }
 
-.trafficDot:nth-child(1) {
+.traffic-dot:nth-child(1) {
   background: #ed6a5e;
 }
-.trafficDot:nth-child(2) {
+.traffic-dot:nth-child(2) {
   background: #f4bf4f;
 }
-.trafficDot:nth-child(3) {
+.traffic-dot:nth-child(3) {
   background: #61c554;
 }
 
-.titleBarCenter {
+.title-bar-center {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -77,14 +77,14 @@
   pointer-events: none;
 }
 
-.titleText {
+.title-text {
   font-size: 0.9375rem;
   font-weight: 600;
   color: var(--discord-text-primary);
   letter-spacing: -0.01em;
 }
 
-.titleCount {
+.title-count {
   font-size: var(--font-size-sm);
   color: var(--discord-text-faint);
   margin-left: auto;
@@ -92,7 +92,7 @@
 
 /* ── Content Area ──────────────────────────────────────────────── */
 
-.contentArea {
+.content-area {
   display: flex;
   flex-direction: column;
   height: 75vh;
@@ -102,17 +102,17 @@
 
 /* ── Search Bar ────────────────────────────────────────────────── */
 
-.searchBar {
+.search-bar {
   padding: 12px 16px 8px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
   background: var(--discord-background-chat);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid oklch(0 0 0 / 0.2);
 }
 
-.searchInput {
+.search-input {
   width: 100%;
   padding: 8px 12px 8px 36px;
   border: none;
@@ -128,21 +128,21 @@
   height: auto;
 }
 
-.searchInput::placeholder {
+.search-input::placeholder {
   color: var(--discord-text-subtle);
 }
 
-.searchInput:focus {
+.search-input:focus {
   background: var(--discord-background-input);
-  box-shadow: 0 0 0 2px rgba(88, 101, 242, 0.4);
+  box-shadow: 0 0 0 2px oklch(0.557 0.2568 288.9 / 0.4);
   border-color: transparent;
 }
 
-.searchInputWrap {
+.search-input-wrap {
   position: relative;
 }
 
-.searchIcon {
+.search-icon {
   position: absolute;
   left: 10px;
   top: 50%;
@@ -155,7 +155,7 @@
 
 /* ── Filter Row (tabs + year) ──────────────────────────────────── */
 
-.filterRow {
+.filter-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -164,14 +164,14 @@
 
 /* ── Type Tabs ─────────────────────────────────────────────────── */
 
-.typeTabs {
+.type-tabs {
   display: flex;
   gap: 4px;
   flex-wrap: wrap;
   min-width: 0;
 }
 
-.typeTab {
+.type-tab {
   padding: 4px 12px;
   border: none;
   border-radius: 4px;
@@ -188,25 +188,25 @@
   letter-spacing: 0.02em;
 }
 
-.typeTab:hover {
-  background: rgba(255, 255, 255, 0.06);
+.type-tab:hover {
+  background: oklch(1 0 0 / 0.06);
   color: var(--discord-text-normal);
 }
 
-.typeTabActive {
-  background: rgba(88, 101, 242, 0.2);
+.type-tab-active {
+  background: oklch(0.557 0.2568 288.9 / 0.2);
   color: var(--discord-blurple-muted);
 }
 
 /* ── Year Filter ───────────────────────────────────────────────── */
 
-.yearFilter {
+.year-filter {
   flex-shrink: 0;
 }
 
-.yearSelect {
+.year-select {
   padding: 4px 28px 4px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid oklch(1 0 0 / 0.08);
   border-radius: 4px;
   background: var(--discord-background-input);
   color: var(--discord-text-normal);
@@ -229,24 +229,24 @@
   text-transform: uppercase;
 }
 
-.yearSelect:hover {
+.year-select:hover {
   background-color: var(--discord-background-input);
-  border-color: rgba(255, 255, 255, 0.12);
+  border-color: oklch(1 0 0 / 0.12);
 }
 
-.yearSelect:focus {
-  box-shadow: 0 0 0 2px rgba(88, 101, 242, 0.4);
-  border-color: rgba(88, 101, 242, 0.5);
+.year-select:focus {
+  box-shadow: 0 0 0 2px oklch(0.557 0.2568 288.9 / 0.4);
+  border-color: oklch(0.557 0.2568 288.9 / 0.5);
 }
 
-.yearSelect option {
+.year-select option {
   background: var(--discord-background-mid);
   color: var(--discord-text-normal);
 }
 
 /* ── Item Grid (scrollable) ────────────────────────────────────── */
 
-.itemGrid {
+.item-grid {
   flex: 1;
   overflow-y: auto;
   padding: 10px 14px;
@@ -260,46 +260,46 @@
 }
 
 /* Discord-style scrollbar */
-.itemGrid::-webkit-scrollbar {
+.item-grid::-webkit-scrollbar {
   width: 8px;
 }
-.itemGrid::-webkit-scrollbar-track {
+.item-grid::-webkit-scrollbar-track {
   background: var(--discord-background-mid);
   border-radius: 4px;
 }
-.itemGrid::-webkit-scrollbar-thumb {
+.item-grid::-webkit-scrollbar-thumb {
   background: var(--discord-background-deep);
   border-radius: 4px;
 }
-.itemGrid::-webkit-scrollbar-thumb:hover {
+.item-grid::-webkit-scrollbar-thumb:hover {
   background: var(--discord-background-deep);
 }
 
 /* ── Item Card ─────────────────────────────────────────────────── */
 
-.itemCard {
+.item-card {
   width: 180px;
   flex-shrink: 0;
   border-radius: 8px;
   overflow: hidden;
   background: var(--discord-background-mid);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  border: 1px solid oklch(1 0 0 / 0.04);
   cursor: pointer;
   transition:
     transform 200ms cubic-bezier(0.16, 1, 0.3, 1),
     box-shadow 200ms ease,
     border-color 200ms ease;
-  animation: cardAppear 300ms ease both;
+  animation: card-appear 300ms ease both;
   will-change: transform;
 }
 
-.itemCard:hover {
+.item-card:hover {
   transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 24px oklch(0 0 0 / 0.4);
+  border-color: oklch(1 0 0 / 0.1);
 }
 
-@keyframes cardAppear {
+@keyframes card-appear {
   from {
     opacity: 0;
     transform: translateY(12px) scale(0.96);
@@ -310,7 +310,7 @@
   }
 }
 
-.itemThumbWrap {
+.item-thumb-wrap {
   position: relative;
   width: 100%;
   height: 135px;
@@ -318,7 +318,7 @@
   overflow: hidden;
 }
 
-.itemThumb {
+.item-thumb {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -326,11 +326,11 @@
   transition: transform 300ms ease;
 }
 
-.itemCard:hover .itemThumb {
+.item-card:hover .item-thumb {
   transform: scale(1.08);
 }
 
-.typeBadge {
+.type-badge {
   position: absolute;
   top: 6px;
   right: 6px;
@@ -344,26 +344,26 @@
   -webkit-backdrop-filter: blur(8px);
 }
 
-.typeBadgeMovie {
-  background: rgba(229, 57, 53, 0.75);
+.type-badge-movie {
+  background: oklch(0.608 0.2087 27.2 / 0.75);
   color: var(--discord-white);
 }
 
-.typeBadgeGame {
-  background: rgba(67, 160, 71, 0.75);
+.type-badge-game {
+  background: oklch(0.635 0.1892 143.8 / 0.75);
   color: var(--discord-white);
 }
 
-.typeBadgeAudio {
-  background: rgba(156, 39, 176, 0.75);
+.type-badge-audio {
+  background: oklch(0.502 0.2723 323.6 / 0.75);
   color: var(--discord-white);
 }
 
-.itemInfo {
+.item-info {
   padding: 8px 10px 10px;
 }
 
-.itemTitle {
+.item-title {
   font-size: 0.8125rem;
   font-weight: 600;
   color: var(--discord-text-primary);
@@ -374,7 +374,7 @@
   display: block;
 }
 
-.itemMeta {
+.item-meta {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -382,7 +382,7 @@
   margin-top: 4px;
 }
 
-.itemAuthor {
+.item-author {
   font-size: var(--font-size-xs);
   color: var(--discord-text-muted);
   overflow: hidden;
@@ -390,7 +390,7 @@
   white-space: nowrap;
 }
 
-.itemScore {
+.item-score {
   display: flex;
   align-items: center;
   gap: 3px;
@@ -400,16 +400,16 @@
   flex-shrink: 0;
 }
 
-.scoreStar {
+.score-star {
   font-size: 0.625rem;
 }
 
 /* ── Profile Card Modal Overlay ────────────────────────────────── */
 
-.modalOverlay {
+.modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: oklch(0 0 0 / 0.7);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   z-index: 1000;
@@ -417,10 +417,10 @@
   align-items: center;
   justify-content: center;
   padding: 24px;
-  animation: overlayFadeIn 200ms ease both;
+  animation: overlay-fade-in 200ms ease both;
 }
 
-@keyframes overlayFadeIn {
+@keyframes overlay-fade-in {
   from {
     opacity: 0;
   }
@@ -429,20 +429,20 @@
   }
 }
 
-.modalCard {
+.modal-card {
   width: 100%;
   max-width: 560px;
   max-height: 85vh;
   overflow-y: auto;
   background: var(--discord-background-mid);
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
-  animation: modalSlideIn 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  border: 1px solid oklch(1 0 0 / 0.08);
+  box-shadow: 0 24px 64px oklch(0 0 0 / 0.6);
+  animation: modal-slide-in 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
   position: relative;
 }
 
-@keyframes modalSlideIn {
+@keyframes modal-slide-in {
   from {
     opacity: 0;
     transform: translateY(20px) scale(0.96);
@@ -454,18 +454,18 @@
 }
 
 /* Discord-style scrollbar for modal */
-.modalCard::-webkit-scrollbar {
+.modal-card::-webkit-scrollbar {
   width: 6px;
 }
-.modalCard::-webkit-scrollbar-track {
+.modal-card::-webkit-scrollbar-track {
   background: transparent;
 }
-.modalCard::-webkit-scrollbar-thumb {
+.modal-card::-webkit-scrollbar-thumb {
   background: var(--discord-background-deep);
   border-radius: 3px;
 }
 
-.modalClose {
+.modal-close {
   position: absolute;
   top: 12px;
   right: 12px;
@@ -473,7 +473,7 @@
   height: 32px;
   border: none;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.4);
+  background: oklch(0 0 0 / 0.4);
   color: var(--discord-text-normal);
   font-size: var(--font-size-lg);
   cursor: pointer;
@@ -485,13 +485,13 @@
   font-family: inherit;
 }
 
-.modalClose:hover {
-  background: rgba(0, 0, 0, 0.6);
+.modal-close:hover {
+  background: oklch(0 0 0 / 0.6);
 }
 
 /* ── Content Hero (clicked movie/game at top of modal) ─────────── */
 
-.contentHero {
+.content-hero {
   position: relative;
   display: flex;
   align-items: flex-end;
@@ -503,22 +503,22 @@
   background-position: center;
   background-repeat: no-repeat;
   overflow: hidden;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid oklch(1 0 0 / 0.06);
 }
 
-.contentHeroOverlay {
+.content-hero-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to top,
-    rgba(14, 14, 16, 0.95) 0%,
-    rgba(14, 14, 16, 0.7) 40%,
-    rgba(14, 14, 16, 0.35) 100%
+    oklch(0.164 0.0051 294.7 / 0.95) 0%,
+    oklch(0.164 0.0051 294.7 / 0.7) 40%,
+    oklch(0.164 0.0051 294.7 / 0.35) 100%
   );
   pointer-events: none;
 }
 
-.contentHeroBody {
+.content-hero-body {
   position: relative;
   z-index: 1;
   display: flex;
@@ -530,7 +530,7 @@
   max-width: 420px;
 }
 
-.heroBadge {
+.hero-badge {
   display: inline-flex;
   align-items: center;
   padding: 3px 10px;
@@ -543,16 +543,16 @@
   -webkit-backdrop-filter: blur(8px);
 }
 
-.contentHeroTitle {
+.content-hero-title {
   font-size: 1.375rem;
   font-weight: 700;
   color: var(--discord-white);
   margin: 4px 0 2px;
   line-height: 1.25;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 2px 12px oklch(0 0 0 / 0.6);
 }
 
-.contentHeroMeta {
+.content-hero-meta {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -560,21 +560,21 @@
   margin-top: 2px;
 }
 
-.contentHeroAuthor {
+.content-hero-author {
   font-size: 0.8125rem;
-  color: rgba(255, 255, 255, 0.65);
+  color: oklch(1 0 0 / 0.65);
 }
 
-.contentHeroScore {
+.content-hero-score {
   font-size: 0.8125rem;
   font-weight: 600;
   color: var(--ng-gold);
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 1px 4px oklch(0 0 0 / 0.5);
 }
 
 /* ── Hero CTA ─────────────────────────────────────────────────── */
 
-.actionHero {
+.action-hero {
   margin-top: 14px;
   background: var(--ng-orange);
   color: var(--discord-white);
@@ -582,30 +582,30 @@
   border-radius: 8px;
   font-size: var(--font-size-base);
   box-shadow:
-    0 4px 16px rgba(255, 102, 0, 0.35),
-    0 1px 3px rgba(0, 0, 0, 0.3);
+    0 4px 16px oklch(0.698 0.2031 47.9 / 0.35),
+    0 1px 3px oklch(0 0 0 / 0.3);
   transition:
     background-color 150ms ease,
     box-shadow 200ms ease,
     transform 150ms ease;
 }
 
-.actionHero:hover {
+.action-hero:hover {
   background: var(--ng-orange);
   box-shadow:
-    0 6px 24px rgba(255, 102, 0, 0.45),
-    0 2px 6px rgba(0, 0, 0, 0.4);
+    0 6px 24px oklch(0.698 0.2031 47.9 / 0.45),
+    0 2px 6px oklch(0 0 0 / 0.4);
 }
 
 /* ── Creator Divider ───────────────────────────────────────────── */
 
-.creatorDivider {
+.creator-divider {
   padding: 10px 20px;
-  background: rgba(255, 255, 255, 0.02);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: oklch(1 0 0 / 0.02);
+  border-bottom: 1px solid oklch(1 0 0 / 0.06);
 }
 
-.creatorDividerText {
+.creator-divider-text {
   font-size: var(--font-size-xs);
   font-weight: 700;
   color: var(--discord-text-faint);
@@ -615,7 +615,7 @@
 
 /* ── Creator Header (inline avatar + name) ─────────────────────── */
 
-.creatorHeader {
+.creator-header {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -624,16 +624,16 @@
 
 /* ── Banner + Avatar ───────────────────────────────────────────── */
 
-.cardBanner {
+.card-banner {
   width: 100%;
   height: 100px;
   background: linear-gradient(135deg, #5865f2, #e91e63, #ff9800);
   background-size: 200% 200%;
-  animation: bannerShift 8s ease-in-out infinite;
+  animation: banner-shift 8s ease-in-out infinite;
   position: relative;
 }
 
-@keyframes bannerShift {
+@keyframes banner-shift {
   0%,
   100% {
     background-position: 0% 50%;
@@ -643,13 +643,13 @@
   }
 }
 
-.cardBannerImg {
+.card-banner-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.cardAvatarWrap {
+.card-avatar-wrap {
   position: relative;
   margin: -36px 0 0 20px;
   width: 72px;
@@ -660,14 +660,14 @@
   z-index: 1;
 }
 
-.cardAvatar {
+.card-avatar {
   width: 100%;
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
 }
 
-.cardAvatarFallback {
+.card-avatar-fallback {
   width: 100%;
   height: 100%;
   border-radius: 50%;
@@ -682,17 +682,17 @@
 
 /* ── Card Header ───────────────────────────────────────────────── */
 
-.cardHeader {
+.card-header {
   padding: 8px 20px 0;
 }
 
-.cardUsername {
+.card-username {
   font-size: var(--font-size-xl);
   font-weight: 700;
   color: var(--discord-text-primary);
 }
 
-.cardRankRow {
+.card-rank-row {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -700,7 +700,7 @@
   flex-wrap: wrap;
 }
 
-.cardRankBadge {
+.card-rank-badge {
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -712,46 +712,46 @@
   letter-spacing: 0.02em;
 }
 
-.ngBadge {
-  background: rgba(255, 152, 0, 0.2);
+.ng-badge {
+  background: oklch(0.775 0.1839 73.1 / 0.2);
   color: var(--ng-gold-muted);
 }
 
-.ccBadge {
-  background: rgba(88, 101, 242, 0.2);
+.cc-badge {
+  background: oklch(0.557 0.2568 288.9 / 0.2);
   color: var(--discord-blurple-muted);
 }
 
-.levelBadge {
-  background: rgba(76, 175, 80, 0.2);
+.level-badge {
+  background: oklch(0.68 0.1991 143.8 / 0.2);
   color: var(--color-success);
 }
 
-.supporterBadge {
-  background: rgba(233, 30, 99, 0.2);
+.supporter-badge {
+  background: oklch(0.603 0.2404 7.2 / 0.2);
   color: var(--ng-fan-pink);
 }
 
-.cardDescription {
+.card-description {
   margin-top: 8px;
   padding: 0 20px 12px;
   font-size: 0.8125rem;
   color: var(--discord-text-secondary);
   line-height: 1.5;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid oklch(1 0 0 / 0.06);
 }
 
 /* ── Personal Info ─────────────────────────────────────────────── */
 
-.cardPersonalInfo {
+.card-personal-info {
   padding: 12px 20px;
   display: flex;
   flex-wrap: wrap;
   gap: 6px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid oklch(1 0 0 / 0.06);
 }
 
-.personalInfoItem {
+.personal-info-item {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -759,47 +759,47 @@
   color: var(--discord-text-muted);
 }
 
-.personalInfoIcon {
+.personal-info-icon {
   font-size: 0.8125rem;
   flex-shrink: 0;
 }
 
-.personalInfoValue {
+.personal-info-value {
   color: var(--discord-text-normal);
 }
 
 /* ── Stats Grid ────────────────────────────────────────────────── */
 
-.statsGrid {
+.stats-grid {
   padding: 12px 20px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid oklch(1 0 0 / 0.06);
 }
 
-.statItem {
+.stat-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 8px 4px;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.02);
+  background: oklch(1 0 0 / 0.02);
   transition: background-color 150ms ease;
 }
 
-.statItem:hover {
-  background: rgba(255, 255, 255, 0.05);
+.stat-item:hover {
+  background: oklch(1 0 0 / 0.05);
 }
 
-.statValue {
+.stat-value {
   font-size: var(--font-size-lg);
   font-weight: 700;
   color: var(--discord-text-primary);
   line-height: 1;
 }
 
-.statLabel {
+.stat-label {
   font-size: 0.625rem;
   font-weight: 600;
   color: var(--discord-text-faint);
@@ -810,47 +810,47 @@
 
 /* ── Content Counts ────────────────────────────────────────────── */
 
-.contentCounts {
+.content-counts {
   padding: 12px 20px;
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid oklch(1 0 0 / 0.06);
 }
 
-.contentPill {
+.content-pill {
   display: inline-flex;
   align-items: center;
   gap: 4px;
   padding: 4px 10px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.04);
+  background: oklch(1 0 0 / 0.04);
   font-size: var(--font-size-sm);
   color: var(--discord-text-secondary);
   transition: background-color 150ms ease;
 }
 
-.contentPill:hover {
-  background: rgba(255, 255, 255, 0.08);
+.content-pill:hover {
+  background: oklch(1 0 0 / 0.08);
 }
 
-.contentPillIcon {
+.content-pill-icon {
   font-size: 0.8125rem;
 }
 
-.contentPillCount {
+.content-pill-count {
   font-weight: 600;
   color: var(--discord-text-normal);
 }
 
 /* ── CC Forum Section ──────────────────────────────────────────── */
 
-.ccSection {
+.cc-section {
   padding: 12px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid oklch(1 0 0 / 0.06);
 }
 
-.ccSectionTitle {
+.cc-section-title {
   font-size: var(--font-size-xs);
   font-weight: 700;
   color: var(--discord-text-muted);
@@ -862,13 +862,13 @@
   gap: 6px;
 }
 
-.ccRow {
+.cc-row {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.ccAvatar {
+.cc-avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -877,54 +877,54 @@
   background: var(--discord-background-dark);
 }
 
-.ccInfo {
+.cc-info {
   min-width: 0;
   flex: 1;
 }
 
-.ccUsername {
+.cc-username {
   font-size: var(--font-size-base);
   font-weight: 600;
   color: var(--discord-text-primary);
 }
 
-.ccCustomTitle {
+.cc-custom-title {
   font-size: var(--font-size-sm);
   color: var(--discord-text-muted);
   font-style: italic;
   margin-top: 1px;
 }
 
-.ccStats {
+.cc-stats {
   display: flex;
   flex-wrap: wrap;
   gap: 6px 12px;
   margin-top: 8px;
 }
 
-.ccStatItem {
+.cc-stat-item {
   font-size: var(--font-size-sm);
   color: var(--discord-text-muted);
 }
 
-.ccStatValue {
+.cc-stat-value {
   color: var(--discord-text-normal);
   font-weight: 600;
 }
 
 /* ── CC Forum Quote ────────────────────────────────────────────── */
 
-.ccForumQuote {
+.cc-forum-quote {
   margin: 10px 0 0;
   padding: 10px 14px;
-  border-left: 3px solid rgba(88, 101, 242, 0.6);
-  background: rgba(88, 101, 242, 0.06);
+  border-left: 3px solid oklch(0.557 0.2568 288.9 / 0.6);
+  background: oklch(0.557 0.2568 288.9 / 0.06);
   border-radius: 0 6px 6px 0;
-  animation: quoteReveal 400ms ease both;
+  animation: quote-reveal 400ms ease both;
   animation-delay: 200ms;
 }
 
-@keyframes quoteReveal {
+@keyframes quote-reveal {
   from {
     opacity: 0;
     transform: translateX(-6px);
@@ -935,7 +935,7 @@
   }
 }
 
-.ccQuoteBody {
+.cc-quote-body {
   font-size: 0.78125rem;
   line-height: 1.55;
   color: var(--discord-text-secondary);
@@ -944,7 +944,7 @@
   word-break: break-word;
 }
 
-.ccQuoteFooter {
+.cc-quote-footer {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -952,7 +952,7 @@
   flex-wrap: wrap;
 }
 
-.ccQuoteThread {
+.cc-quote-thread {
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -964,12 +964,12 @@
   max-width: 250px;
 }
 
-.ccQuoteThreadIcon {
+.cc-quote-thread-icon {
   font-size: var(--font-size-sm);
   flex-shrink: 0;
 }
 
-.ccQuoteDate {
+.cc-quote-date {
   font-size: var(--font-size-xs);
   color: var(--discord-text-subtle);
   margin-left: auto;
@@ -977,16 +977,16 @@
 
 /* ── Top Submissions ───────────────────────────────────────────── */
 
-.topSubmissions {
+.top-submissions {
   padding: 12px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid oklch(1 0 0 / 0.06);
 }
 
-.topSubmissions:last-child {
+.top-submissions:last-child {
   border-bottom: none;
 }
 
-.topSubTitle {
+.top-sub-title {
   font-size: var(--font-size-xs);
   font-weight: 700;
   color: var(--discord-text-muted);
@@ -995,13 +995,13 @@
   margin-bottom: 6px;
 }
 
-.topSubList {
+.top-sub-list {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.topSubItem {
+.top-sub-item {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1010,11 +1010,11 @@
   transition: background-color 120ms ease;
 }
 
-.topSubItem:hover {
-  background: rgba(255, 255, 255, 0.04);
+.top-sub-item:hover {
+  background: oklch(1 0 0 / 0.04);
 }
 
-.topSubThumb {
+.top-sub-thumb {
   width: 36px;
   height: 27px;
   border-radius: 3px;
@@ -1023,12 +1023,12 @@
   background: var(--discord-background-dark);
 }
 
-.topSubInfo {
+.top-sub-info {
   min-width: 0;
   flex: 1;
 }
 
-.topSubName {
+.top-sub-name {
   font-size: var(--font-size-sm);
   font-weight: 500;
   color: var(--discord-text-normal);
@@ -1037,7 +1037,7 @@
   white-space: nowrap;
 }
 
-.topSubScore {
+.top-sub-score {
   font-size: var(--font-size-xs);
   font-weight: 600;
   color: var(--ng-gold);
@@ -1046,13 +1046,13 @@
 
 /* ── Action Buttons ────────────────────────────────────────────── */
 
-.cardActions {
+.card-actions {
   padding: 12px 20px 16px;
   display: flex;
   gap: 8px;
 }
 
-.actionButton {
+.action-button {
   flex: 1;
   display: flex;
   align-items: center;
@@ -1072,35 +1072,35 @@
   will-change: transform;
 }
 
-.actionButton:hover {
+.action-button:hover {
   transform: translateY(-1px);
 }
 
-.actionButton:active {
+.action-button:active {
   transform: translateY(0);
 }
 
-.actionPrimary {
+.action-primary {
   background: var(--ng-orange);
   color: var(--discord-white);
 }
 
-.actionPrimary:hover {
+.action-primary:hover {
   background: var(--ng-orange);
 }
 
-.actionSecondary {
-  background: rgba(255, 255, 255, 0.08);
+.action-secondary {
+  background: oklch(1 0 0 / 0.08);
   color: var(--discord-text-normal);
 }
 
-.actionSecondary:hover {
-  background: rgba(255, 255, 255, 0.12);
+.action-secondary:hover {
+  background: oklch(1 0 0 / 0.12);
 }
 
 /* ── Loading ───────────────────────────────────────────────────── */
 
-.isLoadingState {
+.is-loading-state {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1111,30 +1111,30 @@
   font-size: var(--font-size-base);
 }
 
-.loadingDots {
+.loading-dots {
   display: flex;
   gap: 6px;
 }
 
-.loadingDot {
+.loading-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
   background: var(--ng-orange);
-  animation: portalBounce 1.4s ease-in-out infinite both;
+  animation: portal-bounce 1.4s ease-in-out infinite both;
 }
 
-.loadingDot:nth-child(1) {
+.loading-dot:nth-child(1) {
   animation-delay: 0ms;
 }
-.loadingDot:nth-child(2) {
+.loading-dot:nth-child(2) {
   animation-delay: 160ms;
 }
-.loadingDot:nth-child(3) {
+.loading-dot:nth-child(3) {
   animation-delay: 320ms;
 }
 
-@keyframes portalBounce {
+@keyframes portal-bounce {
   0%,
   80%,
   100% {
@@ -1149,7 +1149,7 @@
 
 /* ── Empty State ───────────────────────────────────────────────── */
 
-.emptyState {
+.empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1160,12 +1160,12 @@
   text-align: center;
 }
 
-.emptyIcon {
+.empty-icon {
   font-size: 2.25rem;
   opacity: 0.6;
 }
 
-.emptyText {
+.empty-text {
   font-size: var(--font-size-base);
   color: var(--discord-text-muted);
 }
@@ -1178,7 +1178,7 @@
   flex-shrink: 0;
 }
 
-.loadingMore {
+.loading-more {
   width: 100%;
   display: flex;
   justify-content: center;
@@ -1186,7 +1186,7 @@
   flex-shrink: 0;
 }
 
-.endOfList {
+.end-of-list {
   width: 100%;
   text-align: center;
   padding: 16px 0 8px;
@@ -1199,7 +1199,7 @@
 
 /* ── Clock Profile Card ───────────────────────────────────────── */
 
-.clockAvatarWrap {
+.clock-avatar-wrap {
   position: relative;
   width: 100%;
   height: 135px;
@@ -1210,23 +1210,23 @@
   justify-content: center;
 }
 
-.clockAvatarImg {
+.clock-avatar-img {
   width: 80px;
   height: 80px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid rgba(255, 255, 255, 0.1);
+  border: 3px solid oklch(1 0 0 / 0.1);
   transition:
     transform 300ms ease,
     border-color 300ms ease;
 }
 
-.itemCard:hover .clockAvatarImg {
+.item-card:hover .clock-avatar-img {
   transform: scale(1.1);
-  border-color: rgba(255, 152, 0, 0.5);
+  border-color: oklch(0.775 0.1839 73.1 / 0.5);
 }
 
-.clockAvatarFallbackInitial {
+.clock-avatar-fallback-initial {
   width: 80px;
   height: 80px;
   border-radius: 50%;
@@ -1237,24 +1237,24 @@
   font-size: 2rem;
   font-weight: 700;
   color: var(--discord-white);
-  border: 3px solid rgba(255, 255, 255, 0.1);
+  border: 3px solid oklch(1 0 0 / 0.1);
   transition:
     transform 300ms ease,
     border-color 300ms ease;
 }
 
-.itemCard:hover .clockAvatarFallbackInitial {
+.item-card:hover .clock-avatar-fallback-initial {
   transform: scale(1.1);
-  border-color: rgba(255, 152, 0, 0.5);
+  border-color: oklch(0.775 0.1839 73.1 / 0.5);
 }
 
-.clockLevelBadge {
+.clock-level-badge {
   position: absolute;
   bottom: 6px;
   right: 6px;
   padding: 2px 8px;
   border-radius: 4px;
-  background: rgba(76, 175, 80, 0.8);
+  background: oklch(0.68 0.1991 143.8 / 0.8);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   font-size: 0.625rem;
@@ -1263,7 +1263,7 @@
   letter-spacing: 0.02em;
 }
 
-.clockFanCount {
+.clock-fan-count {
   display: flex;
   align-items: center;
   gap: 3px;
@@ -1275,16 +1275,16 @@
 
 /* ── Score Bar (for modal stat) ─────────────────────────────────── */
 
-.scoreBar {
+.score-bar {
   width: 100%;
   height: 4px;
   border-radius: 2px;
-  background: rgba(255, 255, 255, 0.06);
+  background: oklch(1 0 0 / 0.06);
   overflow: hidden;
   margin-top: 3px;
 }
 
-.scoreBarFill {
+.score-bar-fill {
   height: 100%;
   border-radius: 2px;
   background: linear-gradient(90deg, #f5c518, #ff6600);
@@ -1294,7 +1294,7 @@
 
 /* ── Profile Detail Modal (Clocks tab) ─────────────────────────── */
 
-.profileBanner {
+.profile-banner {
   position: relative;
   width: 100%;
   height: 100px;
@@ -1302,15 +1302,15 @@
   flex-shrink: 0;
 }
 
-.profileBannerGradient {
+.profile-banner-gradient {
   position: absolute;
   inset: 0;
   background: linear-gradient(135deg, #ff6600 0%, #e91e63 40%, #5865f2 100%);
   background-size: 200% 200%;
-  animation: bannerShift 8s ease-in-out infinite;
+  animation: banner-shift 8s ease-in-out infinite;
 }
 
-.profileIdentity {
+.profile-identity {
   display: flex;
   align-items: flex-end;
   gap: 14px;
@@ -1320,7 +1320,7 @@
   z-index: 1;
 }
 
-.profileAvatarWrap {
+.profile-avatar-wrap {
   width: 72px;
   height: 72px;
   border-radius: 50%;
@@ -1328,15 +1328,15 @@
   background: var(--discord-background-mid);
   flex-shrink: 0;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 12px oklch(0 0 0 / 0.4);
 }
 
-.profileNameBlock {
+.profile-name-block {
   padding-bottom: 4px;
   min-width: 0;
 }
 
-.profileDisplayName {
+.profile-display-name {
   font-size: 1.375rem;
   font-weight: 700;
   color: var(--discord-text-primary);
@@ -1346,24 +1346,24 @@
 
 /* ── Profile Links ─────────────────────────────────────────────── */
 
-.profileLinks {
+.profile-links {
   padding: 12px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid oklch(1 0 0 / 0.06);
 }
 
-.profileLinksList {
+.profile-links-list {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   margin-top: 6px;
 }
 
-.profileLinkItem {
+.profile-link-item {
   display: inline-flex;
   align-items: center;
   padding: 4px 10px;
   border-radius: 12px;
-  background: rgba(88, 101, 242, 0.1);
+  background: oklch(0.557 0.2568 288.9 / 0.1);
   color: var(--discord-blurple-muted);
   font-size: var(--font-size-sm);
   font-weight: 500;
@@ -1373,14 +1373,14 @@
     color 150ms ease;
 }
 
-.profileLinkItem:hover {
-  background: rgba(88, 101, 242, 0.2);
+.profile-link-item:hover {
+  background: oklch(0.557 0.2568 288.9 / 0.2);
   color: var(--discord-blurple-light);
 }
 
 /* ── Top Submission anchors reset ──────────────────────────────── */
 
-a.topSubItem {
+a.top-sub-item {
   text-decoration: none;
   color: inherit;
 }
@@ -1393,26 +1393,26 @@ a.topSubItem {
     max-width: 100%;
   }
 
-  .contentArea {
+  .content-area {
     height: 460px;
   }
 
-  .itemGrid {
+  .item-grid {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 8px;
     padding: 8px;
   }
 
-  .statsGrid {
+  .stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .modalCard {
+  .modal-card {
     max-width: 100%;
     max-height: 90vh;
   }
 
-  .cardActions {
+  .card-actions {
     flex-direction: column;
   }
 }

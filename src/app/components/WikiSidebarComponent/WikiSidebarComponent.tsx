@@ -57,33 +57,33 @@ export default function WikiSidebarComponent() {
     <>
       {/* ── Mobile toggle ──────────────────────────────────────── */}
       <button
-        className={styles.mobileToggle}
+        className={styles['mobile-toggle']}
         onClick={() => setCollapsed((previous) => !previous)}
         aria-label={collapsed ? "Open sidebar" : "Close sidebar"}
       >
-        <span className={styles.mobileToggleIcon}>
+        <span className={styles['mobile-toggle-icon']}>
           {collapsed ? "☰" : "✕"}
         </span>
-        <span className={styles.mobileToggleLabel}>Wiki Nav</span>
+        <span className={styles['mobile-toggle-label']}>Wiki Nav</span>
       </button>
 
       {/* ── Sidebar ────────────────────────────────────────────── */}
       <aside
-        className={`${styles.sidebar} ${collapsed ? styles.sidebarCollapsed : ""}`}
+        className={`${styles.sidebar} ${collapsed ? styles['sidebar-collapsed'] : ""}`}
         role="complementary"
         aria-label="Wiki navigation"
       >
-        <div className={styles.sidebarInner}>
+        <div className={styles['sidebar-inner']}>
           {/* ── Section nav ──────────────────────────────────────── */}
-          <nav className={styles.sectionNav}>
-            <span className={styles.sectionLabel}>Wiki</span>
+          <nav className={styles['section-nav']}>
+            <span className={styles['section-label']}>Wiki</span>
             {WIKI_SECTIONS.map((section) => (
               <Link
                 key={section.id}
                 href={section.href}
-                className={`${styles.sectionLink} ${activeSectionId === section.id ? styles.sectionLinkActive : ""}`}
+                className={`${styles['section-link']} ${activeSectionId === section.id ? styles['section-link-active'] : ""}`}
               >
-                <span className={styles.sectionIcon}>{section.icon}</span>
+                <span className={styles['section-icon']}>{section.icon}</span>
                 {section.label}
               </Link>
             ))}
@@ -92,16 +92,16 @@ export default function WikiSidebarComponent() {
           {/* ── A–Z Quick Jump (only on members pages) ───────────── */}
           {isMembersSection && (
             <nav
-              className={styles.alphaNav}
+              className={styles['alpha-nav']}
               aria-label="Alphabetical quick jump"
             >
-              <span className={styles.sectionLabel}>Jump to</span>
-              <div className={styles.alphaGrid}>
+              <span className={styles['section-label']}>Jump to</span>
+              <div className={styles['alpha-grid']}>
                 {ALPHABET.map((letter) => (
                   <a
                     key={letter}
                     href={`#letter-${letter}`}
-                    className={styles.alphaLink}
+                    className={styles['alpha-link']}
                   >
                     {letter}
                   </a>
@@ -112,14 +112,14 @@ export default function WikiSidebarComponent() {
 
           {/* ── Article Sections (only on history page) ──────────── */}
           {isHistorySection && (
-            <nav className={styles.alphaNav} aria-label="Article section jump">
-              <span className={styles.sectionLabel}>On This Page</span>
-              <div className={styles.articleSections}>
+            <nav className={styles['alpha-nav']} aria-label="Article section jump">
+              <span className={styles['section-label']}>On This Page</span>
+              <div className={styles['article-sections']}>
                 {HISTORY_SECTIONS.map((section) => (
                   <a
                     key={section.id}
                     href={`#${section.id}`}
-                    className={styles.articleSectionLink}
+                    className={styles['article-section-link']}
                   >
                     {section.label}
                   </a>

@@ -27,27 +27,27 @@ export default function NavBarComponent() {
 
   return (
     <nav
-      className={`${styles.navigationBar} ${scrolled ? styles.navigationScrolled : ""} ${isHome ? styles.navigationHome : styles.navigationInner}`}
+      className={`${styles['navigation-bar']} ${scrolled ? styles['navigation-scrolled'] : ""} ${isHome ? styles['navigation-home'] : styles['navigation-inner']}`}
       role="navigation"
       aria-label="Main navigation"
     >
-      <div className={styles.navigationInnerWrapper}>
+      <div className={styles['navigation-inner-wrapper']}>
         {/* ── Logo / Home ──────────────────────────────────────── */}
-        <Link href="/" className={styles.logoLink}>
+        <Link href="/" className={styles['logo-link']}>
           <Image
             src="/animated-clock.gif"
             alt=""
-            className={styles.logoGif}
+            className={styles['logo-gif']}
             aria-hidden="true"
             width={32}
             height={32}
             unoptimized
           />
-          <span className={styles.logoText}>The Clock Crew</span>
+          <span className={styles['logo-text']}>The Clock Crew</span>
         </Link>
 
         {/* ── Links ────────────────────────────────────────────── */}
-        <ul className={styles.linkList}>
+        <ul className={styles['link-list']}>
           {NAV_LINKS.map(({ href, label }) => {
             const isActive =
               href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -56,7 +56,7 @@ export default function NavBarComponent() {
               <li key={href}>
                 <Link
                   href={href}
-                  className={`${styles.link} ${isActive ? styles.linkActive : ""}`}
+                  className={`${styles.link} ${isActive ? styles['link-active'] : ""}`}
                 >
                   {label}
                 </Link>
