@@ -1,3 +1,4 @@
+blockExoticSubdeps: false
 allowBuilds:
   '@rodrigo-barraza/components-library': true
   '@rodrigo-barraza/utilities-library': true
@@ -9,3 +10,5 @@ allowBuilds:
   '@rodrigo-barraza/components-library@https://codeload.github.com/rodrigo-barraza/components-library/tar.gz/dbfc1e5a98525c3333626c13b641c928e4efff11': true
   '@rodrigo-barraza/utilities-library@file:../utilities-library': true
   '@rodrigo-barraza/utilities-library@https://codeload.github.com/rodrigo-barraza/utilities-library/tar.gz/16951ef6d0c01979265c18c3e94070d304851a3a': true
+  '@rodrigo-barraza/components-library@https://codeload.github.com/rodrigo-barraza/components-library/tar.gz/7e6ab815c1f6e753b7544634fb296562cea97ecc': true
+  '@rodrigo-barraza/utilities-library@https://codeload.github.com/rodrigo-barraza/utilities-library/tar.gz/e1a53dac7e6693087a3d4f096175e1789ac4cdf2': true
