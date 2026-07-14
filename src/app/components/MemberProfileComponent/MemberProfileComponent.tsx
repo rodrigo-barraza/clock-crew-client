@@ -2,7 +2,11 @@
 
 import { useState, useEffect, useCallback, SyntheticEvent } from "react";
 import Link from "next/link";
-import { formatNumber, stripHtml } from "@rodrigo-barraza/utilities-library";
+import {
+  formatNumber,
+  getErrorMessage,
+  stripHtml,
+} from "@rodrigo-barraza/utilities-library";
 import styles from "./MemberProfileComponent.module.css";
 import {
   TransformedMemberProfileData,
@@ -28,9 +32,6 @@ function formatDate(dateStr: string | Date | null | undefined): string {
     day: "numeric",
   });
 }
-
-const errorMessage = (err: unknown): string =>
-  err instanceof Error ? err.message : String(err);
 
 // ── Tab definitions ──────────────────────────────────────────────
 interface TabDefinition {
@@ -643,7 +644,7 @@ export default function MemberProfileComponent({ username }: MemberProfileCompon
       }
       return { data: await response.json(), error: null };
     } catch (err: unknown) {
-      return { data: null, error: errorMessage(err) };
+      return { data: null, error: getErrorMessage(err) };
     }
   }, []);
 
