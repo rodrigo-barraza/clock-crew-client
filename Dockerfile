@@ -19,8 +19,12 @@ RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
     pnpm install --frozen-lockfile
 
 # --- Build ---
-FROM base AS builder
+FROM deps AS builder
 WORKDIR /app
+
+# curl is required by the vault client's fetchSync() (execFileSync("curl"))
+# to resolve secrets at build time. Alpine doesn't include it by default.
+RUN apk add --no-cache curl
 
 # Vault credentials — needed at build time for next.config.ts
 ARG VAULT_SERVICE_URL=http://192.168.86.2:5599
