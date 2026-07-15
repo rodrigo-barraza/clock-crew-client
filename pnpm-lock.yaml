@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@rodrigo-barraza/components-library':
         specifier: github:rodrigo-barraza/components-library
-        version: https://codeload.github.com/rodrigo-barraza/components-library/tar.gz/e421077a8ab7812ab14773b311f03c8961c95f9a(lucide-react@1.21.0(react@19.2.6))(luxon@3.7.2)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+        version: https://codeload.github.com/rodrigo-barraza/components-library/tar.gz/9dfba2fefc2a7a1de46fabf4bc51b0fa550a0337(lucide-react@1.21.0(react@19.2.6))(luxon@3.7.2)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@rodrigo-barraza/utilities-library':
         specifier: github:rodrigo-barraza/utilities-library
         version: https://codeload.github.com/rodrigo-barraza/utilities-library/tar.gz/e9949146f0677a545022cd2abca02efa597b9934
@@ -560,8 +560,8 @@ packages:
   '@oxc-project/types@0.133.0':
     resolution: {integrity: sha512-KzkdCd6Uxqnf6l3HOw1xfatAlUURA0g14cvBYFyJ5SaNOQbOUvBr9PKArcPcrNIeRsBdgcUzOGrhKveVpvOIGA==}
 
-  '@rodrigo-barraza/components-library@https://codeload.github.com/rodrigo-barraza/components-library/tar.gz/e421077a8ab7812ab14773b311f03c8961c95f9a':
-    resolution: {gitHosted: true, tarball: https://codeload.github.com/rodrigo-barraza/components-library/tar.gz/e421077a8ab7812ab14773b311f03c8961c95f9a}
+  '@rodrigo-barraza/components-library@https://codeload.github.com/rodrigo-barraza/components-library/tar.gz/9dfba2fefc2a7a1de46fabf4bc51b0fa550a0337':
+    resolution: {gitHosted: true, integrity: sha512-90GD2EBKuDUkALuh0EoZn0bz2f4Zj4jFRvK+uFkFZ1QiBB2WouGi2gWQzWfXgA2O42Ku9J4EvZaVXe37N5BXQw==, tarball: https://codeload.github.com/rodrigo-barraza/components-library/tar.gz/9dfba2fefc2a7a1de46fabf4bc51b0fa550a0337}
     version: 0.2.0
     peerDependencies:
       lucide-react: '>=0.300.0'
@@ -3050,7 +3050,7 @@ snapshots:
 
   '@oxc-project/types@0.133.0': {}
 
-  '@rodrigo-barraza/components-library@https://codeload.github.com/rodrigo-barraza/components-library/tar.gz/e421077a8ab7812ab14773b311f03c8961c95f9a(lucide-react@1.21.0(react@19.2.6))(luxon@3.7.2)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
+  '@rodrigo-barraza/components-library@https://codeload.github.com/rodrigo-barraza/components-library/tar.gz/9dfba2fefc2a7a1de46fabf4bc51b0fa550a0337(lucide-react@1.21.0(react@19.2.6))(luxon@3.7.2)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
     dependencies:
       '@rodrigo-barraza/utilities-library': https://codeload.github.com/rodrigo-barraza/utilities-library/tar.gz/e9949146f0677a545022cd2abca02efa597b9934
       lucide-react: 1.21.0(react@19.2.6)
