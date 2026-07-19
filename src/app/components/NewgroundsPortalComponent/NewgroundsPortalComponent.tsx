@@ -9,7 +9,7 @@ import {
   LoadingIndicatorComponent,
   EmptyStateComponent,
 } from "@rodrigo-barraza/components-library";
-import { formatNumber } from "@rodrigo-barraza/utilities-library";
+import { formatDate, formatNumber } from "@rodrigo-barraza/utilities-library";
 import styles from "./NewgroundsPortalComponent.module.css";
 import {
   NewgroundsStats,
@@ -98,17 +98,6 @@ function ScoreDisplay({ score }: ScoreDisplayProps) {
       {rounded.toFixed(1)}
     </span>
   );
-}
-
-function formatDate(dateStr: string | Date | null | undefined): string {
-  if (!dateStr) return "—";
-  const parsedDate = new Date(dateStr);
-  if (isNaN(parsedDate.getTime())) return String(dateStr);
-  return parsedDate.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
 }
 
 // ── Top Submissions Section ──────────────────────────────────

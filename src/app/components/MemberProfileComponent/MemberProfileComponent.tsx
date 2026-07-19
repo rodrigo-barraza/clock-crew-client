@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, SyntheticEvent } from "react";
 import Link from "next/link";
 import {
+  formatDate,
   formatNumber,
   getErrorMessage,
   stripHtml,
@@ -19,19 +20,6 @@ import {
   ForumPost,
   Review,
 } from "../../../types";
-
-// ── Helpers ──────────────────────────────────────────────────────
-
-function formatDate(dateStr: string | Date | null | undefined): string {
-  if (!dateStr) return "—";
-  const parsedDate = new Date(dateStr);
-  if (isNaN(parsedDate.getTime())) return String(dateStr);
-  return parsedDate.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-}
 
 // ── Tab definitions ──────────────────────────────────────────────
 interface TabDefinition {
