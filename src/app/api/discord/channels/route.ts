@@ -7,6 +7,12 @@
 // Guild is hardcoded for security.
 // ============================================================
 
+import {
+  discordBannerUrl,
+  discordGuildIconUrl,
+  discordSplashUrl,
+} from "@rodrigo-barraza/utilities-library/discord";
+
 import { GUILD_ID, LUPOS_BOT_URL, TOOLS_SERVICE_URL } from "../discord-config";
 
 // Whitelisted channel IDs — must match DiscordChatComponent
@@ -59,16 +65,9 @@ export async function GET() {
         const message = guildData.messages?.[0];
         guildName = message?.guildName || null;
         // Build CDN URLs from stored icon/banner/splash hashes
-        if (message?.guildIcon) {
-          const ext = message.guildIcon.startsWith("a_") ? "gif" : "png";
-          guildIcon = `https://cdn.discordapp.com/icons/${GUILD_ID}/${message.guildIcon}.${ext}?size=128`;
-        }
-        if (message?.guildBanner) {
-          guildBanner = `https://cdn.discordapp.com/banners/${GUILD_ID}/${message.guildBanner}.png?size=480`;
-        }
-        if (message?.guildSplash) {
-          guildSplash = `https://cdn.discordapp.com/splashes/${GUILD_ID}/${message.guildSplash}.png?size=480`;
-        }
+        guildIcon = discordGuildIconUrl(GUILD_ID, message?.guildIcon);
+        guildBanner = discordBannerUrl(GUILD_ID, message?.guildBanner);
+        guildSplash = discordSplashUrl(GUILD_ID, message?.guildSplash);
       }
     } catch {
       // non-critical
