@@ -12,15 +12,17 @@
 // ============================================================
 
 import { rewriteStream } from "../rewritePrivateUrls";
-import { GUILD_ID, TOOLS_SERVICE_URL } from "../discord-config";
+import {
+  GUILD_ID,
+  TOOLS_SERVICE_URL,
+  GENERAL_CHAT_CHANNEL_ID,
+  PUBLIC_CHANNEL_IDS,
+} from "../discord-config";
 
 // Whitelist of allowed channel IDs (prevents arbitrary channel access)
-const ALLOWED_CHANNELS = new Set([
-  "671089694397956116", // #general-chat
-  "676318241689436170", // #memes
-]);
+const ALLOWED_CHANNELS = new Set(PUBLIC_CHANNEL_IDS);
 
-const DEFAULT_CHANNEL = "671089694397956116";
+const DEFAULT_CHANNEL = GENERAL_CHAT_CHANNEL_ID;
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);

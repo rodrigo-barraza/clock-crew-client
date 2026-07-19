@@ -35,3 +35,9 @@ function resolveServiceUrl() {
 export const CLOCK_CREW_SERVICE_URL = resolveServiceUrl();
 export const LUPOS_BOT_URL = process.env.LUPOS_BOT_URL || process.env.LUPOS_URL;
 export const TOOLS_SERVICE_URL = process.env.TOOLS_SERVICE_URL;
+
+// Publicly streamed Discord channels — the whitelist shared by the
+// chat component and every discord API proxy route.
+export const GENERAL_CHAT_CHANNEL_ID = "671089694397956116"; // #general-chat
+export const MEMES_CHANNEL_ID = "676318241689436170"; // #memes
+export const PUBLIC_CHANNEL_IDS = [GENERAL_CHAT_CHANNEL_ID, MEMES_CHANNEL_ID];

@@ -7,13 +7,10 @@
 // the whitelist.
 // ============================================================
 
-import { GUILD_ID, LUPOS_BOT_URL } from "../discord-config";
+import { GUILD_ID, LUPOS_BOT_URL, PUBLIC_CHANNEL_IDS } from "../discord-config";
 
 // Whitelist of allowed channel IDs (must match stream/route.js)
-const ALLOWED_CHANNELS = new Set([
-  "671089694397956116", // #general-chat
-  "676318241689436170", // #memes
-]);
+const ALLOWED_CHANNELS = new Set(PUBLIC_CHANNEL_IDS);
 
 export async function POST(request: Request) {
   try {

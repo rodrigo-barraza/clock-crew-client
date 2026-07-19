@@ -2,6 +2,7 @@
 
 import { useRef, useCallback, useEffect } from "react";
 import { DiscordChatComponent } from "@rodrigo-barraza/components-library";
+import { PUBLIC_CHANNEL_IDS } from "@/config";
 import NewgroundsPortalComponent from "./components/NewgroundsPortalComponent/NewgroundsPortalComponent";
 import ClockComponent from "./components/ClockComponent/ClockComponent";
 
@@ -93,7 +94,7 @@ export default function HomePage() {
               messageCount={500}
               joinMode
               onJoinHoverChange={handleJoinHover}
-              channelIds={["671089694397956116", "676318241689436170"]}
+              channelIds={PUBLIC_CHANNEL_IDS}
               serverIconUrl="/animated-clock.gif"
             />
             <NewgroundsPortalComponent />

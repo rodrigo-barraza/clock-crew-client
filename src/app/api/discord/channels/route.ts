@@ -13,10 +13,10 @@ import {
   discordSplashUrl,
 } from "@rodrigo-barraza/utilities-library/discord";
 
-import { GUILD_ID, LUPOS_BOT_URL, TOOLS_SERVICE_URL } from "../discord-config";
+import { GUILD_ID, LUPOS_BOT_URL, TOOLS_SERVICE_URL, PUBLIC_CHANNEL_IDS } from "../discord-config";
 
 // Whitelisted channel IDs — must match DiscordChatComponent
-const CHANNEL_IDS = ["671089694397956116", "676318241689436170"];
+const CHANNEL_IDS = PUBLIC_CHANNEL_IDS;
 
 export async function GET() {
   // ── Try Lupos first (live Discord.js cache) ──────────────────

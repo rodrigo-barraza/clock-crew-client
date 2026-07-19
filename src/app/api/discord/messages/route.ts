@@ -9,8 +9,8 @@
 // ============================================================
 
 import { rewritePrivateUrls } from "../rewritePrivateUrls";
-import { GUILD_ID, TOOLS_SERVICE_URL } from "../discord-config";
-const CHANNEL_ID = "671089694397956116"; // #general-chat
+import { GUILD_ID, TOOLS_SERVICE_URL, GENERAL_CHAT_CHANNEL_ID } from "../discord-config";
+const CHANNEL_ID = GENERAL_CHAT_CHANNEL_ID;
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
