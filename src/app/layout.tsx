@@ -178,7 +178,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={inter.variable}>
         <ThemeProvider storageKey="clock:theme">
           <ComponentsProvider>
-            <SessionTrackerComponent projectId="clock-crew-client" />
+            <SessionTrackerComponent projectId="clock-crew-client" replay heatmap />
             <NavBarComponent />
             {children}
             <footer className="site-footer">
