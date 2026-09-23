@@ -11,10 +11,6 @@ import {
 import styles from "./MemberProfileComponent.module.css";
 import {
   TransformedMemberProfileData,
-  MemberProfile,
-  NewgroundsStats,
-  ClockCrewForumStats,
-  AIProfileSummary,
   MemberContentItem,
   ForumThread,
   ForumPost,
