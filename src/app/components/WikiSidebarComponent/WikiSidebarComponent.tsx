@@ -1,23 +1,13 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from "./WikiSidebarComponent.module.css";
 
 const WIKI_SECTIONS = [
-  {
-    id: "members",
-    label: "Members",
-    href: "/clocks",
-    icon: "👥",
-  },
-  {
-    id: "history",
-    label: "History",
-    href: "/history",
-    icon: "📜",
-  },
+  { id: "members", label: "Members", href: "/clocks", icon: "👥" },
+  { id: "history", label: "History", href: "/history", icon: "📜" },
 ];
 
 // A–Z quick-jump letters for the members directory
@@ -43,83 +33,108 @@ const HISTORY_SECTIONS = [
 
 export default function WikiSidebarComponent() {
   const pathname = usePathname();
-  const isMembersSection = pathname.startsWith("/clocks");
-  const isHistorySection = pathname === "/history";
-  const [collapsed, setCollapsed] = useState(false);
+  const isDirectory = pathname === "/clocks";
+  const isHistory = pathname === "/history";
+  const activeSectionId = pathname.startsWith("/clocks")
+    ? "members"
+    : pathname.startsWith("/history")
+      ? "history"
+      : null;
 
-  const activeSectionId = useMemo(() => {
-    if (pathname.startsWith("/clocks")) return "members";
-    if (pathname.startsWith("/history")) return "history";
-    return null;
-  }, [pathname]);
+  // On narrow screens the sidebar is a drawer: closed until asked for, and
+  // closed again by any navigation. (It used to open over every page load.)
+  const [open, setOpen] = useState(false);
+  const [openedAt, setOpenedAt] = useState(pathname);
+  if (open && openedAt !== pathname) setOpen(false);
+
+  const toggle = () => {
+    setOpenedAt(pathname);
+    setOpen((previous) => !previous);
+  };
+  const close = () => setOpen(false);
 
   return (
     <>
       {/* ── Mobile toggle ──────────────────────────────────────── */}
       <button
-        className={styles['mobile-toggle']}
-        onClick={() => setCollapsed((previous) => !previous)}
-        aria-label={collapsed ? "Open sidebar" : "Close sidebar"}
+        type="button"
+        className={styles["mobile-toggle"]}
+        onClick={toggle}
+        aria-expanded={open}
+        aria-controls="wiki-sidebar"
+        aria-label={open ? "Close wiki navigation" : "Open wiki navigation"}
       >
-        <span className={styles['mobile-toggle-icon']}>
-          {collapsed ? "☰" : "✕"}
+        <span className={styles["mobile-toggle-icon"]} aria-hidden="true">
+          {open ? "✕" : "☰"}
         </span>
-        <span className={styles['mobile-toggle-label']}>Wiki Nav</span>
+        <span className={styles["mobile-toggle-label"]}>Wiki Nav</span>
       </button>
 
       {/* ── Sidebar ────────────────────────────────────────────── */}
       <aside
-        className={`${styles.sidebar} ${collapsed ? styles['sidebar-collapsed'] : ""}`}
-        role="complementary"
+        id="wiki-sidebar"
+        className={`${styles.sidebar} ${open ? "" : styles["sidebar-collapsed"]}`}
         aria-label="Wiki navigation"
       >
-        <div className={styles['sidebar-inner']}>
+        <div className={styles["sidebar-inner"]}>
           {/* ── Section nav ──────────────────────────────────────── */}
-          <nav className={styles['section-nav']}>
-            <span className={styles['section-label']}>Wiki</span>
+          <nav className={styles["section-nav"]}>
+            <span className={styles["section-label"]}>Wiki</span>
             {WIKI_SECTIONS.map((section) => (
               <Link
                 key={section.id}
                 href={section.href}
-                className={`${styles['section-link']} ${activeSectionId === section.id ? styles['section-link-active'] : ""}`}
+                onClick={close}
+                aria-current={
+                  activeSectionId === section.id ? "page" : undefined
+                }
+                className={`${styles["section-link"]} ${activeSectionId === section.id ? styles["section-link-active"] : ""}`}
               >
-                <span className={styles['section-icon']}>{section.icon}</span>
+                <span className={styles["section-icon"]} aria-hidden="true">
+                  {section.icon}
+                </span>
                 {section.label}
               </Link>
             ))}
           </nav>
 
-          {/* ── A–Z Quick Jump (only on members pages) ───────────── */}
-          {isMembersSection && (
+          {/* ── A–Z Quick Jump (directory only) ─────────────────── */}
+          {/* The letter headings exist only in the A–Z sort, so each link switches to it. */}
+          {isDirectory && (
             <nav
-              className={styles['alpha-nav']}
+              className={styles["alpha-nav"]}
               aria-label="Alphabetical quick jump"
             >
-              <span className={styles['section-label']}>Jump to</span>
-              <div className={styles['alpha-grid']}>
+              <span className={styles["section-label"]}>Jump to</span>
+              <div className={styles["alpha-grid"]}>
                 {ALPHABET.map((letter) => (
-                  <a
+                  <Link
                     key={letter}
-                    href={`#letter-${letter}`}
-                    className={styles['alpha-link']}
+                    href={`/clocks?sort=alpha#letter-${letter}`}
+                    onClick={close}
+                    className={styles["alpha-link"]}
                   >
                     {letter}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </nav>
           )}
 
-          {/* ── Article Sections (only on history page) ──────────── */}
-          {isHistorySection && (
-            <nav className={styles['alpha-nav']} aria-label="Article section jump">
-              <span className={styles['section-label']}>On This Page</span>
-              <div className={styles['article-sections']}>
+          {/* ── Article Sections (history page only) ────────────── */}
+          {isHistory && (
+            <nav
+              className={styles["alpha-nav"]}
+              aria-label="Article section jump"
+            >
+              <span className={styles["section-label"]}>On This Page</span>
+              <div className={styles["article-sections"]}>
                 {HISTORY_SECTIONS.map((section) => (
                   <a
                     key={section.id}
                     href={`#${section.id}`}
-                    className={styles['article-section-link']}
+                    onClick={close}
+                    className={styles["article-section-link"]}
                   >
                     {section.label}
                   </a>
@@ -131,12 +146,8 @@ export default function WikiSidebarComponent() {
       </aside>
 
       {/* ── Backdrop (mobile) ──────────────────────────────────── */}
-      {!collapsed && (
-        <div
-          className={styles.backdrop}
-          onClick={() => setCollapsed(true)}
-          aria-hidden="true"
-        />
+      {open && (
+        <div className={styles.backdrop} onClick={close} aria-hidden="true" />
       )}
     </>
   );

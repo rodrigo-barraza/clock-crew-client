@@ -1,18 +1,18 @@
 // ============================================================
 // Clock Crew — Discord Members API Proxy
 // ============================================================
-// Proxies requests to Lupos for live Discord member/presence data.
-// Guild is hardcoded for security.
-// Retries on 503 (Discord client not ready) with exponential backoff.
+// Live member/presence data from Lupos. A 503 means Lupos's Discord
+// client is still starting, so it is retried with backoff.
 // ============================================================
 
 import { retry } from "@rodrigo-barraza/utilities-library";
-import { GUILD_ID, LUPOS_BOT_URL } from "../discord-config";
+import { discordConfig } from "../discord-config";
+
 const MAX_RETRIES = 3;
 
 /** Thrown inside the retry action to signal a retryable upstream status. */
 class RetryableStatusError extends Error {
-  response: Response;
+  readonly response: Response;
   constructor(response: Response) {
     super(`Upstream responded ${response.status}`);
     this.response = response;
@@ -26,34 +26,29 @@ async function respondFromUpstream(response: Response): Promise<Response> {
       { status: response.status },
     );
   }
-
-  const data = await response.json();
-  return Response.json(data);
+  return Response.json(await response.json());
 }
 
 export async function GET() {
   try {
-    // Network errors and 503s (thrown below) are retried with 1s, 2s, 4s
-    // backoff; other statuses return normally and are never retried.
+    // Network errors and 503s are retried with 1 s, 2 s, 4 s backoff.
     return await retry(
       async () => {
-        const url = `${LUPOS_BOT_URL}/guild/members?guildId=${GUILD_ID}`;
-        const response = await fetch(url, { cache: "no-store" });
-
-        // Retry on 503 — Lupos Discord client isn't ready yet
+        const response = await fetch(
+          `${discordConfig.luposUrl}/guild/members?guildId=${discordConfig.guildId}`,
+          {
+            cache: "no-store",
+          },
+        );
         if (response.status === 503) throw new RetryableStatusError(response);
-
         return respondFromUpstream(response);
       },
       { retries: MAX_RETRIES, delay: 1000, backoff: 2 },
     );
   } catch (error) {
-    // Retries exhausted on 503 — respond from the last upstream response,
-    // same as any other non-ok status.
-    if (error instanceof RetryableStatusError) {
+    // Retries exhausted on 503 — answer from the last upstream response.
+    if (error instanceof RetryableStatusError)
       return respondFromUpstream(error.response);
-    }
-
     console.error("[discord/members] Proxy error:", (error as Error).message);
     return Response.json({ error: "Service unavailable" }, { status: 503 });
   }

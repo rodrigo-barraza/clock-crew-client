@@ -1,45 +1,10 @@
-// ============================================================
-// Clock Crew — Newgrounds Portal API Proxy
-// ============================================================
-// Proxies search/browse requests to clockcrew-api /newgrounds/portal.
-// ============================================================
+// Clock Crew — Newgrounds portal browse → clock-crew-service /newgrounds/portal
 
-import { CLOCK_CREW_SERVICE_URL } from "@/config";
+import { proxyService } from "@/lib/clockCrewService";
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-
-  // Forward all supported query params
-  const params = new URLSearchParams();
-  for (const key of [
-    "q",
-    "username",
-    "type",
-    "sort",
-    "limit",
-    "skip",
-    "year",
-  ]) {
-    const value = searchParams.get(key);
-    if (value) params.set(key, value);
-  }
-  if (!params.has("limit")) params.set("limit", "60");
-
-  try {
-    const url = `${CLOCK_CREW_SERVICE_URL}/newgrounds/portal?${params}`;
-    const response = await fetch(url, { cache: "no-store" });
-
-    if (!response.ok) {
-      return Response.json(
-        { error: "Failed to fetch portal data" },
-        { status: response.status },
-      );
-    }
-
-    const data = await response.json();
-    return Response.json(data);
-  } catch (error) {
-    console.error("[newgrounds/portal] Proxy error:", (error as Error).message);
-    return Response.json({ error: "Service unavailable" }, { status: 503 });
-  }
+export function GET(request: Request) {
+  return proxyService(request, "/newgrounds/portal", {
+    allowedParams: ["q", "username", "type", "sort", "limit", "skip", "year"],
+    defaults: { limit: "60" },
+  });
 }

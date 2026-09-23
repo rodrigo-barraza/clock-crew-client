@@ -1,3 +1,4 @@
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import Image from "next/image";
 import "./globals.css";
@@ -8,18 +9,17 @@ import {
   SessionTrackerComponent,
   generateThemeInitScript,
 } from "@rodrigo-barraza/components-library";
+import { SITE_NAME, SITE_URL } from "@/constants";
 
 const inter = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
 });
 
-const SITE_URL = "https://clocktopia.com";
-const SITE_NAME = "The Clock Crew";
 const SITE_DESCRIPTION =
   "The Clock Crew — the legendary Newgrounds Flash animation collective born in 2002. Home of StrawberryClock, the king of the portal, and the iconic clock characters that defined early internet culture.";
 
-export const metadata = {
+export const metadata: Metadata = {
   // ── Core ──────────────────────────────────────────────────────
   title: {
     default: "The Clock Crew — Newgrounds Flash Animation Collective",
@@ -92,6 +92,8 @@ export const metadata = {
     images: ["/og-image.png"],
   },
 
+  manifest: "/manifest.json",
+
   // ── Icons ────────────────────────────────────────────────────
   icons: {
     icon: [
@@ -155,12 +157,16 @@ const jsonLd = {
   ],
 };
 
-export const viewport = {
+export const viewport: Viewport = {
   themeColor: "#0f0f0f",
   colorScheme: "dark",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -178,7 +184,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={inter.variable}>
         <ThemeProvider storageKey="clock:theme">
           <ComponentsProvider>
-            <SessionTrackerComponent projectId="clock-crew-client" replay heatmap />
+            <SessionTrackerComponent
+              projectId="clock-crew-client"
+              replay
+              heatmap
+            />
             <NavBarComponent />
             {children}
             <footer className="site-footer">
@@ -196,7 +206,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   height={14}
                   unoptimized
                 />
-                © 2023–2026 Rodrigo Barraza
+                © 2023–{new Date().getFullYear()} Rodrigo Barraza
               </a>
             </footer>
           </ComponentsProvider>

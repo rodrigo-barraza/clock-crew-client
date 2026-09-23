@@ -14,8 +14,9 @@ interface ClockComponentProps {
  * Renders a golden-faced clock with hour/minute/second hands,
  * tick marks, and a warm ambient glow — Clock Crew style.
  *
- * Uses rAF for smooth second-hand sweeping and CSS custom properties
- * for GPU-accelerated rotation (no React re-renders).
+ * The hands turn through CSS custom properties (no React re-renders). A
+ * sweeping second hand needs every frame; without one, the minute hand
+ * moves a tenth of a degree a second, so one update a second is enough.
  */
 export default function ClockComponent({
   size = 160,
@@ -25,9 +26,7 @@ export default function ClockComponent({
   const clockRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    let rafId: number;
-
-    function tick() {
+    function update() {
       const now = new Date();
       const seconds = now.getSeconds() + now.getMilliseconds() / 1000;
       const minutes = now.getMinutes() + seconds / 60;
@@ -39,13 +38,20 @@ export default function ClockComponent({
         element.style.setProperty("--minute-deg", `${minutes * 6}deg`);
         element.style.setProperty("--second-deg", `${seconds * 6}deg`);
       }
-
-      rafId = requestAnimationFrame(tick);
     }
 
-    rafId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafId);
-  }, []);
+    update();
+    if (!showSeconds) {
+      const interval = setInterval(update, 1000);
+      return () => clearInterval(interval);
+    }
+
+    let frame = requestAnimationFrame(function tick() {
+      update();
+      frame = requestAnimationFrame(tick);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [showSeconds]);
 
   return (
     <div
@@ -81,7 +87,7 @@ export default function ClockComponent({
           >
             {/* Hour hand — thick, short, arrow-shaped */}
             <g
-              className={styles['hour-hand']}
+              className={styles["hour-hand"]}
               style={{ transform: "rotate(var(--hour-deg))" }}
             >
               <polygon
@@ -95,7 +101,7 @@ export default function ClockComponent({
 
             {/* Minute hand — thinner, longer, arrow-shaped */}
             <g
-              className={styles['minute-hand']}
+              className={styles["minute-hand"]}
               style={{ transform: "rotate(var(--minute-deg))" }}
             >
               <polygon
@@ -110,7 +116,7 @@ export default function ClockComponent({
             {/* Second hand — hairline, optional */}
             {showSeconds && (
               <g
-                className={styles['second-hand']}
+                className={styles["second-hand"]}
                 style={{ transform: "rotate(var(--second-deg))" }}
               >
                 <line

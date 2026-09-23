@@ -1,69 +1,83 @@
 // ── Clock Crew Member Profile Page ───────────────────────────
-// Server Component with dynamic metadata, canonical URLs,
-// JSON-LD structured data, and dynamic OG images for each
-// member profile.
+// Server-rendered: the member is fetched here (once — generateMetadata
+// and the page share the cached request), unknown names are a real
+// 404, and the profile ships as HTML instead of a loading skeleton.
 // ──────────────────────────────────────────────────────────────
 
-import MemberProfileComponent from "../../../components/MemberProfileComponent/MemberProfileComponent";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { cache } from "react";
+import MemberProfileComponent from "@/app/components/MemberProfileComponent/MemberProfileComponent";
+import {
+  ARCHIVE_REVALIDATE_SECONDS,
+  fetchServiceOrNull,
+} from "@/lib/clockCrewService";
+import { clip } from "@/lib/display";
+import { SITE_NAME, SITE_URL } from "@/constants";
+import type { MemberPageData } from "@/types";
 
-const SITE_URL = "https://clocktopia.com";
-import { CLOCK_CREW_SERVICE_URL } from "@/config";
-
-// ── Fetch member data at request time for metadata ───────────
-async function fetchMember(username: string) {
-  try {
-    const response = await fetch(
-      `${CLOCK_CREW_SERVICE_URL}/clockcrew/users/${encodeURIComponent(username)}`,
-      { next: { revalidate: 3600 } },
-    );
-    if (response.ok) return response.json();
-  } catch {
-    // Silently fall back to basic metadata
-  }
-  return null;
+interface MemberPageProps {
+  params: Promise<{ username: string }>;
 }
 
-export async function generateMetadata({ params }: { params: Record<string, string> }) {
-  const { username } = await params;
-  const decodedName = decodeURIComponent(username);
-  const member = await fetchMember(decodedName);
+/** Route params arrive percent-encoded for some characters; a stray `%` must not throw. */
+function decodeUsername(raw: string): string {
+  try {
+    return decodeURIComponent(raw);
+  } catch {
+    return raw;
+  }
+}
 
-  const title = `${decodedName} — Clock Crew Member`;
-  const description = member?.card?.bio
-    ? `${decodedName}: ${member.card.bio.slice(0, 150).trim()}…`
-    : `Profile page for ${decodedName}, a member of the Clock Crew — the legendary Newgrounds Flash animation collective.`;
+const getMember = cache((username: string) =>
+  fetchServiceOrNull<MemberPageData>(
+    `/clockcrew/members/${encodeURIComponent(username)}`,
+    {
+      next: { revalidate: ARCHIVE_REVALIDATE_SECONDS },
+    },
+  ),
+);
 
-  const avatarUrl = member?.card?.avatar || member?.avatarUrl || null;
-  const ogImages = avatarUrl
-    ? [
-        {
-          url: avatarUrl,
-          width: 300,
-          height: 300,
-          alt: `${decodedName} avatar`,
-        },
-      ]
-    : [
-        {
-          url: `${SITE_URL}/og-image.png`,
-          width: 1200,
-          height: 630,
-          alt: "The Clock Crew",
-        },
-      ];
+/** The page's one-line description: the member's own bio, else a stock line. */
+function describe(data: MemberPageData | null, name: string): string {
+  const bio =
+    data?.member.newgrounds?.description?.trim() ||
+    data?.member.ccForum?.personalText?.trim();
+  return bio
+    ? `${name}: ${clip(bio, 150)}`
+    : `Profile page for ${name}, a member of the Clock Crew — the legendary Newgrounds Flash animation collective.`;
+}
+
+export async function generateMetadata({
+  params,
+}: MemberPageProps): Promise<Metadata> {
+  const requested = decodeUsername((await params).username);
+  const data = await getMember(requested).catch(() => null);
+  const name = data?.member.username ?? requested;
+  const title = `${name} — Clock Crew Member`;
+  const description = describe(data, name);
+  const canonical = `/clocks/${encodeURIComponent(name)}`;
+  const avatarUrl = data?.member.avatarUrl;
 
   return {
     title,
     description,
-    alternates: {
-      canonical: `/clocks/${encodeURIComponent(decodedName)}`,
-    },
+    alternates: { canonical },
     openGraph: {
       type: "profile",
       title,
       description,
-      url: `${SITE_URL}/clocks/${encodeURIComponent(decodedName)}`,
-      images: ogImages,
+      url: `${SITE_URL}${canonical}`,
+      images: avatarUrl
+        ? [{ url: avatarUrl, width: 300, height: 300, alt: `${name} avatar` }]
+        : [
+            {
+              url: `${SITE_URL}/og-image.png`,
+              width: 1200,
+              height: 630,
+              alt: SITE_NAME,
+            },
+          ],
     },
     twitter: {
       card: avatarUrl ? "summary" : "summary_large_image",
@@ -73,36 +87,35 @@ export async function generateMetadata({ params }: { params: Record<string, stri
   };
 }
 
-export default async function MemberProfilePage({ params }: { params: Record<string, string> }) {
-  const { username } = await params;
-  const decodedName = decodeURIComponent(username);
-  const member = await fetchMember(decodedName);
+export default async function MemberProfilePage({ params }: MemberPageProps) {
+  const data = await getMember(decodeUsername((await params).username));
+  if (!data) notFound();
 
-  // ── JSON-LD Person structured data ──────────────────────────
+  const { member } = data;
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
-    name: decodedName,
-    url: `${SITE_URL}/clocks/${encodeURIComponent(decodedName)}`,
-    memberOf: {
-      "@type": "Organization",
-      name: "The Clock Crew",
-      url: SITE_URL,
-    },
-    ...(member?.card?.avatar && { image: member.card.avatar }),
-    ...(member?.card?.bio && { description: member.card.bio.slice(0, 200) }),
-    ...(member?.dateRegistered && {
-      knowsAbout: ["Flash Animation", "Newgrounds"],
+    name: member.username,
+    url: `${SITE_URL}/clocks/${encodeURIComponent(member.username)}`,
+    memberOf: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
+    ...(member.avatarUrl && { image: member.avatarUrl }),
+    ...(member.newgrounds?.description && {
+      description: clip(member.newgrounds.description, 200),
     }),
+    sameAs: [member.newgrounds?.profileUrl, member.ccForum?.profileUrl].filter(
+      Boolean,
+    ),
   };
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
       />
-      <MemberProfileComponent username={decodedName} />
+      <MemberProfileComponent data={data} />
     </>
   );
 }

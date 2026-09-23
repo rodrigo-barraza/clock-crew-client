@@ -1,29 +1,15 @@
-// ============================================================
-// Clock Crew — Newgrounds Profile Card API Proxy
-// ============================================================
-// Proxies enriched profile card requests to clockcrew-api.
-// ============================================================
+// Clock Crew — Newgrounds profile card → clock-crew-service /newgrounds/portal/:username/card
 
-import { CLOCK_CREW_SERVICE_URL } from "@/config";
+import { proxyService } from "@/lib/clockCrewService";
 
-export async function GET(request: Request, { params }: { params: Promise<{ username: string }> }) {
-  const username = (await params).username;
-
-  try {
-    const url = `${CLOCK_CREW_SERVICE_URL}/newgrounds/portal/${encodeURIComponent(username)}/card`;
-    const response = await fetch(url, { next: { revalidate: 600 } });
-
-    if (!response.ok) {
-      return Response.json(
-        { error: "Failed to fetch card data" },
-        { status: response.status },
-      );
-    }
-
-    const data = await response.json();
-    return Response.json(data);
-  } catch (error) {
-    console.error("[newgrounds/card] Proxy error:", (error as Error).message);
-    return Response.json({ error: "Service unavailable" }, { status: 503 });
-  }
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ username: string }> },
+) {
+  const { username } = await params;
+  return proxyService(
+    request,
+    `/newgrounds/portal/${encodeURIComponent(username)}/card`,
+    { revalidate: 600 },
+  );
 }

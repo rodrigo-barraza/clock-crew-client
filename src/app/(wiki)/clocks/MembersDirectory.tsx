@@ -1,189 +1,152 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import {
   SearchInputComponent,
-  LoadingIndicatorComponent,
   EmptyStateComponent,
 } from "@rodrigo-barraza/components-library";
-import MemberCardComponent from "../../components/MemberCardComponent/MemberCardComponent";
+import MemberCardComponent from "@/app/components/MemberCardComponent/MemberCardComponent";
+import { formatCount } from "@/lib/display";
+import type { DirectoryUser } from "@/types";
+import { SORT_OPTIONS, type DirectorySort } from "./sortOptions";
 import styles from "./MembersPage.module.css";
 
-interface TransformedDirectoryUser {
-  userId?: string | number;
-  username?: string;
-  customTitle?: string;
-  postCount?: number;
-  dateRegistered?: string | number;
-  [key: string]: unknown;
+function registered(user: DirectoryUser): number {
+  const time = user.dateRegistered ? Date.parse(user.dateRegistered) : NaN;
+  return Number.isNaN(time) ? 0 : time;
 }
 
-const SORT_OPTIONS = [
-  { key: "posts", label: "Most Posts" },
-  { key: "newest", label: "Newest" },
-  { key: "oldest", label: "Oldest" },
-  { key: "alpha", label: "A → Z" },
-];
+const COMPARE: Record<
+  DirectorySort,
+  (a: DirectoryUser, b: DirectoryUser) => number
+> = {
+  posts: (a, b) => (b.postCount ?? 0) - (a.postCount ?? 0),
+  newest: (a, b) => registered(b) - registered(a),
+  oldest: (a, b) => registered(a) - registered(b),
+  alpha: (a, b) =>
+    a.username.localeCompare(b.username, "en", { sensitivity: "base" }),
+};
 
-export default function MembersDirectory() {
-  const [users, setUsers] = useState<TransformedDirectoryUser[]>([]);
-  const [loading, setLoading] = useState(true);
+/** The A–Z bucket of a name: a letter, or "#" for anything else. */
+export function letterOf(username: string): string {
+  const letter = username.charAt(0).toUpperCase();
+  return /[A-Z]/.test(letter) ? letter : "#";
+}
+
+interface MembersDirectoryProps {
+  /** null when the service could not be reached. */
+  users: DirectoryUser[] | null;
+  initialSort: DirectorySort;
+}
+
+export default function MembersDirectory({
+  users,
+  initialSort,
+}: MembersDirectoryProps) {
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState("posts");
+  const [sort, setSort] = useState<DirectorySort>(initialSort);
 
-  useEffect(() => {
-    async function fetchUsers() {
-      try {
-        const response = await fetch("/api/clockcrew/users?limit=2000");
-        if (!response.ok) throw new Error("Failed to fetch");
-        const data = await response.json();
-        setUsers(data.users || []);
-      } catch (error) {
-        console.error("[MembersPage] Fetch error:", (error as Error).message);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchUsers();
-  }, []);
+  const changeSort = (next: DirectorySort) => {
+    setSort(next);
+    // Keep the sort shareable without a server round-trip; Next syncs its router with history.
+    const url = new URL(window.location.href);
+    if (next === "posts") url.searchParams.delete("sort");
+    else url.searchParams.set("sort", next);
+    url.hash = "";
+    window.history.replaceState(null, "", url);
+  };
 
-  // ── Filter + sort ─────────────────────────────────────────────
   const filteredUsers = useMemo(() => {
-    let list = users;
-
-    // Search filter
-    if (search.trim()) {
-      const normalizedSearch = search.trim().toLowerCase();
-      list = list.filter(
-        (user) =>
-          user.username?.toLowerCase().includes(normalizedSearch) ||
-          user.customTitle?.toLowerCase().includes(normalizedSearch),
-      );
-    }
-
-    // Sort
-    const sorted = [...list];
-    switch (sort) {
-      case "posts":
-        sorted.sort((a, b) => (b.postCount || 0) - (a.postCount || 0));
-        break;
-      case "newest":
-        sorted.sort(
-          (a, b) =>
-            new Date(b.dateRegistered || 0).getTime() -
-            new Date(a.dateRegistered || 0).getTime(),
-        );
-        break;
-      case "oldest":
-        sorted.sort(
-          (a, b) =>
-            new Date(a.dateRegistered || 0).getTime() -
-            new Date(b.dateRegistered || 0).getTime(),
-        );
-        break;
-      case "alpha":
-        sorted.sort((a, b) =>
-          (a.username || "").localeCompare(b.username || ""),
-        );
-        break;
-    }
-
-    return sorted;
+    const needle = search.trim().toLowerCase();
+    const matching = needle
+      ? (users ?? []).filter(
+          (user) =>
+            user.username.toLowerCase().includes(needle) ||
+            user.customTitle?.toLowerCase().includes(needle),
+        )
+      : (users ?? []);
+    return [...matching].sort(COMPARE[sort]);
   }, [users, search, sort]);
 
-  // ── Group by letter for A–Z anchors ───────────────────────────
-  const grouped = useMemo<Record<string, TransformedDirectoryUser[]> | null>(() => {
+  const groups = useMemo(() => {
     if (sort !== "alpha") return null;
-
-    const groups: Record<string, TransformedDirectoryUser[]> = {};
+    const byLetter = new Map<string, DirectoryUser[]>();
     for (const user of filteredUsers) {
-      const letter = (user.username || "?")[0].toUpperCase();
-      const key = /[A-Z]/.test(letter) ? letter : "#";
-      if (!groups[key]) groups[key] = [];
-      groups[key].push(user);
+      const letter = letterOf(user.username);
+      byLetter.set(letter, [...(byLetter.get(letter) ?? []), user]);
     }
-    return groups;
+    return [...byLetter].sort(([a], [b]) =>
+      a === "#" ? 1 : b === "#" ? -1 : a.localeCompare(b),
+    );
   }, [filteredUsers, sort]);
 
   return (
     <div className={styles.page}>
-      {/* ── Page Header ─────────────────────────────────────────── */}
       <header className={styles.header}>
         <h1 className={styles.title}>Members</h1>
         <p className={styles.subtitle}>
-          {loading
-            ? "Loading directory…"
-            : `${users.length} Clock Crew members archived`}
+          {users
+            ? `${formatCount(users.length)} Clock Crew members archived`
+            : "The member directory is unavailable right now."}
         </p>
       </header>
 
-      {/* ── Controls ────────────────────────────────────────────── */}
       <div className={styles.controls}>
         <SearchInputComponent
           value={search}
           onChange={setSearch}
           placeholder="Search members…"
           leadingIcon={<Search size={14} />}
+          className={styles["search-input"]}
         />
-        <div className={styles['sort-group']}>
-          {SORT_OPTIONS.map((opt) => (
+        <div
+          className={styles["sort-group"]}
+          role="group"
+          aria-label="Sort members"
+        >
+          {SORT_OPTIONS.map((option) => (
             <button
-              key={opt.key}
-              className={`${styles['sort-button']} ${sort === opt.key ? styles['sort-btn-active'] : ""}`}
-              onClick={() => setSort(opt.key)}
+              key={option.key}
+              type="button"
+              aria-pressed={sort === option.key}
+              className={`${styles["sort-button"]} ${sort === option.key ? styles["sort-btn-active"] : ""}`}
+              onClick={() => changeSort(option.key)}
             >
-              {opt.label}
+              {option.label}
             </button>
           ))}
         </div>
       </div>
 
-      {/* ── Loading state ───────────────────────────────────────── */}
-      {loading && (
-        <div className={styles.loadingState}>
-          <LoadingIndicatorComponent size={48} />
-          <span>Loading directory…</span>
-        </div>
-      )}
-
-      {/* ── Alphabetical grouped view ───────────────────────────── */}
-      {!loading && grouped && (
-        <div className={styles['grouped-list']}>
-          {Object.entries(grouped)
-            .sort(([a], [b]) => a.localeCompare(b))
-            .map(([letter, members]) => (
-              <div key={letter} id={`letter-${letter}`}>
-                <h2 className={styles['letter-heading']}>{letter}</h2>
-                <div className={styles.grid}>
-                  {members.map((user, i) => (
-                    <MemberCardComponent
-                      key={user.userId as string | number || user.username as string}
-                      user={user}
-                      index={i}
-                    />
-                  ))}
-                </div>
+      {groups ? (
+        <div className={styles["grouped-list"]}>
+          {groups.map(([letter, members]) => (
+            <section key={letter} aria-labelledby={`letter-${letter}`}>
+              <h2 id={`letter-${letter}`} className={styles["letter-heading"]}>
+                {letter}
+              </h2>
+              <div className={styles.grid}>
+                {members.map((user, index) => (
+                  <MemberCardComponent
+                    key={user.userId}
+                    user={user}
+                    index={index}
+                  />
+                ))}
               </div>
-            ))}
+            </section>
+          ))}
         </div>
-      )}
-
-      {/* ── Flat grid view ──────────────────────────────────────── */}
-      {!loading && !grouped && (
+      ) : (
         <div className={styles.grid}>
-          {filteredUsers.map((user, i) => (
-            <MemberCardComponent
-              key={user.userId as string | number || user.username as string}
-              user={user}
-              index={i}
-            />
+          {filteredUsers.map((user, index) => (
+            <MemberCardComponent key={user.userId} user={user} index={index} />
           ))}
         </div>
       )}
 
-      {/* ── Empty state ─────────────────────────────────────────── */}
-      {!loading && filteredUsers.length === 0 && (
+      {users && filteredUsers.length === 0 && (
         <EmptyStateComponent
           icon={<span style={{ fontSize: 40 }}>🔍</span>}
           subtitle={`No members found matching "${search}"`}

@@ -1,66 +1,48 @@
 // ── sitemap.xml via Next.js App Router ───────────────────────
-// Generates a comprehensive sitemap including all static pages
-// and all dynamic /clocks/[username] member profiles.
+// Static pages plus every /clocks/[username] member page in the
+// directory.
 // ──────────────────────────────────────────────────────────────
 
-const BASE_URL = "https://clocktopia.com";
-import { CLOCK_CREW_SERVICE_URL } from "@/config";
+import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/constants";
+import { fetchService } from "@/lib/clockCrewService";
+import type { DirectoryUser } from "@/types";
 
 export const revalidate = 86_400; // 1 day — must be a literal for Next.js static analysis
 
-function safeDate(str: string) {
-  if (!str) return new Date();
-  const parsedDate = new Date(str);
-  return isNaN(parsedDate.getTime()) ? new Date() : parsedDate;
-}
-
-export default async function sitemap() {
-  // ── Static pages ────────────────────────────────────────────
-  const now = new Date();
-  const staticPages = [
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const staticPages: MetadataRoute.Sitemap = [
     {
-      url: BASE_URL,
-      lastModified: now,
+      url: SITE_URL,
+      lastModified: new Date(),
       changeFrequency: "daily",
       priority: 1.0,
     },
-    {
-      url: `${BASE_URL}/clocks`,
-      lastModified: now,
-      changeFrequency: "daily",
-      priority: 0.9,
-    },
-    {
-      url: `${BASE_URL}/history`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
+    { url: `${SITE_URL}/clocks`, changeFrequency: "daily", priority: 0.9 },
+    { url: `${SITE_URL}/history`, changeFrequency: "monthly", priority: 0.8 },
   ];
 
-  // ── Dynamic member profile pages ────────────────────────────
-  let memberPages = [];
   try {
-    const response = await fetch(
-      `${CLOCK_CREW_SERVICE_URL}/clockcrew/users?limit=5000`,
-      { cache: "no-store" },
+    const { users } = await fetchService<{ users: DirectoryUser[] }>(
+      "/clockcrew/users?limit=5000",
+      {
+        next: { revalidate },
+      },
     );
-
-    if (response.ok) {
-      const data = await response.json();
-      const users = data.users || [];
-
-      memberPages = users.map((user: Record<string, unknown>) => ({
-        url: `${BASE_URL}/clocks/${encodeURIComponent(user.username as string)}`,
-        lastModified: safeDate(user.dateRegistered as string),
-        changeFrequency: "weekly",
-        priority: 0.6,
-      }));
-    }
+    // No lastModified: the archive does not know when a profile last changed,
+    // and a registration date passed off as one would be wrong.
+    const memberPages: MetadataRoute.Sitemap = users.map((user) => ({
+      url: `${SITE_URL}/clocks/${encodeURIComponent(user.username)}`,
+      changeFrequency: "weekly",
+      priority: 0.6,
+    }));
+    return [...staticPages, ...memberPages];
   } catch (error) {
-    console.error("[sitemap] Failed to fetch members:", (error as Error).message);
-    // Return only static pages if service is unavailable
+    // Static pages only while the service is unavailable.
+    console.error(
+      "[sitemap] Failed to fetch members:",
+      (error as Error).message,
+    );
+    return staticPages;
   }
-
-  return [...staticPages, ...memberPages];
 }

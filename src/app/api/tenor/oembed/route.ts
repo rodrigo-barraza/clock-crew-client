@@ -1,54 +1,60 @@
 // ============================================================
 // Clock Crew — Tenor oEmbed Proxy
 // ============================================================
-// Fetches the Tenor oEmbed JSON for a given tenor.com URL and
-// returns the direct GIF media URL. The oEmbed thumbnail uses
-// the "AAAAN" (nano PNG) variant — we swap to "AAAAC" (.gif)
-// to get the full animated version.
+// Resolves a tenor.com link to its animated GIF. The oEmbed
+// thumbnail is the "AAAAN" (nano PNG) variant; "AAAAC" is the GIF.
 //
 // GET /api/tenor/oembed?url=https://tenor.com/view/...
-// → { gifUrl, width, height, title }
+// → { gifUrl, thumbnailUrl, width, height, title }
 // ============================================================
 
-import { MILLISECONDS_PER_DAY } from "@rodrigo-barraza/utilities-library";
+import { parseTenorUrl, thumbnailToGif } from "@/lib/tenor";
 
-// In-memory cache to avoid repeated oEmbed fetches for the same URL
-const cache = new Map();
-const CACHE_TTL = MILLISECONDS_PER_DAY;
 const ONE_DAY_SECONDS = 86_400;
+const CACHE_TTL_MS = ONE_DAY_SECONDS * 1000;
+const CACHE_MAX_ENTRIES = 500;
 
-function transformThumbnailToGif(thumbnailUrl: string) {
-  if (!thumbnailUrl) return null;
-  // Tenor thumbnail pattern: https://media.tenor.com/{hash}AAAAN/{slug}.png
-  // GIF variant:              https://media.tenor.com/{hash}AAAAC/{slug}.gif
-  return thumbnailUrl.replace(/AAAAN\//, "AAAAC/").replace(/\.png$/, ".gif");
+interface TenorGif {
+  gifUrl: string | null;
+  thumbnailUrl: string | null;
+  width: number;
+  height: number;
+  title: string;
 }
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const tenorUrl = searchParams.get("url");
+/** Insertion-ordered, so the first key is always the oldest entry. */
+const cache = new Map<string, { data: TenorGif; storedAt: number }>();
 
-  if (!tenorUrl || !tenorUrl.includes("tenor.com")) {
+function remember(key: string, data: TenorGif) {
+  cache.delete(key);
+  cache.set(key, { data, storedAt: Date.now() });
+  while (cache.size > CACHE_MAX_ENTRIES)
+    cache.delete(cache.keys().next().value!);
+}
+
+const CACHE_HEADERS = { "Cache-Control": `public, max-age=${ONE_DAY_SECONDS}` };
+
+export async function GET(request: Request) {
+  const tenorUrl = parseTenorUrl(new URL(request.url).searchParams.get("url"));
+  if (!tenorUrl) {
     return Response.json(
       { error: "Missing or invalid Tenor URL" },
       { status: 400 },
     );
   }
 
-  // Check cache
   const cached = cache.get(tenorUrl);
-  if (cached && Date.now() - cached.ts < CACHE_TTL) {
-    return Response.json(cached.data, {
-      headers: { "Cache-Control": `public, max-age=${ONE_DAY_SECONDS}` },
-    });
+  if (cached && Date.now() - cached.storedAt < CACHE_TTL_MS) {
+    return Response.json(cached.data, { headers: CACHE_HEADERS });
   }
 
   try {
-    const oembedUrl = `https://tenor.com/oembed?url=${encodeURIComponent(tenorUrl)}`;
-    const response = await fetch(oembedUrl, {
-      next: { revalidate: ONE_DAY_SECONDS },
-    });
-
+    const response = await fetch(
+      `https://tenor.com/oembed?url=${encodeURIComponent(tenorUrl)}`,
+      {
+        next: { revalidate: ONE_DAY_SECONDS },
+      },
+    );
     if (!response.ok) {
       return Response.json(
         { error: "Tenor oEmbed request failed" },
@@ -56,31 +62,23 @@ export async function GET(request: Request) {
       );
     }
 
-    const oembed = await response.json();
-    const gifUrl = transformThumbnailToGif(oembed.thumbnail_url);
-
-    const data = {
-      gifUrl,
-      thumbnailUrl: oembed.thumbnail_url,
+    const oembed = (await response.json()) as {
+      thumbnail_url?: string;
+      thumbnail_width?: number;
+      thumbnail_height?: number;
+      width?: number;
+      height?: number;
+      author_name?: string;
+    };
+    const data: TenorGif = {
+      gifUrl: thumbnailToGif(oembed.thumbnail_url),
+      thumbnailUrl: oembed.thumbnail_url ?? null,
       width: oembed.thumbnail_width || oembed.width || 400,
       height: oembed.thumbnail_height || oembed.height || 300,
       title: oembed.author_name || "Tenor GIF",
     };
-
-    // Cache the result
-    cache.set(tenorUrl, { data, ts: Date.now() });
-
-    // Lazy cleanup — prevent unbounded growth
-    if (cache.size > 500) {
-      const now = Date.now();
-      for (const [key, value] of cache) {
-        if (now - value.ts > CACHE_TTL) cache.delete(key);
-      }
-    }
-
-    return Response.json(data, {
-      headers: { "Cache-Control": `public, max-age=${ONE_DAY_SECONDS}` },
-    });
+    remember(tenorUrl, data);
+    return Response.json(data, { headers: CACHE_HEADERS });
   } catch (error) {
     console.error("[tenor/oembed] Proxy error:", (error as Error).message);
     return Response.json(

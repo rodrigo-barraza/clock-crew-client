@@ -15,39 +15,42 @@ const NAV_LINKS = [
 export default function NavBarComponent() {
   const pathname = usePathname();
   const isHome = pathname === "/";
-  const [scrolled, setScrolled] = useState(
-    () => typeof window !== "undefined" && window.scrollY > 32,
-  );
+  // Starts false on both sides so hydration matches; the first scroll
+  // event (or a page restored mid-scroll) sets it.
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 32);
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const frame = requestAnimationFrame(onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   return (
     <nav
-      className={`${styles['navigation-bar']} ${scrolled ? styles['navigation-scrolled'] : ""} ${isHome ? styles['navigation-home'] : styles['navigation-inner']}`}
-      role="navigation"
+      className={`${styles["navigation-bar"]} ${scrolled ? styles["navigation-scrolled"] : ""} ${isHome ? styles["navigation-home"] : styles["navigation-inner"]}`}
       aria-label="Main navigation"
     >
-      <div className={styles['navigation-inner-wrapper']}>
+      <div className={styles["navigation-inner-wrapper"]}>
         {/* ── Logo / Home ──────────────────────────────────────── */}
-        <Link href="/" className={styles['logo-link']}>
+        <Link href="/" className={styles["logo-link"]}>
           <Image
             src="/animated-clock.gif"
             alt=""
-            className={styles['logo-gif']}
+            className={styles["logo-gif"]}
             aria-hidden="true"
             width={32}
             height={32}
             unoptimized
           />
-          <span className={styles['logo-text']}>The Clock Crew</span>
+          <span className={styles["logo-text"]}>The Clock Crew</span>
         </Link>
 
         {/* ── Links ────────────────────────────────────────────── */}
-        <ul className={styles['link-list']}>
+        <ul className={styles["link-list"]}>
           {NAV_LINKS.map(({ href, label }) => {
             const isActive =
               href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -56,7 +59,8 @@ export default function NavBarComponent() {
               <li key={href}>
                 <Link
                   href={href}
-                  className={`${styles.link} ${isActive ? styles['link-active'] : ""}`}
+                  className={`${styles.link} ${isActive ? styles["link-active"] : ""}`}
+                  aria-current={isActive ? "page" : undefined}
                 >
                   {label}
                 </Link>

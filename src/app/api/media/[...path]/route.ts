@@ -1,36 +1,46 @@
 // ============================================================
 // Clock Crew — Media Proxy
 // ============================================================
-// Proxies requests for archived Discord media from the internal
-// MinIO instance to the public web. This prevents Chrome's
-// Private Network Access (PNA) prompt by keeping all resource
-// loads on the same public origin.
+// Serves archived Discord media from the internal MinIO on the
+// public origin, so no visitor gets Chrome's Private Network
+// Access prompt.
 //
-// Incoming:  GET /api/media/discord-media/media/<key>
-// Proxied:   GET http://<MINIO_HOST>:9000/discord-media/media/<key>
+//   GET /api/media/discord-media/<key>  →  <MINIO>/discord-media/<key>
+//
+// Only the archived-media bucket is reachable; anything else, and
+// any path that tries to climb out of it, is a 404.
 // ============================================================
 
-const MINIO_INTERNAL_URL = process.env.MINIO_INTERNAL_URL;
+import { SERVER_CONFIG } from "@/config";
+import { mediaObjectPath } from "@/lib/media";
 
-export async function GET(_request: Request, { params }: { params: Promise<{ path: string[] }> }) {
-  const segments = (await params).path || [];
-  const objectPath = segments.join("/");
-
-  const upstream = `${MINIO_INTERNAL_URL}/${objectPath}`;
+export async function GET(
+  _request: Request,
+  { params }: { params: Promise<{ path?: string[] }> },
+) {
+  const objectPath = mediaObjectPath((await params).path ?? []);
+  const baseUrl = SERVER_CONFIG.minioInternalUrl;
+  if (!objectPath || !baseUrl) return new Response(null, { status: 404 });
 
   try {
-    const response = await fetch(upstream, { cache: "no-store" });
-
-    if (!response.ok) {
-      return new Response(null, { status: response.status });
-    }
+    const response = await fetch(`${baseUrl}/${objectPath}`, {
+      cache: "no-store",
+    });
+    if (!response.ok)
+      return new Response(null, {
+        status: response.status === 403 ? 404 : response.status,
+      });
 
     return new Response(response.body, {
       headers: {
         "Content-Type":
           response.headers.get("Content-Type") || "application/octet-stream",
+        ...(response.headers.get("Content-Length") && {
+          "Content-Length": response.headers.get("Content-Length")!,
+        }),
         // Archived media is immutable — cache aggressively
         "Cache-Control": "public, max-age=31536000, immutable",
+        "X-Content-Type-Options": "nosniff",
       },
     });
   } catch (error) {
