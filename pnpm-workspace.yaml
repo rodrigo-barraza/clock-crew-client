@@ -1,7 +1,7 @@
 blockExoticSubdeps: false
 allowBuilds:
-  '@rodrigo-barraza/components-library': true
-  '@rodrigo-barraza/utilities-library': true
+  # Git-hosted libs ship a built dist/ and run no scripts. `false` by NAME covers every
+  # SHA; a name-level `true` makes pnpm 11 abort each new SHA as a "revoked" build.
+  '@rodrigo-barraza/components-library': false
+  '@rodrigo-barraza/utilities-library': false
   sharp: true
-  '@rodrigo-barraza/components-library@https://codeload.github.com/rodrigo-barraza/components-library/tar.gz/77cc8894ece262bcfbd8ab710d32068fedc82057': true
-  '@rodrigo-barraza/utilities-library@https://codeload.github.com/rodrigo-barraza/utilities-library/tar.gz/eb72517ec56b4c2735bf0f5605bacbae99fa62e3': true
