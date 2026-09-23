@@ -1,36 +1,33 @@
 // ============================================================
 // Clock Crew — Discord Messages API Proxy
 // ============================================================
-// Proxies requests to tools-service's Discord message search endpoint.
-// Hardcodes the guild/channel to prevent abuse.
-//
-// Private MinIO URLs are rewritten to prevent Chrome's
-// Private Network Access (PNA) prompt for all visitors.
+// Recent #general-chat messages from tools-service. Private MinIO
+// URLs are rewritten so no visitor gets Chrome's Private Network
+// Access prompt.
 // ============================================================
 
-import { rewritePrivateUrls } from "../rewritePrivateUrls";
-import { GUILD_ID, TOOLS_SERVICE_URL, GENERAL_CHAT_CHANNEL_ID } from "../discord-config";
-const CHANNEL_ID = GENERAL_CHAT_CHANNEL_ID;
+import {
+  discordConfig,
+  GENERAL_CHAT_CHANNEL_ID,
+  messageLimit,
+  rewriteMediaUrls,
+} from "../discord-config";
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const limit = Math.min(parseInt(searchParams.get("limit") || "50", 10), 500);
+  const limit = messageLimit(new URL(request.url).searchParams);
 
   try {
-    const url = `${TOOLS_SERVICE_URL}/discord/messages/search?guildId=${GUILD_ID}&channelId=${CHANNEL_ID}&limit=${limit}&includeBots=true`;
-    const response = await fetch(url, { cache: "no-store" });
-
+    const response = await fetch(
+      `${discordConfig.toolsServiceUrl}/discord/messages/search?guildId=${discordConfig.guildId}&channelId=${GENERAL_CHAT_CHANNEL_ID}&limit=${limit}&includeBots=true`,
+      { cache: "no-store" },
+    );
     if (!response.ok) {
       return Response.json(
         { error: "Failed to fetch messages" },
         { status: response.status },
       );
     }
-
-    // Sanitize private MinIO URLs before sending to the browser
-    const raw = await response.text();
-    const sanitized = rewritePrivateUrls(raw);
-    return new Response(sanitized, {
+    return new Response(rewriteMediaUrls(await response.text()), {
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {

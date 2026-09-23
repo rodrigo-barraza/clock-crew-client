@@ -1,30 +1,35 @@
 "use client";
 
-import { useState, useEffect, useCallback, SyntheticEvent } from "react";
-import Link from "next/link";
-import {
-  formatDate,
-  formatNumber,
-  getErrorMessage,
-  stripHtml,
-} from "@rodrigo-barraza/utilities-library";
+import { useId, useState, type ReactNode, type SyntheticEvent } from "react";
+import ReactMarkdown, { type Components } from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { stripHtml } from "@rodrigo-barraza/utilities-library";
 import styles from "./MemberProfileComponent.module.css";
 import {
-  TransformedMemberProfileData,
-  MemberContentItem,
-  ForumThread,
+  clip,
+  formatArchiveDate as formatDate,
+  formatCompact as formatNumber,
+  formatScore,
+  initials,
+  linkLabel,
+  safeHref,
+} from "@/lib/display";
+import type {
   ForumPost,
+  ForumThread,
+  MemberPageData,
+  NewgroundsPost,
   Review,
-} from "../../../types";
+  Submission,
+  SubmissionType,
+} from "@/types";
 
-// ── Tab definitions ──────────────────────────────────────────────
-interface TabDefinition {
-  key: string;
-  label: string;
-  icon: string;
-}
+// ── Tabs ─────────────────────────────────────────────────────────
 
-const TABS: TabDefinition[] = [
+type TabKey =
+  "overview" | "movies" | "games" | "audio" | "art" | "posts" | "reviews";
+
+const TABS: Array<{ key: TabKey; label: string; icon: string }> = [
   { key: "overview", label: "Overview", icon: "📋" },
   { key: "movies", label: "Movies", icon: "🎬" },
   { key: "games", label: "Games", icon: "🎮" },
@@ -34,81 +39,120 @@ const TABS: TabDefinition[] = [
   { key: "reviews", label: "Reviews", icon: "📝" },
 ];
 
-// ── Sub-components ───────────────────────────────────────────────
+const TYPE_EMOJI: Record<SubmissionType, string> = {
+  movie: "🎬",
+  game: "🎮",
+  audio: "🎵",
+  art: "🎨",
+};
 
-interface StatCardProps {
-  label: string;
-  value: string | number | undefined;
-  icon?: string;
+function hideBrokenImage(event: SyntheticEvent<HTMLImageElement>) {
+  event.currentTarget.style.display = "none";
 }
 
-function StatCard({ label, value, icon }: StatCardProps) {
+// ── Pieces ───────────────────────────────────────────────────────
+
+function StatCard({
+  label,
+  value,
+  icon,
+}: {
+  label: string;
+  value: ReactNode;
+  icon?: string;
+}) {
   return (
-    <div className={styles['stat-card']}>
-      {icon && <span className={styles['stat-icon']}>{icon}</span>}
-      <span className={styles['stat-value']}>{value}</span>
-      <span className={styles['stat-label']}>{label}</span>
+    <div className={styles["stat-card"]}>
+      {icon && (
+        <span className={styles["stat-icon"]} aria-hidden="true">
+          {icon}
+        </span>
+      )}
+      <span className={styles["stat-value"]}>{value}</span>
+      <span className={styles["stat-label"]}>{label}</span>
     </div>
   );
 }
 
-interface ContentCardProps {
-  item: MemberContentItem;
-  type: string;
+function Panel({
+  icon,
+  title,
+  count,
+  children,
+}: {
+  icon: string;
+  title: string;
+  count?: number;
+  children: ReactNode;
+}) {
+  return (
+    <section className={styles.panel}>
+      <h2 className={styles["section-title"]}>
+        <span className={styles["section-icon"]} aria-hidden="true">
+          {icon}
+        </span>
+        {title}
+        {count !== undefined && (
+          <span className={styles["panel-count"]}>{formatNumber(count)}</span>
+        )}
+      </h2>
+      {children}
+    </section>
+  );
 }
 
-function ContentCard({ item, type }: ContentCardProps) {
-  const emoji =
-    type === "movie"
-      ? "🎬"
-      : type === "game"
-        ? "🎮"
-        : type === "audio"
-          ? "🎵"
-          : "🎨";
+function ContentCard({
+  item,
+  type,
+}: {
+  item: Submission;
+  type: SubmissionType;
+}) {
+  const kind =
+    (item.contentType as SubmissionType) in TYPE_EMOJI
+      ? (item.contentType as SubmissionType)
+      : type;
   return (
     <a
-      href={item.url}
+      href={safeHref(item.url)}
       target="_blank"
       rel="noopener noreferrer"
-      className={styles['content-card']}
+      className={styles["content-card"]}
     >
       {item.thumbnailUrl && (
         <img
           src={item.thumbnailUrl}
-          alt={item.title}
-          className={styles['content-thumb']}
+          alt=""
+          className={styles["content-thumb"]}
           loading="lazy"
-          onError={(event: SyntheticEvent<HTMLImageElement>) => {
-            event.currentTarget.style.display = "none";
-          }}
+          onError={hideBrokenImage}
         />
       )}
-      <div className={styles['content-info']}>
-        <span className={styles['content-title']}>{item.title}</span>
-        <div className={styles['content-meta']}>
-          <span className={styles['content-type']}>{emoji}</span>
+      <div className={styles["content-info"]}>
+        <span className={styles["content-title"]}>{item.title}</span>
+        <div className={styles["content-meta"]}>
+          <span className={styles["content-type"]} aria-label={kind}>
+            {TYPE_EMOJI[kind]}
+          </span>
           {item.score != null && (
-            <span className={styles['content-score']}>
-              ★ {(Math.round(item.score * 10) / 10).toFixed(1)}
+            <span className={styles["content-score"]}>
+              ★ {formatScore(item.score)}
             </span>
           )}
           {item.views != null && (
-            <span className={styles['content-views']}>
+            <span className={styles["content-views"]}>
               {formatNumber(item.views)} views
             </span>
           )}
           {item.publishedDate && (
-            <span className={styles['content-date']}>
+            <span className={styles["content-date"]}>
               {formatDate(item.publishedDate)}
             </span>
           )}
         </div>
         {item.description && (
-          <p className={styles['content-desc']}>
-            {item.description.length > 120
-              ? item.description.slice(0, 120) + "…"
-              : item.description}
+          <p className={styles["content-desc"]}>
+            {clip(item.description, 120)}
           </p>
         )}
       </div>
@@ -116,647 +160,521 @@ function ContentCard({ item, type }: ContentCardProps) {
   );
 }
 
-interface PostItemProps {
-  post: ForumPost;
-  showThread?: boolean;
-}
-
-function PostItem({ post, showThread = true }: PostItemProps) {
-  const body = stripHtml(post.body || post.content || "");
-  return (
-    <div className={styles['post-item']}>
-      <div className={styles['post-header']}>
-        {showThread && post.threadTitle && (
-          <span className={styles['post-thread']}>{post.threadTitle}</span>
-        )}
-        {post.date && (
-          <time className={styles['post-date']}>{formatDate(post.date)}</time>
-        )}
-      </div>
-      {body && (
-        <p className={styles['post-body']}>
-          {body.length > 300 ? body.slice(0, 300) + "…" : body}
-        </p>
-      )}
-    </div>
-  );
-}
-
-interface ReviewItemProps {
-  review: Review;
-}
-
-function ReviewItem({ review }: ReviewItemProps) {
-  const body = stripHtml(review.body || review.text || "");
-  return (
-    <div className={styles['review-item']}>
-      <div className={styles['review-header']}>
-        <span className={styles['review-target']}>
-          {review.contentTitle || review.contentUrl || "Unknown"}
-        </span>
-        {review.score != null && (
-          <span className={styles['review-score']}>{review.score}/10</span>
-        )}
-      </div>
-      {body && (
-        <p className={styles['review-body']}>
-          {body.length > 250 ? body.slice(0, 250) + "…" : body}
-        </p>
-      )}
-    </div>
-  );
-}
-
-interface ContentSectionProps {
-  items?: MemberContentItem[];
-  type: string;
+function ContentSection({
+  items,
+  type,
+  emptyLabel,
+}: {
+  items: Submission[];
+  type: SubmissionType;
   emptyLabel: string;
-}
-
-function ContentSection({ items, type, emptyLabel }: ContentSectionProps) {
-  if (!items?.length) {
+}) {
+  if (items.length === 0) {
     return (
-      <div className={styles['empty-tab']}>
-        <span className={styles['empty-tab-icon']}>📭</span>
+      <div className={styles["empty-tab"]}>
+        <span className={styles["empty-tab-icon"]} aria-hidden="true">
+          📭
+        </span>
         <span>No {emptyLabel} found</span>
       </div>
     );
   }
   return (
-    <div className={styles['content-grid']}>
-      {items.map((item, i) => (
-        <ContentCard
-          key={item.contentId || item._id || i}
-          item={item}
-          type={item.type || type}
-        />
+    <div className={styles["content-grid"]}>
+      {items.map((item) => (
+        <ContentCard key={item._id} item={item} type={type} />
       ))}
     </div>
   );
 }
 
-// ── Overview Tab ─────────────────────────────────────────────────
-
-interface OverviewTabProps {
-  data: TransformedMemberProfileData;
+function ForumPostItem({ post }: { post: ForumPost }) {
+  const body = stripHtml(post.body ?? "");
+  return (
+    <div className={styles["post-item"]}>
+      <div className={styles["post-header"]}>
+        {post.threadTitle && (
+          <span className={styles["post-thread"]}>{post.threadTitle}</span>
+        )}
+        {post.date && (
+          <time className={styles["post-date"]}>{formatDate(post.date)}</time>
+        )}
+      </div>
+      {body && <p className={styles["post-body"]}>{clip(body, 300)}</p>}
+    </div>
+  );
 }
 
-function OverviewTab({ data }: OverviewTabProps) {
-  const { member, movies, games, audio, fans, ccPosts, ccThreads } = data;
-  const newgroundsStats = member.newgrounds;
-  const clockCrewForum = member.ccForum;
-  const summary = member.profileSummary;
+/** A Newgrounds BBS post — the archive keeps its topic title and link, not its text. */
+function NewgroundsPostItem({ post }: { post: NewgroundsPost }) {
+  const body = stripHtml(post.body ?? "");
+  const href = safeHref(post.contentUrl);
+  const title = post.title || "Untitled post";
+  return (
+    <div className={styles["post-item"]}>
+      <div className={styles["post-header"]}>
+        {href ? (
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles["post-thread"]}
+          >
+            {title}
+          </a>
+        ) : (
+          <span className={styles["post-thread"]}>{title}</span>
+        )}
+        {post.date && (
+          <time className={styles["post-date"]}>{formatDate(post.date)}</time>
+        )}
+      </div>
+      {body && <p className={styles["post-body"]}>{clip(body, 300)}</p>}
+    </div>
+  );
+}
 
-  // Top 3 of each content type for highlights
-  const topMovies = movies?.slice(0, 3) || [];
-  const topGames = games?.slice(0, 3) || [];
-  const topAudio = audio?.slice(0, 3) || [];
+function ReviewItem({ review }: { review: Review }) {
+  const body = stripHtml(review.body ?? "");
+  const href = safeHref(review.reviewedUrl);
+  const target =
+    review.reviewedTitle || review.reviewedUrl || "Unknown submission";
+  return (
+    <div className={styles["review-item"]}>
+      <div className={styles["review-header"]}>
+        {href ? (
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles["review-target"]}
+          >
+            {target}
+          </a>
+        ) : (
+          <span className={styles["review-target"]}>{target}</span>
+        )}
+        {review.score != null && (
+          <span
+            className={styles["review-score"]}
+            aria-label={`${review.score} out of 5 stars`}
+          >
+            ★ {formatScore(review.score)} / 5
+          </span>
+        )}
+      </div>
+      {body && <p className={styles["review-body"]}>{clip(body, 250)}</p>}
+    </div>
+  );
+}
+
+// ── AI summary ──────────────────────────────────────────────────
+// react-markdown renders no raw HTML, so model output cannot inject markup.
+
+const MARKDOWN_COMPONENTS: Components = {
+  h1: ({ children }) => <h1 className={styles["md-h1"]}>{children}</h1>,
+  h2: ({ children }) => <h2 className={styles["md-h2"]}>{children}</h2>,
+  h3: ({ children }) => <h3 className={styles["md-h3"]}>{children}</h3>,
+  blockquote: ({ children }) => (
+    <blockquote className={styles["md-blockquote"]}>{children}</blockquote>
+  ),
+  ul: ({ children }) => <ul className={styles["md-list"]}>{children}</ul>,
+  ol: ({ children }) => <ol className={styles["md-list"]}>{children}</ol>,
+  p: ({ children }) => <p className={styles["md-paragraph"]}>{children}</p>,
+  a: ({ href, children }) => (
+    <a href={safeHref(href)} target="_blank" rel="noopener noreferrer nofollow">
+      {children}
+    </a>
+  ),
+};
+
+function SummaryMarkdown({ markdown }: { markdown: string }) {
+  return (
+    <div className={styles["md-wrap"]}>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={MARKDOWN_COMPONENTS}
+      >
+        {markdown}
+      </ReactMarkdown>
+    </div>
+  );
+}
+
+// ── Overview ────────────────────────────────────────────────────
+
+function InfoItem({ icon, children }: { icon: string; children: ReactNode }) {
+  return (
+    <span className={styles["info-item"]}>
+      <span aria-hidden="true">{icon}</span> {children}
+    </span>
+  );
+}
+
+function TopContent({
+  icon,
+  title,
+  items,
+  type,
+}: {
+  icon: string;
+  title: string;
+  items: Submission[];
+  type: SubmissionType;
+}) {
+  if (items.length === 0) return null;
+  return (
+    <Panel icon={icon} title={title}>
+      <div className={styles["top-content-list"]}>
+        {items.slice(0, 3).map((item) => (
+          <ContentCard key={item._id} item={item} type={type} />
+        ))}
+      </div>
+    </Panel>
+  );
+}
+
+const FANS_SHOWN = 50;
+const THREADS_SHOWN = 20;
+const RECENT_POSTS_SHOWN = 10;
+
+function OverviewTab({ data }: { data: MemberPageData }) {
+  const {
+    member,
+    movies,
+    games,
+    audio,
+    fans,
+    ccPosts,
+    ccThreads,
+    ccThreadCount,
+  } = data;
+  const ng = member.newgrounds;
+  const forum = member.ccForum;
+  const summary = member.profileSummary;
+  const contentCounts = ng
+    ? (
+        [
+          ["🎬", ng.movieCount, "Movies"],
+          ["🎮", ng.gameCount, "Games"],
+          ["🎵", ng.audioCount, "Audio"],
+          ["📝", ng.reviewCount, "Reviews"],
+          ["💬", ng.postCount, "Posts"],
+          ["❤️", ng.faveCount, "Faves"],
+          ["📰", ng.newsCount, "News"],
+        ] as const
+      ).filter(([, count]) => count > 0)
+    : [];
 
   return (
-    <div className={styles['overview-grid']}>
-      {/* ── AI Profile Summary ─────────────────────────────────── */}
+    <div className={styles["overview-grid"]}>
       {summary?.markdown && summary.status === "complete" && (
-        <section className={styles['summary-panel']}>
-          <h2 className={styles['section-title']}>
-            <span className={styles['section-icon']}>🤖</span>
-            AI-Generated Profile
-            <span className={styles['summary-meta']}>
-              {summary.model && (
-                <span className={styles['summary-model']}>{summary.model}</span>
-              )}
+        <section className={styles["summary-panel"]}>
+          <h2 className={styles["section-title"]}>
+            <span className={styles["section-icon"]} aria-hidden="true">
+              🤖
             </span>
+            AI-Generated Profile
+            {summary.model && (
+              <span className={styles["summary-meta"]}>
+                <span className={styles["summary-model"]}>{summary.model}</span>
+              </span>
+            )}
           </h2>
-          <div className={styles['summary-content']}>
-            <MarkdownRenderer markdown={summary.markdown} />
+          <div className={styles["summary-content"]}>
+            <SummaryMarkdown markdown={summary.markdown} />
           </div>
         </section>
       )}
 
-      {/* ── Newgrounds Stats ───────────────────────────────────── */}
-      {newgroundsStats && (
-        <section className={styles.panel}>
-          <h2 className={styles['section-title']}>
-            <span className={styles['section-icon']}>🟠</span>
-            Newgrounds Stats
-          </h2>
-          <div className={styles['mini-stats-grid']}>
-            <StatCard label="Fans" value={formatNumber(newgroundsStats.fans)} icon="♥" />
-            <StatCard label="Level" value={newgroundsStats.level ?? "—"} icon="⬆" />
-            <StatCard label="Blams" value={formatNumber(newgroundsStats.blams)} icon="💣" />
-            <StatCard label="Saves" value={formatNumber(newgroundsStats.saves)} icon="🛡" />
+      {ng && (
+        <Panel icon="🟠" title="Newgrounds Stats">
+          <div className={styles["mini-stats-grid"]}>
+            <StatCard label="Fans" value={formatNumber(ng.fans)} icon="♥" />
+            <StatCard label="Level" value={ng.level ?? "—"} icon="⬆" />
+            <StatCard label="Blams" value={formatNumber(ng.blams)} icon="💣" />
+            <StatCard label="Saves" value={formatNumber(ng.saves)} icon="🛡" />
             <StatCard
               label="Medals"
-              value={formatNumber(newgroundsStats.medals)}
+              value={formatNumber(ng.medals)}
               icon="🏅"
             />
             <StatCard
               label="Trophies"
-              value={formatNumber(newgroundsStats.trophies)}
+              value={formatNumber(ng.trophies)}
               icon="🏆"
             />
-            {newgroundsStats.expPoints && (
-              <StatCard label="EXP" value={newgroundsStats.expPoints} icon="✨" />
+            {ng.expPoints && (
+              <StatCard label="EXP" value={ng.expPoints} icon="✨" />
             )}
-            {newgroundsStats.votePower && (
-              <StatCard label="Vote Power" value={newgroundsStats.votePower} icon="⚡" />
-            )}
-          </div>
-          {newgroundsStats.description && <p className={styles['ng-bio']}>{newgroundsStats.description}</p>}
-          <div className={styles['personal-info']}>
-            {newgroundsStats.joinDate && (
-              <span className={styles['info-item']}>📅 Joined {newgroundsStats.joinDate}</span>
-            )}
-            {newgroundsStats.location && (
-              <span className={styles['info-item']}>📍 {newgroundsStats.location}</span>
-            )}
-            {newgroundsStats.job && <span className={styles['info-item']}>💼 {newgroundsStats.job}</span>}
-            {newgroundsStats.age != null && (
-              <span className={styles['info-item']}>🎂 Age {newgroundsStats.age}</span>
-            )}
-            {newgroundsStats.sex && <span className={styles['info-item']}>👤 {newgroundsStats.sex}</span>}
-            {newgroundsStats.realName && (
-              <span className={styles['info-item']}>🪪 {newgroundsStats.realName}</span>
-            )}
-            {newgroundsStats.school && (
-              <span className={styles['info-item']}>🎓 {newgroundsStats.school}</span>
-            )}
-            {newgroundsStats.rank && <span className={styles['info-item']}>🎖 {newgroundsStats.rank}</span>}
-            {newgroundsStats.globalRank != null && (
-              <span className={styles['info-item']}>
-                🌍 Rank #{formatNumber(newgroundsStats.globalRank)}
-              </span>
+            {ng.votePower && (
+              <StatCard label="Vote Power" value={ng.votePower} icon="⚡" />
             )}
           </div>
-        </section>
+          {ng.description && (
+            <p className={styles["ng-bio"]}>{ng.description}</p>
+          )}
+          <div className={styles["personal-info"]}>
+            {ng.joinDate && (
+              <InfoItem icon="📅">Joined {formatDate(ng.joinDate)}</InfoItem>
+            )}
+            {ng.location && <InfoItem icon="📍">{ng.location}</InfoItem>}
+            {ng.job && <InfoItem icon="💼">{ng.job}</InfoItem>}
+            {ng.age != null && <InfoItem icon="🎂">Age {ng.age}</InfoItem>}
+            {ng.sex && <InfoItem icon="👤">{ng.sex}</InfoItem>}
+            {ng.realName && <InfoItem icon="🪪">{ng.realName}</InfoItem>}
+            {ng.school && <InfoItem icon="🎓">{ng.school}</InfoItem>}
+            {ng.rank && <InfoItem icon="🎖">{ng.rank}</InfoItem>}
+            {ng.globalRank != null && (
+              <InfoItem icon="🌍">Rank #{formatNumber(ng.globalRank)}</InfoItem>
+            )}
+          </div>
+        </Panel>
       )}
 
-      {/* ── CC Forum ───────────────────────────────────────────── */}
-      {clockCrewForum && (
-        <section className={styles.panel}>
-          <h2 className={styles['section-title']}>
-            <span className={styles['section-icon']}>🕰️</span>
-            ClockCrew.net Forum
-          </h2>
-          <div className={styles['cc-identity']}>
-            {clockCrewForum.avatarUrl && (
+      {forum && (
+        <Panel icon="🕰️" title="ClockCrew.net Forum">
+          <div className={styles["cc-identity"]}>
+            {forum.avatarUrl && (
               <img
-                src={clockCrewForum.avatarUrl}
-                alt={clockCrewForum.username}
-                className={styles['cc-avatar']}
+                src={forum.avatarUrl}
+                alt=""
+                className={styles["cc-avatar"]}
               />
             )}
             <div>
-              <span className={styles['cc-name']}>{clockCrewForum.username}</span>
-              {clockCrewForum.customTitle && (
-                <span className={styles['cc-title']}>
-                  &ldquo;{clockCrewForum.customTitle}&rdquo;
+              <span className={styles["cc-name"]}>{forum.username}</span>
+              {forum.customTitle && (
+                <span className={styles["cc-title"]}>
+                  &ldquo;{forum.customTitle}&rdquo;
                 </span>
               )}
-              {clockCrewForum.position && (
-                <span className={styles['cc-badge']}>{clockCrewForum.position}</span>
+              {forum.position && (
+                <span className={styles["cc-badge"]}>{forum.position}</span>
               )}
             </div>
           </div>
-          <div className={styles['mini-stats-grid']}>
+          <div className={styles["mini-stats-grid"]}>
             <StatCard
               label="Posts"
-              value={formatNumber(clockCrewForum.postCount)}
+              value={formatNumber(forum.postCount)}
               icon="💬"
             />
-            <StatCard
-              label="Registered"
-              value={formatDate(clockCrewForum.dateRegistered)}
-              icon="📅"
-            />
-            {clockCrewForum.location && (
-              <StatCard label="Location" value={clockCrewForum.location} icon="📍" />
+            {forum.dateRegistered && (
+              <StatCard
+                label="Registered"
+                value={formatDate(forum.dateRegistered)}
+                icon="📅"
+              />
             )}
-            {clockCrewForum.gender && (
-              <StatCard label="Gender" value={clockCrewForum.gender} icon="👤" />
+            {forum.location && (
+              <StatCard label="Location" value={forum.location} icon="📍" />
+            )}
+            {forum.gender && (
+              <StatCard label="Gender" value={forum.gender} icon="👤" />
             )}
           </div>
-          {clockCrewForum.signatureHtml && (
-            <div className={styles['signature-wrap']}>
-              <span className={styles['signature-label']}>Signature</span>
-              <div
-                className={styles['signature-content']}
-                dangerouslySetInnerHTML={{ __html: clockCrewForum.signatureHtml }}
-              />
+          {forum.signature && (
+            <div className={styles["signature-wrap"]}>
+              <span className={styles["signature-label"]}>Signature</span>
+              <p className={styles["signature-content"]}>{forum.signature}</p>
             </div>
           )}
-        </section>
+        </Panel>
       )}
 
-      {/* ── Content Counts ─────────────────────────────────────── */}
-      {newgroundsStats && (
-        <section className={styles.panel}>
-          <h2 className={styles['section-title']}>
-            <span className={styles['section-icon']}>📊</span>
-            Content Overview
-          </h2>
-          <div className={styles['content-pills']}>
-            {newgroundsStats.movieCount > 0 && (
-              <span className={styles.pill}>🎬 {newgroundsStats.movieCount} Movies</span>
-            )}
-            {newgroundsStats.gameCount > 0 && (
-              <span className={styles.pill}>🎮 {newgroundsStats.gameCount} Games</span>
-            )}
-            {newgroundsStats.audioCount > 0 && (
-              <span className={styles.pill}>🎵 {newgroundsStats.audioCount} Audio</span>
-            )}
-            {newgroundsStats.reviewCount > 0 && (
-              <span className={styles.pill}>📝 {newgroundsStats.reviewCount} Reviews</span>
-            )}
-            {newgroundsStats.postCount > 0 && (
-              <span className={styles.pill}>💬 {newgroundsStats.postCount} Posts</span>
-            )}
-            {newgroundsStats.faveCount > 0 && (
-              <span className={styles.pill}>❤️ {newgroundsStats.faveCount} Faves</span>
-            )}
-            {newgroundsStats.newsCount > 0 && (
-              <span className={styles.pill}>📰 {newgroundsStats.newsCount} News</span>
-            )}
-          </div>
-        </section>
-      )}
-
-      {/* ── Top Movies ─────────────────────────────────────────── */}
-      {topMovies.length > 0 && (
-        <section className={styles.panel}>
-          <h2 className={styles['section-title']}>
-            <span className={styles['section-icon']}>🎬</span>
-            Top Movies
-          </h2>
-          <div className={styles['top-content-list']}>
-            {topMovies.map((movie: MemberContentItem, i: number) => (
-              <ContentCard key={movie.contentId || i} item={movie} type="movie" />
+      {contentCounts.length > 0 && (
+        <Panel icon="📊" title="Content Overview">
+          <div className={styles["content-pills"]}>
+            {contentCounts.map(([icon, count, label]) => (
+              <span key={label} className={styles.pill}>
+                {icon} {formatNumber(count)} {label}
+              </span>
             ))}
           </div>
-        </section>
+        </Panel>
       )}
 
-      {/* ── Top Games ──────────────────────────────────────────── */}
-      {topGames.length > 0 && (
-        <section className={styles.panel}>
-          <h2 className={styles['section-title']}>
-            <span className={styles['section-icon']}>🎮</span>
-            Top Games
-          </h2>
-          <div className={styles['top-content-list']}>
-            {topGames.map((game: MemberContentItem, i: number) => (
-              <ContentCard key={game.contentId || i} item={game} type="game" />
-            ))}
-          </div>
-        </section>
-      )}
+      <TopContent icon="🎬" title="Top Movies" items={movies} type="movie" />
+      <TopContent icon="🎮" title="Top Games" items={games} type="game" />
+      <TopContent icon="🎵" title="Top Audio" items={audio} type="audio" />
 
-      {/* ── Top Audio ──────────────────────────────────────────── */}
-      {topAudio.length > 0 && (
-        <section className={styles.panel}>
-          <h2 className={styles['section-title']}>
-            <span className={styles['section-icon']}>🎵</span>
-            Top Audio
-          </h2>
-          <div className={styles['top-content-list']}>
-            {topAudio.map((audio: MemberContentItem, i: number) => (
-              <ContentCard key={audio.contentId || i} item={audio} type="audio" />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* ── Fans ───────────────────────────────────────────────── */}
-      {fans && fans.length > 0 && (
-        <section className={styles.panel}>
-          <h2 className={styles['section-title']}>
-            <span className={styles['section-icon']}>♥</span>
-            Fans
-            <span className={styles['panel-count']}>{fans.length}</span>
-          </h2>
-          <div className={styles['fans-list']}>
-            {fans.slice(0, 50).map((fan: string, i: number) => (
-              <span key={i} className={styles['fan-tag']}>
+      {fans.length > 0 && (
+        <Panel icon="♥" title="Fans" count={fans.length}>
+          <div className={styles["fans-list"]}>
+            {fans.slice(0, FANS_SHOWN).map((fan) => (
+              <span key={fan} className={styles["fan-tag"]}>
                 {fan}
               </span>
             ))}
-            {fans.length > 50 && (
-              <span className={styles['fan-more']}>+{fans.length - 50} more</span>
+            {fans.length > FANS_SHOWN && (
+              <span className={styles["fan-more"]}>
+                +{fans.length - FANS_SHOWN} more
+              </span>
             )}
           </div>
-        </section>
+        </Panel>
       )}
 
-      {/* ── CC Threads Started ─────────────────────────────────── */}
-      {ccThreads && ccThreads.length > 0 && (
-        <section className={styles.panel}>
-          <h2 className={styles['section-title']}>
-            <span className={styles['section-icon']}>📌</span>
-            Forum Threads Started
-            <span className={styles['panel-count']}>{ccThreads.length}</span>
-          </h2>
-          <ul className={styles['thread-list']}>
-            {ccThreads.slice(0, 20).map((forumThread: ForumThread, i: number) => (
-              <li key={forumThread.topicId || i} className={styles['thread-item']}>
-                <span className={styles['thread-title']}>{forumThread.title}</span>
-                <span className={styles['thread-meta']}>
-                  {forumThread.totalPosts != null && <span>{forumThread.totalPosts} replies</span>}
-                  {forumThread.date && <span>{formatDate(forumThread.date)}</span>}
-                  {forumThread.boardName && (
-                    <span className={styles['thread-board']}>{forumThread.boardName}</span>
+      {ccThreads.length > 0 && (
+        <Panel icon="📌" title="Forum Threads Started" count={ccThreadCount}>
+          <ul className={styles["thread-list"]}>
+            {ccThreads.slice(0, THREADS_SHOWN).map((thread: ForumThread) => (
+              <li key={thread._id} className={styles["thread-item"]}>
+                {safeHref(thread.url) ? (
+                  <a
+                    href={safeHref(thread.url)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles["thread-title"]}
+                  >
+                    {thread.title}
+                  </a>
+                ) : (
+                  <span className={styles["thread-title"]}>{thread.title}</span>
+                )}
+                <span className={styles["thread-meta"]}>
+                  {thread.totalPosts != null && (
+                    <span>{formatNumber(thread.totalPosts)} replies</span>
+                  )}
+                  {thread.date && <span>{formatDate(thread.date)}</span>}
+                  {thread.boardName && (
+                    <span className={styles["thread-board"]}>
+                      {thread.boardName}
+                    </span>
                   )}
                 </span>
               </li>
             ))}
           </ul>
-        </section>
+        </Panel>
       )}
 
-      {/* ── Recent CC Posts ─────────────────────────────────────── */}
-      {ccPosts && ccPosts.length > 0 && (
-        <section className={styles.panel}>
-          <h2 className={styles['section-title']}>
-            <span className={styles['section-icon']}>💬</span>
-            Recent Forum Posts
-            <span className={styles['panel-count']}>{ccPosts.length}</span>
-          </h2>
-          <div className={styles['posts-list']}>
-            {ccPosts.slice(0, 10).map((post: ForumPost, i: number) => (
-              <PostItem key={post.messageId || i} post={post} />
+      {ccPosts.length > 0 && (
+        <Panel icon="💬" title="Recent Forum Posts">
+          <div className={styles["posts-list"]}>
+            {ccPosts.slice(0, RECENT_POSTS_SHOWN).map((post) => (
+              <ForumPostItem key={post._id} post={post} />
             ))}
           </div>
-        </section>
+        </Panel>
       )}
 
-      {/* ── External Links ─────────────────────────────────────── */}
-      {newgroundsStats?.links && newgroundsStats.links.length > 0 && (
-        <section className={styles.panel}>
-          <h2 className={styles['section-title']}>
-            <span className={styles['section-icon']}>🔗</span>
-            Links
-          </h2>
-          <div className={styles['links-list']}>
-            {newgroundsStats.links.map((link: string | { url?: string; label?: string; name?: string }, i: number) => {
-              const url = typeof link === "string" ? link : link.url || "";
-              const label = typeof link === "string" ? link : link.label || link.name || "";
-              return (
-                <a
-                  key={i}
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles['link-item']}
-                >
-                  {label || (() => {
-                    try {
-                      return new URL(url).hostname;
-                    } catch {
-                      return "Link";
-                    }
-                  })()}
-                </a>
-              );
-            })}
+      {ng && ng.links.length > 0 && (
+        <Panel icon="🔗" title="Links">
+          <div className={styles["links-list"]}>
+            {ng.links.map((link) => (
+              <a
+                key={link.url}
+                href={safeHref(link.url)}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                className={styles["link-item"]}
+              >
+                {linkLabel(link)}
+              </a>
+            ))}
           </div>
-        </section>
+        </Panel>
       )}
     </div>
   );
-}
-
-// ── Simple markdown renderer ─────────────────────────────────────
-interface MarkdownRendererProps {
-  markdown?: string;
-}
-
-function MarkdownRenderer({ markdown }: MarkdownRendererProps) {
-  if (!markdown) return null;
-
-  const lines = markdown.split("\n");
-  const elements: React.ReactNode[] = [];
-  let i = 0;
-
-  while (i < lines.length) {
-    const line = lines[i];
-
-    if (line.startsWith("# ")) {
-      elements.push(
-        <h1 key={i} className={styles['md-h1']}>
-          {line.slice(2)}
-        </h1>,
-      );
-    } else if (line.startsWith("## ")) {
-      elements.push(
-        <h2 key={i} className={styles['md-h2']}>
-          {line.slice(3)}
-        </h2>,
-      );
-    } else if (line.startsWith("### ")) {
-      elements.push(
-        <h3 key={i} className={styles['md-h3']}>
-          {line.slice(4)}
-        </h3>,
-      );
-    } else if (line.startsWith("> ")) {
-      elements.push(
-        <blockquote key={i} className={styles['md-blockquote']}>
-          {line.slice(2)}
-        </blockquote>,
-      );
-    } else if (line.startsWith("- ") || line.startsWith("* ")) {
-      const listItems: string[] = [];
-      let j = i;
-      while (
-        j < lines.length &&
-        (lines[j].startsWith("- ") ||
-          lines[j].startsWith("* ") ||
-          lines[j].startsWith("  "))
-      ) {
-        listItems.push(lines[j].replace(/^[-*]\s/, "").replace(/^\s+/, ""));
-        j++;
-      }
-      elements.push(
-        <ul key={i} className={styles['md-list']}>
-          {listItems.map((item, index) => (
-            <li key={index}>{item}</li>
-          ))}
-        </ul>,
-      );
-      i = j;
-      continue;
-    } else if (line.trim() === "") {
-      // skip
-    } else {
-      elements.push(
-        <p key={i} className={styles['md-paragraph']}>
-          {line}
-        </p>,
-      );
-    }
-    i++;
-  }
-
-  return <div className={styles['md-wrap']}>{elements}</div>;
 }
 
 // ═════════════════════════════════════════════════════════════════
 // Main Component
 // ═════════════════════════════════════════════════════════════════
 
-interface MemberProfileComponentProps {
-  username: string;
-}
+/** A member's wiki page body. The page fetches the data on the server. */
+export default function MemberProfileComponent({
+  data,
+}: {
+  data: MemberPageData;
+}) {
+  const [activeTab, setActiveTab] = useState<TabKey>("overview");
+  const tabsId = useId();
 
-interface FetchMemberResponse {
-  data: TransformedMemberProfileData | null;
-  error: string | null;
-}
+  const { member, movies, games, audio, art, reviews, ccPosts, ngPosts } = data;
+  const ng = member.newgrounds;
+  const forum = member.ccForum;
+  const avatarUrl = forum?.avatarUrl || ng?.avatarUrl || member.avatarUrl;
 
-export default function MemberProfileComponent({ username }: MemberProfileComponentProps) {
-  const [data, setData] = useState<TransformedMemberProfileData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState("overview");
-
-  const fetchMember = useCallback(async (name: string): Promise<FetchMemberResponse> => {
-    try {
-      const response = await fetch(
-        `/api/clockcrew/users/${encodeURIComponent(name)}`,
-      );
-      if (!response.ok) {
-        const body = await response.json().catch(() => ({}));
-        throw new Error(body.error || `Failed (${response.status})`);
-      }
-      return { data: await response.json(), error: null };
-    } catch (err: unknown) {
-      return { data: null, error: getErrorMessage(err) };
-    }
-  }, []);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    fetchMember(username).then(({ data: fetchedData, error: fetchedError }) => {
-      if (cancelled) return;
-      setData(fetchedData);
-      setError(fetchedError);
-      setLoading(false);
-    });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [username, fetchMember]);
-
-  // ── Loading ────────────────────────────────────────────────────
-  if (loading) {
-    return (
-      <div className={styles['profile-wrap']}>
-        <div className={styles.skeleton}>
-          <div className={styles['skeleton-avatar']} />
-          <div className={styles['skeleton-lines']}>
-            <div className={styles['skeleton-line']} style={{ width: "40%" }} />
-            <div className={styles['skeleton-line']} style={{ width: "60%" }} />
-            <div className={styles['skeleton-line']} style={{ width: "30%" }} />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // ── Error ──────────────────────────────────────────────────────
-  if (error || !data?.member) {
-    return (
-      <div className={styles['profile-wrap']}>
-        <div className={styles['error-card']}>
-          <span className={styles['error-icon']}>⚠️</span>
-          <p className={styles['error-text']}>{error || "Member not found"}</p>
-          <Link href="/clocks" className={styles['back-link']}>
-            ← Back to Members
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  const { member, movies, games, audio, art, reviews } = data;
-  const newgroundsStats = member.newgrounds;
-  const clockCrewForum = member.ccForum;
-
-  const initials = (member.username || "?")
-    .replace(/clock$/i, "")
-    .slice(0, 2)
-    .toUpperCase();
-  const avatarUrl = clockCrewForum?.avatarUrl || newgroundsStats?.avatarUrl || member.avatarUrl;
-
-  // Build visible tabs based on available data
-  const visibleTabs = TABS.filter((tab) => {
-    if (tab.key === "overview") return true;
-    if (tab.key === "movies") return !!(movies && movies.length > 0);
-    if (tab.key === "games") return !!(games && games.length > 0);
-    if (tab.key === "audio") return !!(audio && audio.length > 0);
-    if (tab.key === "art") return !!(art && art.length > 0);
-    if (tab.key === "posts")
-      return !!((data.ccPosts && data.ccPosts.length > 0) || (data.ngPosts && data.ngPosts.length > 0));
-    if (tab.key === "reviews") return !!(reviews && reviews.length > 0);
-    return false;
-  });
+  const tabCounts: Record<TabKey, number> = {
+    overview: 1,
+    movies: movies.length,
+    games: games.length,
+    audio: audio.length,
+    art: art.length,
+    posts: ccPosts.length + ngPosts.length,
+    reviews: reviews.length,
+  };
+  const visibleTabs = TABS.filter((tab) => tabCounts[tab.key] > 0);
 
   return (
-    <div className={styles['profile-wrap']}>
+    <div className={styles["profile-wrap"]}>
       {/* ── Header ────────────────────────────────────────────── */}
       <header className={styles.header}>
-        <div className={styles['header-bg']} aria-hidden="true" />
+        <div className={styles["header-bg"]} aria-hidden="true" />
         <div className={styles.identity}>
-          <div className={styles['avatar-large']}>
+          <div className={styles["avatar-large"]}>
             {avatarUrl ? (
               <img
                 src={avatarUrl}
                 alt={`${member.username} avatar`}
-                className={styles['avatar-img']}
+                className={styles["avatar-img"]}
               />
             ) : (
-              <span className={styles['avatar-fallback']}>{initials}</span>
+              <span className={styles["avatar-fallback"]} aria-hidden="true">
+                {initials(member.username)}
+              </span>
             )}
           </div>
-          <div className={styles['identity-info']}>
+          <div className={styles["identity-info"]}>
             <h1 className={styles.username}>{member.username}</h1>
             <div className={styles.badges}>
-              {clockCrewForum?.customTitle && (
-                <span className={styles['custom-title']}>{clockCrewForum.customTitle}</span>
+              {forum?.customTitle && (
+                <span className={styles["custom-title"]}>
+                  {forum.customTitle}
+                </span>
               )}
-              {clockCrewForum?.group && (
-                <span className={styles['group-badge']}>{clockCrewForum.group}</span>
+              {forum?.group && (
+                <span className={styles["group-badge"]}>{forum.group}</span>
               )}
-              {clockCrewForum?.position && (
-                <span className={styles['pos-badge']}>{clockCrewForum.position}</span>
+              {forum?.position && (
+                <span className={styles["pos-badge"]}>{forum.position}</span>
               )}
-              {newgroundsStats?.rank && (
-                <span className={styles['ng-rank-badge']}>{newgroundsStats.rank}</span>
+              {ng?.rank && (
+                <span className={styles["ng-rank-badge"]}>{ng.rank}</span>
               )}
-              {newgroundsStats?.level != null && (
-                <span className={styles['level-badge']}>Lvl {newgroundsStats.level}</span>
+              {ng?.level != null && (
+                <span className={styles["level-badge"]}>Lvl {ng.level}</span>
               )}
-              {newgroundsStats?.supporter && (
-                <span className={styles['supporter-badge']}>⭐ Supporter</span>
+              {ng?.supporter && (
+                <span
+                  className={styles["supporter-badge"]}
+                  title={`Supporter for ${ng.supporter}`}
+                >
+                  ⭐ Supporter
+                </span>
               )}
             </div>
-            <div className={styles['header-actions']}>
-              {newgroundsStats?.profileUrl && (
+            <div className={styles["header-actions"]}>
+              {safeHref(ng?.profileUrl) && (
                 <a
-                  href={newgroundsStats.profileUrl}
+                  href={safeHref(ng?.profileUrl)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={styles['header-button']}
+                  className={styles["header-button"]}
                 >
                   🌐 Newgrounds
                 </a>
               )}
-              {clockCrewForum?.profileUrl && (
+              {safeHref(forum?.profileUrl) && (
                 <a
-                  href={clockCrewForum.profileUrl}
+                  href={safeHref(forum?.profileUrl)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={styles['header-button']}
+                  className={styles["header-button"]}
                 >
                   🕰️ Forum
                 </a>
@@ -766,68 +684,76 @@ export default function MemberProfileComponent({ username }: MemberProfileCompon
         </div>
       </header>
 
-      {/* ── Quick Stats Bar ───────────────────────────────────── */}
-      <section className={styles['quick-stats']}>
-        {clockCrewForum && clockCrewForum.postCount > 0 && (
+      {/* ── Quick Stats ───────────────────────────────────────── */}
+      <section className={styles["quick-stats"]} aria-label="Quick stats">
+        {forum && forum.postCount > 0 && (
           <StatCard
             label="Forum Posts"
-            value={formatNumber(clockCrewForum.postCount)}
+            value={formatNumber(forum.postCount)}
             icon="💬"
           />
         )}
-        {newgroundsStats && newgroundsStats.fans > 0 && (
-          <StatCard label="NG Fans" value={formatNumber(newgroundsStats.fans)} icon="♥" />
+        {ng && ng.fans > 0 && (
+          <StatCard label="NG Fans" value={formatNumber(ng.fans)} icon="♥" />
         )}
-        {movies && movies.length > 0 && (
+        {movies.length > 0 && (
           <StatCard label="Movies" value={movies.length} icon="🎬" />
         )}
-        {games && games.length > 0 && (
+        {games.length > 0 && (
           <StatCard label="Games" value={games.length} icon="🎮" />
         )}
-        {audio && audio.length > 0 && (
+        {audio.length > 0 && (
           <StatCard label="Audio" value={audio.length} icon="🎵" />
         )}
-        {art && art.length > 0 && (
+        {art.length > 0 && (
           <StatCard label="Art" value={art.length} icon="🎨" />
         )}
-        {reviews && reviews.length > 0 && (
+        {reviews.length > 0 && (
           <StatCard label="Reviews" value={reviews.length} icon="📝" />
         )}
       </section>
 
       {/* ── Tabs ──────────────────────────────────────────────── */}
       {visibleTabs.length > 1 && (
-        <nav className={styles['tab-bar']}>
+        <div
+          className={styles["tab-bar"]}
+          role="tablist"
+          aria-label="Profile sections"
+        >
           {visibleTabs.map((tab) => (
             <button
               key={tab.key}
-              className={`${styles.tab} ${activeTab === tab.key ? styles['tab-active'] : ""}`}
+              type="button"
+              role="tab"
+              id={`${tabsId}-${tab.key}`}
+              aria-selected={activeTab === tab.key}
+              aria-controls={`${tabsId}-panel`}
+              className={`${styles.tab} ${activeTab === tab.key ? styles["tab-active"] : ""}`}
               onClick={() => setActiveTab(tab.key)}
             >
-              <span className={styles['tab-icon']}>{tab.icon}</span>
+              <span className={styles["tab-icon"]} aria-hidden="true">
+                {tab.icon}
+              </span>
               {tab.label}
-              {tab.key === "movies" && movies && movies.length > 0 && (
-                <span className={styles['tab-count']}>{movies.length}</span>
-              )}
-              {tab.key === "games" && games && games.length > 0 && (
-                <span className={styles['tab-count']}>{games.length}</span>
-              )}
-              {tab.key === "audio" && audio && audio.length > 0 && (
-                <span className={styles['tab-count']}>{audio.length}</span>
-              )}
-              {tab.key === "art" && art && art.length > 0 && (
-                <span className={styles['tab-count']}>{art.length}</span>
-              )}
-              {tab.key === "reviews" && reviews && reviews.length > 0 && (
-                <span className={styles['tab-count']}>{reviews.length}</span>
+              {tab.key !== "overview" && tab.key !== "posts" && (
+                <span className={styles["tab-count"]}>
+                  {tabCounts[tab.key]}
+                </span>
               )}
             </button>
           ))}
-        </nav>
+        </div>
       )}
 
       {/* ── Tab Content ───────────────────────────────────────── */}
-      <div className={styles['tab-content']}>
+      <div
+        className={styles["tab-content"]}
+        id={`${tabsId}-panel`}
+        role={visibleTabs.length > 1 ? "tabpanel" : undefined}
+        aria-labelledby={
+          visibleTabs.length > 1 ? `${tabsId}-${activeTab}` : undefined
+        }
+      >
         {activeTab === "overview" && <OverviewTab data={data} />}
         {activeTab === "movies" && (
           <ContentSection items={movies} type="movie" emptyLabel="movies" />
@@ -842,45 +768,39 @@ export default function MemberProfileComponent({ username }: MemberProfileCompon
           <ContentSection items={art} type="art" emptyLabel="art" />
         )}
         {activeTab === "posts" && (
-          <div className={styles['posts-tab']}>
-            {data.ccPosts && data.ccPosts.length > 0 && (
-              <section className={styles.panel}>
-                <h2 className={styles['section-title']}>
-                  <span className={styles['section-icon']}>🕰️</span>
-                  ClockCrew Forum Posts
-                  <span className={styles['panel-count']}>
-                    {data.ccPosts.length}
-                  </span>
-                </h2>
-                <div className={styles['posts-list']}>
-                  {data.ccPosts.map((post: ForumPost, i: number) => (
-                    <PostItem key={post.messageId || i} post={post} />
+          <div className={styles["posts-tab"]}>
+            {ccPosts.length > 0 && (
+              <Panel
+                icon="🕰️"
+                title="ClockCrew Forum Posts"
+                count={ccPosts.length}
+              >
+                <div className={styles["posts-list"]}>
+                  {ccPosts.map((post) => (
+                    <ForumPostItem key={post._id} post={post} />
                   ))}
                 </div>
-              </section>
+              </Panel>
             )}
-            {data.ngPosts && data.ngPosts.length > 0 && (
-              <section className={styles.panel}>
-                <h2 className={styles['section-title']}>
-                  <span className={styles['section-icon']}>🟠</span>
-                  Newgrounds BBS Posts
-                  <span className={styles['panel-count']}>
-                    {data.ngPosts.length}
-                  </span>
-                </h2>
-                <div className={styles['posts-list']}>
-                  {data.ngPosts.map((post: ForumPost, i: number) => (
-                    <PostItem key={post.postId || i} post={post} showThread={false} />
+            {ngPosts.length > 0 && (
+              <Panel
+                icon="🟠"
+                title="Newgrounds BBS Posts"
+                count={ngPosts.length}
+              >
+                <div className={styles["posts-list"]}>
+                  {ngPosts.map((post) => (
+                    <NewgroundsPostItem key={post._id} post={post} />
                   ))}
                 </div>
-              </section>
+              </Panel>
             )}
           </div>
         )}
         {activeTab === "reviews" && (
-          <div className={styles['reviews-list']}>
-            {reviews?.map((review: Review, i: number) => (
-              <ReviewItem key={review.reviewId || i} review={review} />
+          <div className={styles["reviews-list"]}>
+            {reviews.map((review) => (
+              <ReviewItem key={review._id} review={review} />
             ))}
           </div>
         )}

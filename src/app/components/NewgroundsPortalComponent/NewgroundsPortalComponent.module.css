@@ -60,9 +60,11 @@
 .traffic-dot:nth-child(1) {
   background: #ed6a5e;
 }
+
 .traffic-dot:nth-child(2) {
   background: #f4bf4f;
 }
+
 .traffic-dot:nth-child(3) {
   background: #61c554;
 }
@@ -112,45 +114,8 @@
   border-bottom: 1px solid oklch(0 0 0 / 0.2);
 }
 
-.search-input {
-  width: 100%;
-  padding: 8px 12px 8px 36px;
-  border: none;
-  border-radius: 6px;
-  background: var(--discord-background-input);
-  color: var(--discord-text-normal);
-  font-size: var(--font-size-base);
-  font-family: inherit;
-  outline: none;
-  transition:
-    background-color 150ms ease,
-    box-shadow 150ms ease;
-  height: auto;
-}
-
-.search-input::placeholder {
-  color: var(--discord-text-subtle);
-}
-
-.search-input:focus {
-  background: var(--discord-background-input);
-  box-shadow: 0 0 0 2px oklch(0.557 0.2568 288.9 / 0.4);
-  border-color: transparent;
-}
-
 .search-input-wrap {
   position: relative;
-}
-
-.search-icon {
-  position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 16px;
-  height: 16px;
-  color: var(--discord-text-subtle);
-  pointer-events: none;
 }
 
 /* ── Filter Row (tabs + year) ──────────────────────────────────── */
@@ -204,46 +169,6 @@
   flex-shrink: 0;
 }
 
-.year-select {
-  padding: 4px 28px 4px 10px;
-  border: 1px solid oklch(1 0 0 / 0.08);
-  border-radius: 4px;
-  background: var(--discord-background-input);
-  color: var(--discord-text-normal);
-  font-size: var(--font-size-sm);
-  font-weight: 600;
-  font-family: inherit;
-  cursor: pointer;
-  outline: none;
-  transition:
-    background-color 150ms ease,
-    border-color 150ms ease,
-    box-shadow 150ms ease;
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2380848e' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 8px center;
-  background-size: 10px 6px;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-}
-
-.year-select:hover {
-  background-color: var(--discord-background-input);
-  border-color: oklch(1 0 0 / 0.12);
-}
-
-.year-select:focus {
-  box-shadow: 0 0 0 2px oklch(0.557 0.2568 288.9 / 0.4);
-  border-color: oklch(0.557 0.2568 288.9 / 0.5);
-}
-
-.year-select option {
-  background: var(--discord-background-mid);
-  color: var(--discord-text-normal);
-}
-
 /* ── Item Grid (scrollable) ────────────────────────────────────── */
 
 .item-grid {
@@ -263,14 +188,17 @@
 .item-grid::-webkit-scrollbar {
   width: 8px;
 }
+
 .item-grid::-webkit-scrollbar-track {
   background: var(--discord-background-mid);
   border-radius: 4px;
 }
+
 .item-grid::-webkit-scrollbar-thumb {
   background: var(--discord-background-deep);
   border-radius: 4px;
 }
+
 .item-grid::-webkit-scrollbar-thumb:hover {
   background: var(--discord-background-deep);
 }
@@ -457,36 +385,14 @@
 .modal-card::-webkit-scrollbar {
   width: 6px;
 }
+
 .modal-card::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .modal-card::-webkit-scrollbar-thumb {
   background: var(--discord-background-deep);
   border-radius: 3px;
-}
-
-.modal-close {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 32px;
-  height: 32px;
-  border: none;
-  border-radius: 50%;
-  background: oklch(0 0 0 / 0.4);
-  color: var(--discord-text-normal);
-  font-size: var(--font-size-lg);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 150ms ease;
-  z-index: 2;
-  font-family: inherit;
-}
-
-.modal-close:hover {
-  background: oklch(0 0 0 / 0.6);
 }
 
 /* ── Content Hero (clicked movie/game at top of modal) ─────────── */
@@ -622,17 +528,6 @@
   padding: 12px 20px;
 }
 
-/* ── Banner + Avatar ───────────────────────────────────────────── */
-
-.card-banner {
-  width: 100%;
-  height: 100px;
-  background: linear-gradient(135deg, #5865f2, #e91e63, #ff9800);
-  background-size: 200% 200%;
-  animation: banner-shift 8s ease-in-out infinite;
-  position: relative;
-}
-
 @keyframes banner-shift {
   0%,
   100% {
@@ -641,12 +536,6 @@
   50% {
     background-position: 100% 50%;
   }
-}
-
-.card-banner-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 .card-avatar-wrap {
@@ -678,12 +567,6 @@
   font-size: 1.75rem;
   font-weight: 700;
   color: var(--discord-white);
-}
-
-/* ── Card Header ───────────────────────────────────────────────── */
-
-.card-header {
-  padding: 8px 20px 0;
 }
 
 .card-username {
@@ -1111,65 +994,6 @@
   font-size: var(--font-size-base);
 }
 
-.loading-dots {
-  display: flex;
-  gap: 6px;
-}
-
-.loading-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--ng-orange);
-  animation: portal-bounce 1.4s ease-in-out infinite both;
-}
-
-.loading-dot:nth-child(1) {
-  animation-delay: 0ms;
-}
-.loading-dot:nth-child(2) {
-  animation-delay: 160ms;
-}
-.loading-dot:nth-child(3) {
-  animation-delay: 320ms;
-}
-
-@keyframes portal-bounce {
-  0%,
-  80%,
-  100% {
-    transform: scale(0.6);
-    opacity: 0.4;
-  }
-  40% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-/* ── Empty State ───────────────────────────────────────────────── */
-
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 48px 24px;
-  color: var(--discord-text-faint);
-  text-align: center;
-}
-
-.empty-icon {
-  font-size: 2.25rem;
-  opacity: 0.6;
-}
-
-.empty-text {
-  font-size: var(--font-size-base);
-  color: var(--discord-text-muted);
-}
-
 /* ── Infinite Scroll ──────────────────────────────────────────── */
 
 .sentinel {
@@ -1415,4 +1239,28 @@ a.top-sub-item {
   .card-actions {
     flex-direction: column;
   }
+}
+
+/* ── Cards are buttons: reset the native look, keep a focus ring ── */
+
+button.item-card {
+  display: block;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+}
+
+.item-card:focus-visible,
+.type-tab:focus-visible {
+  outline: 2px solid var(--discord-blurple-muted);
+  outline-offset: 2px;
+}
+
+.modal-card:focus {
+  outline: none;
+}
+
+h2.profile-display-name {
+  margin: 0;
 }

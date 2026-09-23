@@ -1,43 +1,35 @@
 // ============================================================
-// Clock Crew — Runtime Configuration
+// Clock Crew — Server Configuration
 // ============================================================
-// Typed accessor layer over process.env. The Vault service is
-// the single source of truth — next.config.ts hydrates
-// process.env from the Vault before any module imports run.
-//
-// This file contains NO defaults and NO secrets.
+// Every key here is listed in next.config.ts's SERVER_ENV_KEYS, so
+// the build inlines the vault's value and a standalone server that
+// cannot reach the vault still has it. Server-only: none of this is
+// ever bundled for the browser.
 // ============================================================
 
-export const IS_PRODUCTION =
-  typeof window !== "undefined" && window.location.hostname.endsWith(".com");
+import "server-only";
 
-export const IS_LOCALHOST = !IS_PRODUCTION;
-
-// Environment-aware project name — isolates data between dev and prod
-export const PROJECT_NAME = "clock-crew";
-
-const IS_BROWSER = typeof window !== "undefined";
-
-const RAW_SERVICE_URL =
-  process.env.NEXT_PUBLIC_CLOCK_CREW_SERVICE_URL ||
-  process.env.CLOCK_CREW_SERVICE_URL;
-
-const PUBLIC_SERVICE_URL =
-  process.env.NEXT_PUBLIC_CLOCK_CREW_SERVICE_PUBLIC_URL ||
-  process.env.CLOCK_CREW_SERVICE_PUBLIC_URL;
-
-function resolveServiceUrl() {
-  if (!IS_BROWSER) return RAW_SERVICE_URL;
-  if (IS_PRODUCTION && PUBLIC_SERVICE_URL) return PUBLIC_SERVICE_URL;
-  return RAW_SERVICE_URL;
-}
-
-export const CLOCK_CREW_SERVICE_URL = resolveServiceUrl();
-export const LUPOS_BOT_URL = process.env.LUPOS_BOT_URL || process.env.LUPOS_URL;
-export const TOOLS_SERVICE_URL = process.env.TOOLS_SERVICE_URL;
-
-// Publicly streamed Discord channels — the whitelist shared by the
-// chat component and every discord API proxy route.
-export const GENERAL_CHAT_CHANNEL_ID = "671089694397956116"; // #general-chat
-export const MEMES_CHANNEL_ID = "676318241689436170"; // #memes
-export const PUBLIC_CHANNEL_IDS = [GENERAL_CHAT_CHANNEL_ID, MEMES_CHANNEL_ID];
+export const SERVER_CONFIG = {
+  get clockCrewServiceUrl() {
+    return process.env.CLOCK_CREW_SERVICE_URL;
+  },
+  get toolsServiceUrl() {
+    return process.env.TOOLS_SERVICE_URL;
+  },
+  get luposUrl() {
+    return process.env.LUPOS_BOT_URL;
+  },
+  get minioInternalUrl() {
+    return process.env.MINIO_INTERNAL_URL;
+  },
+  /** The Clock Crew Discord guild — from the vault, never from a request. */
+  get guildId() {
+    return process.env.CLOCK_CREW_GUILD_ID;
+  },
+  get sessionsServiceUrl() {
+    return process.env.SESSIONS_SERVICE_URL;
+  },
+  get sessionsServicePublicUrl() {
+    return process.env.SESSIONS_SERVICE_PUBLIC_URL;
+  },
+};

@@ -2,7 +2,7 @@
 
 import { useRef, useCallback, useEffect } from "react";
 import { DiscordChatComponent } from "@rodrigo-barraza/components-library";
-import { PUBLIC_CHANNEL_IDS } from "@/config";
+import { PUBLIC_CHANNEL_IDS } from "@/constants";
 import NewgroundsPortalComponent from "./components/NewgroundsPortalComponent/NewgroundsPortalComponent";
 import ClockComponent from "./components/ClockComponent/ClockComponent";
 
@@ -45,7 +45,8 @@ export default function HomePage() {
         const targetSpeed =
           IDLE_SPEED +
           (MAX_SPEED - IDLE_SPEED) * (1 - Math.exp(-elapsed * RATE_RAMP));
-        state.speed += (targetSpeed - state.speed) * (1 - Math.exp(-deltaTime * 6));
+        state.speed +=
+          (targetSpeed - state.speed) * (1 - Math.exp(-deltaTime * 6));
       } else {
         // Decelerate smoothly back to idle
         state.speed +=

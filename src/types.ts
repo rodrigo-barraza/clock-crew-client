@@ -1,25 +1,62 @@
-// ── Types and Interfaces for Clock Crew Client ─────────────────
+// ── Types for the Clock Crew client ────────────────────────────
+// The shapes clock-crew-service answers with (see its
+// src/services/serializers.ts), plus the history page's data.
 
-// ── Member Profile Component ─────────────────────────────────────
-export interface NewgroundsStats {
-  fans: number;
-  level?: number;
+// ── Forum + Newgrounds identities ───────────────────────────────
+
+export interface ForumUser {
+  userId: number;
+  username: string;
+  avatarUrl: string | null;
+  customTitle: string | null;
+  position: string | null;
+  group: string | null;
+  postCount: number;
+  personalText: string | null;
+  dateRegistered: string | null;
+  age: number | null;
+  gender: string | null;
+  location: string | null;
+  onlineStatus: string | null;
+  profileUrl: string | null;
+  signature: string | null;
+  website: string | null;
+  lastActive: string | null;
+}
+
+export interface ProfileLink {
+  url: string;
+  text: string | null;
+}
+
+export interface NewgroundsProfile {
+  username: string;
+  usernameLower: string;
+  avatarUrl: string | null;
+  bannerUrl: string | null;
+  profileUrl: string | null;
+  description: string | null;
+  level: number | null;
+  rank: string | null;
+  globalRank: number | null;
+  expPoints: string | null;
+  expRank: number | null;
   blams: number;
   saves: number;
+  votePower: string | null;
+  fans: number;
   medals: number;
   trophies: number;
-  expPoints?: string;
-  votePower?: string;
-  description?: string;
-  joinDate?: string;
-  location?: string;
-  job?: string;
-  age?: number;
-  sex?: string;
-  realName?: string;
-  school?: string;
-  rank?: string;
-  globalRank?: number;
+  sex: string | null;
+  age: number | null;
+  location: string | null;
+  job: string | null;
+  joinDate: string | null;
+  realName: string | null;
+  school: string | null;
+  /** Supporter tenure, e.g. "1y 1m" — null when not a supporter. */
+  supporter: string | null;
+  links: ProfileLink[];
   movieCount: number;
   gameCount: number;
   audioCount: number;
@@ -27,90 +64,157 @@ export interface NewgroundsStats {
   postCount: number;
   faveCount: number;
   newsCount: number;
-  avatarUrl?: string;
-  profileUrl?: string;
-  supporter?: boolean;
-  links?: Array<{ url?: string; label?: string; name?: string } | string>;
 }
 
-export interface ClockCrewForumStats {
-  avatarUrl?: string;
-  username: string;
-  customTitle?: string;
-  position?: string;
-  postCount: number;
-  dateRegistered: string; // Date string
-  location?: string;
-  gender?: string;
-  signatureHtml?: string;
-  group?: string;
-  profileUrl?: string;
+export interface ProfileSummary {
+  markdown: string | null;
+  generatedAt: string | null;
+  model: string | null;
+  status: "complete" | "insufficient_data" | string;
 }
 
-export interface AIProfileSummary {
-  markdown?: string;
-  status: "complete" | "pending" | "failed" | string;
-  model?: string;
-}
+// ── Archived content ───────────────────────────────────────────
 
-export interface MemberProfile {
-  username: string;
-  avatarUrl?: string;
-  newgrounds?: NewgroundsStats;
-  ccForum?: ClockCrewForumStats;
-  profileSummary?: AIProfileSummary;
-}
+export type SubmissionType = "movie" | "game" | "audio" | "art";
 
-export interface MemberContentItem {
-  contentId?: string;
-  _id?: string;
+export interface Submission {
+  _id: string;
+  contentId?: number;
+  contentType?: SubmissionType | string;
   title: string;
   url: string;
   thumbnailUrl?: string;
-  score?: number;
+  /** Newgrounds rating, 0–5. */
+  score?: number | null;
   views?: number;
-  publishedDate?: string;
+  publishedDate?: string | null;
   description?: string;
-  type?: string;
-}
-
-export interface ForumThread {
-  topicId?: string;
-  title: string;
-  totalPosts?: number;
-  date?: string;
-  boardName?: string;
+  usernameLower: string;
 }
 
 export interface ForumPost {
-  messageId?: string;
-  postId?: string;
+  _id: string;
+  messageId: number;
+  topicId?: number;
   body?: string;
-  content?: string;
-  threadTitle?: string;
-  date?: string;
+  date?: string | null;
+  threadTitle: string | null;
+}
+
+export interface ForumThread {
+  _id: string;
+  topicId: number;
+  title: string;
+  totalPosts?: number;
+  date?: string | null;
+  boardName?: string;
+  url?: string;
+}
+
+export interface NewgroundsPost {
+  _id: string;
+  postId?: number;
+  title?: string;
+  contentUrl?: string;
+  body?: string;
+  date?: string | null;
 }
 
 export interface Review {
-  reviewId?: string;
-  contentTitle?: string;
-  contentUrl?: string;
-  score?: number;
+  _id: string;
+  reviewId?: number;
   body?: string;
-  text?: string;
+  /** Stars given, 0–5. */
+  score?: number | null;
+  reviewedTitle?: string;
+  reviewedUrl?: string;
+  reviewedThumbnail?: string;
+  date?: string | null;
 }
 
-export interface TransformedMemberProfileData {
-  member: MemberProfile;
-  movies?: MemberContentItem[];
-  games?: MemberContentItem[];
-  audio?: MemberContentItem[];
-  art?: MemberContentItem[];
-  fans?: string[];
-  ccPosts?: ForumPost[];
-  ngPosts?: ForumPost[];
-  ccThreads?: ForumThread[];
-  reviews?: Review[];
+// ── Member page ─────────────────────────────────────────────────
+
+export interface Member {
+  username: string;
+  userId: number | null;
+  avatarUrl: string | null;
+  ccForum: ForumUser | null;
+  newgrounds: NewgroundsProfile | null;
+  profileSummary: ProfileSummary | null;
+}
+
+export interface MemberPageData {
+  member: Member;
+  movies: Submission[];
+  games: Submission[];
+  audio: Submission[];
+  art: Submission[];
+  reviews: Review[];
+  favorites: Submission[];
+  news: Submission[];
+  fans: string[];
+  ngPosts: NewgroundsPost[];
+  ccPosts: ForumPost[];
+  ccThreads: ForumThread[];
+  ccThreadCount: number;
+}
+
+// ── Directory ───────────────────────────────────────────────────
+
+export interface DirectoryUser {
+  userId: number;
+  username: string;
+  avatarUrl?: string;
+  customTitle?: string;
+  postCount?: number;
+  dateRegistered?: string | null;
+}
+
+// ── Portal ──────────────────────────────────────────────────────
+
+export interface ClockProfile {
+  _id: string;
+  username: string;
+  usernameLower: string;
+  avatarUrl?: string;
+  ccAvatarUrl: string | null;
+  level?: number;
+  location?: string;
+  joinDate?: string;
+  fans?: { count?: number };
+}
+
+export interface PortalPage {
+  count: number;
+  totalMovies: number;
+  totalGames: number;
+  totalAudio: number;
+  items: Submission[];
+}
+
+export interface ClocksPage {
+  count: number;
+  totalClocks: number;
+  profiles: ClockProfile[];
+}
+
+export interface PortalYears {
+  contentYears: string[];
+  profileYears: string[];
+}
+
+export interface PortalCard {
+  profile: NewgroundsProfile;
+  ccUser: ForumUser | null;
+  topMovies: Submission[];
+  topGames: Submission[];
+  topAudio: Submission[];
+  randomPost: {
+    body: string;
+    date: string | null;
+    topicId: number | null;
+    threadTitle: string | null;
+  } | null;
 }
 
 // ── History Timeline Component ──────────────────────────────────

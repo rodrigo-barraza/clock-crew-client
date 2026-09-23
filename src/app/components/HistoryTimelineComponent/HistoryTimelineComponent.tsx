@@ -692,12 +692,12 @@ export default function HistoryTimelineComponent() {
         <div className={styles.rail} aria-hidden="true" />
         {(TIMELINE_EVENTS as TimelineEvent[]).map((event, i) => {
           const isVisible = visibleItems.has(String(i));
-          const side = i % 2 === 0 ? "Left" : "Right";
+          const side = i % 2 === 0 ? "left" : "right";
           const eraKey = event.era as EraKey;
           return (
             <div
               key={i}
-              className={`${styles.item} ${styles[`item${side}`]} ${isVisible ? styles['item-visible'] : ""}`}
+              className={`${styles.item} ${styles[`item-${side}`]} ${isVisible ? styles['item-visible'] : ""}`}
               data-index={i}
             >
               <div

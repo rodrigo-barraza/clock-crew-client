@@ -3,11 +3,14 @@
 // Article structured data for the comprehensive history article.
 // ──────────────────────────────────────────────────────────────
 
-import HistoryTimelineComponent from "../../components/HistoryTimelineComponent/HistoryTimelineComponent";
+import type { Metadata } from "next";
+import HistoryTimelineComponent from "@/app/components/HistoryTimelineComponent/HistoryTimelineComponent";
+import { SITE_URL } from "@/constants";
 
-const SITE_URL = "https://clocktopia.com";
+/** Bump when the article's content changes — it is what search engines read as "updated". */
+const LAST_REVISED = "2026-04-28";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "History of the Clock Crew",
   description:
     "The complete history of the Clock Crew — from StrawberryClock's legendary 'B' submission in 2001 to the modern archival era. Explore the founding, golden age, rivalries, and legacy of Newgrounds' most iconic Flash animation collective.",
@@ -42,7 +45,7 @@ const jsonLd = {
     "The complete history of the Clock Crew — from StrawberryClock's legendary 'B' submission in 2001 to the modern archival era.",
   url: `${SITE_URL}/history`,
   datePublished: "2026-04-28",
-  dateModified: new Date().toISOString().split("T")[0],
+  dateModified: LAST_REVISED,
   author: {
     "@type": "Organization",
     name: "The Clock Crew",
