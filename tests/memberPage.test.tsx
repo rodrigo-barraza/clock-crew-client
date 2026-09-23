@@ -24,6 +24,17 @@ describe("member page", () => {
     );
   });
 
+  it("treats the old service's 200 error body as not found", async () => {
+    fetchServiceOrNull.mockResolvedValue({
+      error: true,
+      message: "Member not found",
+      statusCode: 404,
+    });
+    await expect(MemberProfilePage(params("Nobody"))).rejects.toThrow(
+      "NEXT_NOT_FOUND",
+    );
+  });
+
   it("escapes the JSON-LD so no member text can close the script tag", async () => {
     const data = memberData();
     data.member.newgrounds!.description = "</script><script>alert(1)</script>";

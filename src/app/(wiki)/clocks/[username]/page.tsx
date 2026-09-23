@@ -29,14 +29,14 @@ function decodeUsername(raw: string): string {
   }
 }
 
-const getMember = cache((username: string) =>
-  fetchServiceOrNull<MemberPageData>(
+const getMember = cache(async (username: string) => {
+  const data = await fetchServiceOrNull<MemberPageData>(
     `/clockcrew/members/${encodeURIComponent(username)}`,
-    {
-      next: { revalidate: ARCHIVE_REVALIDATE_SECONDS },
-    },
-  ),
-);
+    { next: { revalidate: ARCHIVE_REVALIDATE_SECONDS } },
+  );
+  // Before clock-crew-service 1.1 a missing member was a 200 `{ error }` body.
+  return data?.member ? data : null;
+});
 
 /** The page's one-line description: the member's own bio, else a stock line. */
 function describe(data: MemberPageData | null, name: string): string {
