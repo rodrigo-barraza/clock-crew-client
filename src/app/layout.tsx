@@ -170,11 +170,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <template
+        {/* A plain <script> runs before first paint; one inside a <template>
+            is inert and never runs, so non-default themes flashed. */}
+        <script
           dangerouslySetInnerHTML={{
-            __html: `<script>${generateThemeInitScript("clock:theme")}</script>`,
+            __html: `${generateThemeInitScript("clock:theme")}`,
           }}
-          suppressHydrationWarning
         />
         <script
           type="application/ld+json"
