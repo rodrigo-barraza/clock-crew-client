@@ -51,7 +51,9 @@ function useProfileCard(usernameLower: string): CardState {
         (card) =>
           setLoaded({
             username: usernameLower,
-            state: card ? { status: "loaded", card } : { status: "missing" },
+            state: card?.profile
+              ? { status: "loaded", card }
+              : { status: "missing" },
           }),
         () => {
           if (!controller.signal.aborted)
